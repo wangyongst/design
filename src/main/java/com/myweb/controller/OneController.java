@@ -90,7 +90,7 @@ public class OneController {
             return result;
         }
         opslog.setAction("赠送渔场");
-        opslog.setMemo("渔场ID:" + fisherySend.getId()  + " ,赠送地址:" + fisherySend.getSendAddress());
+        opslog.setMemo("渔场ID:" + fisherySend.getId() + " ,赠送地址:" + fisherySend.getSendAddress());
         return oneService.createLogAsResult(opslog);
     }
 
@@ -108,6 +108,11 @@ public class OneController {
     @ResponseBody
     @RequestMapping(value = "/fishery/sell", method = RequestMethod.POST)
     public Result sell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
+        if (market.getFisheryId() == null || market.getStartPrice() == null || market.getStopPrice() == null || market.getSellDuration() == null) {
+            Result result = new Result();
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
         opslog.setAction("出售渔场");
         opslog.setMemo("渔场ID:" + market.getFisheryId() + ",起始价格:" + market.getStartPrice() + ", 终止价格:" + market.getStopPrice() + ", 销售时长:" + market.getSellDuration() + "天");
         return oneService.createLogAsResult(opslog);
