@@ -2,7 +2,9 @@ package com.myweb.controller;
 
 import com.myweb.pojo.*;
 import com.myweb.service.OneService;
+import com.myweb.vo.FisherySend;
 import com.utils.Result;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -81,9 +83,14 @@ public class OneController {
     //赠送渔场
     @ResponseBody
     @RequestMapping(value = "/fishery/send", method = RequestMethod.POST)
-    public Result send(@ModelAttribute Fishery fishery, @RequestParam String sendAddress, @ModelAttribute Opslog opslog) {
+    public Result send(@ModelAttribute FisherySend fisherySend, @ModelAttribute Opslog opslog) {
+        if (fisherySend.getId() == 0 || StringUtils.isBlank(fisherySend.getAddress()) || StringUtils.isBlank(fisherySend.getSendAddress())) {
+            Result result = new Result();
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
         opslog.setAction("赠送渔场");
-        opslog.setMemo("渔场ID:" + fishery.getId()  + " ,赠送地址:" + sendAddress);
+        opslog.setMemo("渔场ID:" + fisherySend.getId()  + " ,赠送地址:" + fisherySend);
         return oneService.createLogAsResult(opslog);
     }
 
@@ -102,7 +109,7 @@ public class OneController {
     @RequestMapping(value = "/fishery/sell", method = RequestMethod.POST)
     public Result sell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
         opslog.setAction("出售渔场");
-        opslog.setMemo("渔场ID:" + market.getFisheryId() + ",起始价格:" + market.getStartPrice() + ", 终止价格:" + market.getStopPrice() + ", 销售时长:" + market.getSellDuration());
+        opslog.setMemo("渔场ID:" + market.getFisheryId() + ",起始价格:" + market.getStartPrice() + ", 终止价格:" + market.getStopPrice() + ", 销售时长:" + market.getSellDuration() + "天");
         return oneService.createLogAsResult(opslog);
     }
 

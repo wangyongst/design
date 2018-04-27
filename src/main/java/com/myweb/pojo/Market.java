@@ -12,7 +12,7 @@ public class Market {
     private String sellStatus;
     private BigDecimal startPrice;
     private BigDecimal stopPrice;
-    private Integer sellDuration;
+    private BigDecimal sellDuration;
     private String sellStartTime;
     private BigDecimal staticPrice;
     private Integer favorCount;
@@ -70,11 +70,11 @@ public class Market {
 
     @Basic
     @Column(name = "sell_duration")
-    public Integer getSellDuration() {
+    public BigDecimal getSellDuration() {
         return sellDuration;
     }
 
-    public void setSellDuration(Integer sellDuration) {
+    public void setSellDuration(BigDecimal sellDuration) {
         this.sellDuration = sellDuration;
     }
 

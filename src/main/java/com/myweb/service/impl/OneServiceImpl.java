@@ -225,7 +225,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result sell(Market market) {
         Result result = new Result();
-        if (market.getFisheryId() == null || market.getStartPrice() == null || market.getStopPrice() == null || market.getSellDuration() == 0) {
+        if (market.getFisheryId() == null || market.getStartPrice() == null || market.getStopPrice() == null || market.getSellDuration() == null) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
