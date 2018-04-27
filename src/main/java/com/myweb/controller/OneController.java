@@ -90,7 +90,7 @@ public class OneController {
             return result;
         }
         opslog.setAction("赠送渔场");
-        opslog.setMemo("渔场ID:" + fisherySend.getId()  + " ,赠送地址:" + fisherySend);
+        opslog.setMemo("渔场ID:" + fisherySend.getId()  + " ,赠送地址:" + fisherySend.getSendAddress());
         return oneService.createLogAsResult(opslog);
     }
 
