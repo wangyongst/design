@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-04-27 12:31:05
+Date: 2018-04-28 10:17:35
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -470,36 +470,36 @@ CREATE TABLE `refer` (
   `refer_code` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `create_time` varchar(255) DEFAULT NULL,
-  `refer_fee` decimal(10,2) DEFAULT NULL,
+  `refer_fee` decimal(10,4) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of refer
 -- ----------------------------
-INSERT INTO `refer` VALUES ('1', null, 'NNoxWNqV', null, null, '1.85');
-INSERT INTO `refer` VALUES ('2', null, 'NNoxWNqV', null, null, '3.53');
-INSERT INTO `refer` VALUES ('3', '123123123123', 'tjmxqsgc', 'buy', '2018-04-26 15:13:22', '10.10');
-INSERT INTO `refer` VALUES ('4', '123123123123', 'F7kAHvLk', 'buy', '2018-04-26 15:13:41', '10.10');
-INSERT INTO `refer` VALUES ('5', '123123123123', 'F7kAHvLk', 'buy', '2018-04-26 15:14:27', '10.10');
-INSERT INTO `refer` VALUES ('6', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:15:13', '10.10');
-INSERT INTO `refer` VALUES ('7', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:04', '10.10');
-INSERT INTO `refer` VALUES ('8', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:29', '10.10');
-INSERT INTO `refer` VALUES ('9', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:38', '10.10');
-INSERT INTO `refer` VALUES ('10', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:45', '10.10');
-INSERT INTO `refer` VALUES ('11', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:48', '10.10');
-INSERT INTO `refer` VALUES ('12', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:49', '10.10');
-INSERT INTO `refer` VALUES ('13', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:50', '10.10');
-INSERT INTO `refer` VALUES ('14', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:50', '10.10');
-INSERT INTO `refer` VALUES ('15', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:51', '10.10');
-INSERT INTO `refer` VALUES ('16', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:51', '10.10');
-INSERT INTO `refer` VALUES ('17', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:52', '10.10');
-INSERT INTO `refer` VALUES ('18', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:07:18', '10.10');
-INSERT INTO `refer` VALUES ('19', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:11:26', '10.10');
-INSERT INTO `refer` VALUES ('20', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:11:44', '10.10');
-INSERT INTO `refer` VALUES ('21', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:12:06', '10.10');
-INSERT INTO `refer` VALUES ('22', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:12:20', '10.10');
-INSERT INTO `refer` VALUES ('23', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:12:28', '10.10');
+INSERT INTO `refer` VALUES ('1', null, 'NNoxWNqV', null, null, '1.8500');
+INSERT INTO `refer` VALUES ('2', null, 'NNoxWNqV', null, null, '3.5300');
+INSERT INTO `refer` VALUES ('3', '123123123123', 'tjmxqsgc', 'buy', '2018-04-26 15:13:22', '10.1000');
+INSERT INTO `refer` VALUES ('4', '123123123123', 'F7kAHvLk', 'buy', '2018-04-26 15:13:41', '10.1000');
+INSERT INTO `refer` VALUES ('5', '123123123123', 'F7kAHvLk', 'buy', '2018-04-26 15:14:27', '10.1000');
+INSERT INTO `refer` VALUES ('6', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:15:13', '10.1000');
+INSERT INTO `refer` VALUES ('7', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:04', '10.1000');
+INSERT INTO `refer` VALUES ('8', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:29', '10.1000');
+INSERT INTO `refer` VALUES ('9', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:38', '10.1000');
+INSERT INTO `refer` VALUES ('10', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:45', '10.1000');
+INSERT INTO `refer` VALUES ('11', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:48', '10.1000');
+INSERT INTO `refer` VALUES ('12', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:49', '10.1000');
+INSERT INTO `refer` VALUES ('13', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:50', '10.1000');
+INSERT INTO `refer` VALUES ('14', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:50', '10.1000');
+INSERT INTO `refer` VALUES ('15', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:51', '10.1000');
+INSERT INTO `refer` VALUES ('16', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:51', '10.1000');
+INSERT INTO `refer` VALUES ('17', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-26 15:24:52', '10.1000');
+INSERT INTO `refer` VALUES ('18', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:07:18', '10.1000');
+INSERT INTO `refer` VALUES ('19', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:11:26', '10.1000');
+INSERT INTO `refer` VALUES ('20', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:11:44', '10.1000');
+INSERT INTO `refer` VALUES ('21', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:12:06', '10.1000');
+INSERT INTO `refer` VALUES ('22', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:12:20', '10.1000');
+INSERT INTO `refer` VALUES ('23', '123nksdjfasjdfadsf', 'F7kAHvLk', 'buy', '2018-04-27 11:12:28', '10.1000');
 
 -- ----------------------------
 -- Table structure for user
