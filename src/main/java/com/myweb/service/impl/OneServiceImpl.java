@@ -7,6 +7,8 @@ import com.myweb.vo.GetReferUrlVo;
 import com.utils.Result;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -28,6 +30,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 @PropertySource({"classpath:application.properties"})
 public class OneServiceImpl implements OneService {
+
+    private static final Logger logger = LogManager.getLogger(OneServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -288,6 +292,9 @@ public class OneServiceImpl implements OneService {
             long currentTime = System.currentTimeMillis();
             refer.setCreateTime(df.format(currentTime));
             referRepository.save(refer);
+            logger.info("------------------------------------------------------------------------------------------");
+            logger.info("推广码:"+refer.getReferCode()+"佣金:"+refer.getReferFee()+"创建时间:"+refer.getCreateTime());
+            logger.info("------------------------------------------------------------------------------------------");
         }
         Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
         if (savedFishery == null) {
