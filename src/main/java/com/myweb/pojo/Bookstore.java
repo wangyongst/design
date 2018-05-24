@@ -8,8 +8,8 @@ import java.util.Objects;
 @Table(name = "bookstore")
 public class Bookstore {
     private int id;
-    private Integer bookId;
-    private Integer ownerId;
+    private Integer bookid;
+    private Integer ownerid;
     private String location;
     private Integer stauts;
     private BigDecimal deposit;
@@ -28,23 +28,23 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "bookId")
-    public Integer getBookId() {
-        return bookId;
+    @Column(name = "bookid")
+    public Integer getBookid() {
+        return bookid;
     }
 
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
+    public void setBookid(Integer bookid) {
+        this.bookid = bookid;
     }
 
     @Basic
-    @Column(name = "ownerId")
-    public Integer getOwnerId() {
-        return ownerId;
+    @Column(name = "ownerid")
+    public Integer getOwnerid() {
+        return ownerid;
     }
 
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+    public void setOwnerid(Integer ownerid) {
+        this.ownerid = ownerid;
     }
 
     @Basic
@@ -103,8 +103,8 @@ public class Bookstore {
         if (o == null || getClass() != o.getClass()) return false;
         Bookstore bookstore = (Bookstore) o;
         return id == bookstore.id &&
-                Objects.equals(bookId, bookstore.bookId) &&
-                Objects.equals(ownerId, bookstore.ownerId) &&
+                Objects.equals(bookid, bookstore.bookid) &&
+                Objects.equals(ownerid, bookstore.ownerid) &&
                 Objects.equals(location, bookstore.location) &&
                 Objects.equals(stauts, bookstore.stauts) &&
                 Objects.equals(deposit, bookstore.deposit) &&
@@ -115,6 +115,6 @@ public class Bookstore {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, bookId, ownerId, location, stauts, deposit, fee, days);
+        return Objects.hash(id, bookid, ownerid, location, stauts, deposit, fee, days);
     }
 }
