@@ -212,7 +212,12 @@ public class OneServiceImpl implements OneService {
         }
         List<User> userList = userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
         if (userList.size() == 1) {
+            result.setStatus(1);
             result.setData(userList.get(0));
+            return result;
+        }else if(userList.size() == 0){
+            result.setMessage("用户不存在！");
+            return result;
         }
         result.setMessage("登录失败！");
         return result;
