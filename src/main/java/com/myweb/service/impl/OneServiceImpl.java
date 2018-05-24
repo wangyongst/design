@@ -114,7 +114,7 @@ public class OneServiceImpl implements OneService {
         try {
             response = restTemplate.getForObject(url + book.getIsbn(), String.class);
         } catch (RestClientException e) {
-            result.setMessage("Douban api has exception!");
+            result.setMessage("从豆瓣获取图书信息失败!");
             return result;
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -123,7 +123,7 @@ public class OneServiceImpl implements OneService {
             dbBook = mapper.readValue(response, DBBook.class);
         } catch (IOException e) {
             e.printStackTrace();
-            result.setMessage("Douban api result has exception!");
+            result.setMessage("从豆瓣获取图书信息失败!");
             return result;
         }
         String authors = "";
