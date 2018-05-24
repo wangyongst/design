@@ -62,7 +62,7 @@ public class OneController {
             @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String")
     })
     @ResponseBody
-    @PostMapping("user/login")
+    @GetMapping("user/login")
     public Result login(@ModelAttribute User user) {
         return oneService.login(user);
     }
@@ -81,7 +81,7 @@ public class OneController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", value = "openid（必需）", required = true, dataType = "String"),
     })
-    @PostMapping("user/weixin/login")
+    @GetMapping("user/weixin/login")
     @ResponseBody
     public Result weixinOpenId(@ModelAttribute User user) {
         return oneService.weixinLogin(user);
