@@ -169,7 +169,20 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         String response = WeixinUtils.getOpenId(restTemplate, code);
-        System.out.println(response);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            User user = mapper.readValue(response, User.class);
+            if(StringUtils.isNotBlank(user.getOpenid())){
+                User savedUser = userRepository.save(user);
+                result.setStatus(1);
+                result.setData(savedUser);
+                return result;
+            }else {
+                result.setMessage("授权失败，无法获取openid");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 

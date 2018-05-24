@@ -3,6 +3,7 @@ package com.myweb.pojo;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -13,7 +14,7 @@ public class Pay {
     private Integer userid;
     private BigDecimal payfee;
 
-    @Basic
+    @Id
     @Column(name = "id")
     public Integer getId() {
         return id;
