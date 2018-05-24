@@ -162,6 +162,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result weixinCode(String code) {
         Result result = new Result();
         if (StringUtils.isBlank(code)) {
@@ -172,13 +173,24 @@ public class OneServiceImpl implements OneService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             User user = mapper.readValue(response, User.class);
-            if(StringUtils.isNotBlank(user.getOpenid())){
-                User savedUser = userRepository.save(user);
-                result.setStatus(1);
-                result.setData(savedUser);
-                return result;
-            }else {
+            if (StringUtils.isNotBlank(user.getOpenid())) {
+                List<User> userList = userRepository.findByOpenid(user.getOpenid());
+                if (userList.size() == 1) {
+                    result.setStatus(1);
+                    result.setData(userList.get(0));
+                    return result;
+                } else if (userList.size() == 0) {
+                    userRepository.save(user);
+                    result.setStatus(1);
+                    result.setData(user);
+                    return result;
+                } else {
+                    result.setMessage("openid存在重复记录");
+                    return result;
+                }
+            } else {
                 result.setMessage("授权失败，无法获取openid");
+                return result;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -187,6 +199,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result regist(User user) {
         Result result = new Result();
         if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword()) || user.getId() != 0) {
@@ -197,9 +210,9 @@ public class OneServiceImpl implements OneService {
             result.setMessage("用户名已经被占用!");
             return result;
         }
-        User savedUser = userRepository.save(user);
+        userRepository.save(user);
         result.setStatus(1);
-        result.setData(savedUser);
+        result.setData(user);
         return result;
     }
 
@@ -215,8 +228,8 @@ public class OneServiceImpl implements OneService {
             result.setStatus(1);
             result.setData(userList.get(0));
             return result;
-        }else if(userList.size() == 0){
-            result.setMessage("用户不存在！");
+        } else if (userList.size() == 0) {
+            result.setMessage("用户不存在或密码错误！");
             return result;
         }
         result.setMessage("登录失败！");
@@ -235,7 +248,7 @@ public class OneServiceImpl implements OneService {
             result.setStatus(1);
             result.setData(userList.get(0));
             return result;
-        }else if(userList.size() == 0){
+        } else if (userList.size() == 0) {
             result.setMessage("用户不存在！");
             return result;
         }

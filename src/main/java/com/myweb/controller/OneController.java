@@ -38,7 +38,8 @@ public class OneController {
     //上架isbn
     @ApiOperation(value = "上架", notes = "用户扫描书上的isbn,通过豆瓣接口获得书详细信息并上架到书店")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "isbn", value = "isbn（必需）", required = true, dataType = "String")
+            @ApiImplicitParam(name = "isbn", value = "isbn（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "userId", value = "userId（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @PostMapping("/book/isbn")
@@ -51,6 +52,7 @@ public class OneController {
             @ApiImplicitParam(name = "username", value = "用户名（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String")
     })
+    @ResponseBody
     @PostMapping("user/regist")
     public Result regist(@ModelAttribute User user) {
         return oneService.regist(user);
