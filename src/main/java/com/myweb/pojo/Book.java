@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Book {
@@ -21,7 +22,7 @@ public class Book {
     private Integer userId;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -31,7 +32,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "isbn", nullable = true, length = 255)
+    @Column(name = "isbn")
     public String getIsbn() {
         return isbn;
     }
@@ -41,7 +42,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "title", nullable = true, length = 255)
+    @Column(name = "title")
     public String getTitle() {
         return title;
     }
@@ -51,7 +52,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "author", nullable = true, length = 255)
+    @Column(name = "author")
     public String getAuthor() {
         return author;
     }
@@ -61,7 +62,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "image", nullable = true, length = 255)
+    @Column(name = "image")
     public String getImage() {
         return image;
     }
@@ -71,7 +72,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "rating", nullable = true, length = 255)
+    @Column(name = "rating")
     public String getRating() {
         return rating;
     }
@@ -81,7 +82,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "publisher", nullable = true, length = 255)
+    @Column(name = "publisher")
     public String getPublisher() {
         return publisher;
     }
@@ -91,7 +92,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "translator", nullable = true, length = 255)
+    @Column(name = "translator")
     public String getTranslator() {
         return translator;
     }
@@ -101,7 +102,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "price", nullable = true, precision = 2)
+    @Column(name = "price")
     public BigDecimal getPrice() {
         return price;
     }
@@ -111,7 +112,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "authorintro", nullable = true, length = 255)
+    @Column(name = "authorintro")
     public String getAuthorintro() {
         return authorintro;
     }
@@ -121,7 +122,7 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "userId", nullable = true)
+    @Column(name = "userId")
     public Integer getUserId() {
         return userId;
     }
@@ -134,37 +135,23 @@ public class Book {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Book book = (Book) o;
-
-        if (id != book.id) return false;
-        if (isbn != null ? !isbn.equals(book.isbn) : book.isbn != null) return false;
-        if (title != null ? !title.equals(book.title) : book.title != null) return false;
-        if (author != null ? !author.equals(book.author) : book.author != null) return false;
-        if (image != null ? !image.equals(book.image) : book.image != null) return false;
-        if (rating != null ? !rating.equals(book.rating) : book.rating != null) return false;
-        if (publisher != null ? !publisher.equals(book.publisher) : book.publisher != null) return false;
-        if (translator != null ? !translator.equals(book.translator) : book.translator != null) return false;
-        if (price != null ? !price.equals(book.price) : book.price != null) return false;
-        if (authorintro != null ? !authorintro.equals(book.authorintro) : book.authorintro != null) return false;
-        if (userId != null ? !userId.equals(book.userId) : book.userId != null) return false;
-
-        return true;
+        return id == book.id &&
+                Objects.equals(isbn, book.isbn) &&
+                Objects.equals(title, book.title) &&
+                Objects.equals(author, book.author) &&
+                Objects.equals(image, book.image) &&
+                Objects.equals(rating, book.rating) &&
+                Objects.equals(publisher, book.publisher) &&
+                Objects.equals(translator, book.translator) &&
+                Objects.equals(price, book.price) &&
+                Objects.equals(authorintro, book.authorintro) &&
+                Objects.equals(userId, book.userId);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (isbn != null ? isbn.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (author != null ? author.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + (rating != null ? rating.hashCode() : 0);
-        result = 31 * result + (publisher != null ? publisher.hashCode() : 0);
-        result = 31 * result + (translator != null ? translator.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (authorintro != null ? authorintro.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, isbn, title, author, image, rating, publisher, translator, price, authorintro, userId);
     }
 }

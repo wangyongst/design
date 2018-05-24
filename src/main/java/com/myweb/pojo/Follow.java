@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Follow {
@@ -12,7 +13,7 @@ public class Follow {
     private Integer followid;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -22,7 +23,7 @@ public class Follow {
     }
 
     @Basic
-    @Column(name = "userid", nullable = true)
+    @Column(name = "userid")
     public Integer getUserid() {
         return userid;
     }
@@ -32,7 +33,7 @@ public class Follow {
     }
 
     @Basic
-    @Column(name = "followid", nullable = true)
+    @Column(name = "followid")
     public Integer getFollowid() {
         return followid;
     }
@@ -45,21 +46,15 @@ public class Follow {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Follow follow = (Follow) o;
-
-        if (id != follow.id) return false;
-        if (userid != null ? !userid.equals(follow.userid) : follow.userid != null) return false;
-        if (followid != null ? !followid.equals(follow.followid) : follow.followid != null) return false;
-
-        return true;
+        return id == follow.id &&
+                Objects.equals(userid, follow.userid) &&
+                Objects.equals(followid, follow.followid);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (userid != null ? userid.hashCode() : 0);
-        result = 31 * result + (followid != null ? followid.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, userid, followid);
     }
 }

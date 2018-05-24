@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Bookstore {
@@ -18,7 +19,7 @@ public class Bookstore {
     private Integer days;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -28,7 +29,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "bookId", nullable = true)
+    @Column(name = "bookId")
     public Integer getBookId() {
         return bookId;
     }
@@ -38,7 +39,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "ownerId", nullable = true)
+    @Column(name = "ownerId")
     public Integer getOwnerId() {
         return ownerId;
     }
@@ -48,7 +49,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "location", nullable = true, length = 255)
+    @Column(name = "location")
     public String getLocation() {
         return location;
     }
@@ -58,7 +59,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "stauts", nullable = true)
+    @Column(name = "stauts")
     public Integer getStauts() {
         return stauts;
     }
@@ -68,7 +69,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "deposit", nullable = true, precision = 2)
+    @Column(name = "deposit")
     public BigDecimal getDeposit() {
         return deposit;
     }
@@ -78,7 +79,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "fee", nullable = true, precision = 2)
+    @Column(name = "fee")
     public BigDecimal getFee() {
         return fee;
     }
@@ -88,7 +89,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "days", nullable = true)
+    @Column(name = "days")
     public Integer getDays() {
         return days;
     }
@@ -101,31 +102,20 @@ public class Bookstore {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Bookstore bookstore = (Bookstore) o;
-
-        if (id != bookstore.id) return false;
-        if (bookId != null ? !bookId.equals(bookstore.bookId) : bookstore.bookId != null) return false;
-        if (ownerId != null ? !ownerId.equals(bookstore.ownerId) : bookstore.ownerId != null) return false;
-        if (location != null ? !location.equals(bookstore.location) : bookstore.location != null) return false;
-        if (stauts != null ? !stauts.equals(bookstore.stauts) : bookstore.stauts != null) return false;
-        if (deposit != null ? !deposit.equals(bookstore.deposit) : bookstore.deposit != null) return false;
-        if (fee != null ? !fee.equals(bookstore.fee) : bookstore.fee != null) return false;
-        if (days != null ? !days.equals(bookstore.days) : bookstore.days != null) return false;
-
-        return true;
+        return id == bookstore.id &&
+                Objects.equals(bookId, bookstore.bookId) &&
+                Objects.equals(ownerId, bookstore.ownerId) &&
+                Objects.equals(location, bookstore.location) &&
+                Objects.equals(stauts, bookstore.stauts) &&
+                Objects.equals(deposit, bookstore.deposit) &&
+                Objects.equals(fee, bookstore.fee) &&
+                Objects.equals(days, bookstore.days);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (bookId != null ? bookId.hashCode() : 0);
-        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
-        result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (stauts != null ? stauts.hashCode() : 0);
-        result = 31 * result + (deposit != null ? deposit.hashCode() : 0);
-        result = 31 * result + (fee != null ? fee.hashCode() : 0);
-        result = 31 * result + (days != null ? days.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, bookId, ownerId, location, stauts, deposit, fee, days);
     }
 }

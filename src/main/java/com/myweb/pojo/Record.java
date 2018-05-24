@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Record {
@@ -13,7 +14,7 @@ public class Record {
     private String status;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -23,7 +24,7 @@ public class Record {
     }
 
     @Basic
-    @Column(name = "bookid", nullable = true)
+    @Column(name = "bookid")
     public Integer getBookid() {
         return bookid;
     }
@@ -33,7 +34,7 @@ public class Record {
     }
 
     @Basic
-    @Column(name = "userid", nullable = true)
+    @Column(name = "userid")
     public Integer getUserid() {
         return userid;
     }
@@ -43,7 +44,7 @@ public class Record {
     }
 
     @Basic
-    @Column(name = "status", nullable = true, length = 255)
+    @Column(name = "status")
     public String getStatus() {
         return status;
     }
@@ -56,23 +57,16 @@ public class Record {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Record record = (Record) o;
-
-        if (id != record.id) return false;
-        if (bookid != null ? !bookid.equals(record.bookid) : record.bookid != null) return false;
-        if (userid != null ? !userid.equals(record.userid) : record.userid != null) return false;
-        if (status != null ? !status.equals(record.status) : record.status != null) return false;
-
-        return true;
+        return id == record.id &&
+                Objects.equals(bookid, record.bookid) &&
+                Objects.equals(userid, record.userid) &&
+                Objects.equals(status, record.status);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (bookid != null ? bookid.hashCode() : 0);
-        result = 31 * result + (userid != null ? userid.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, bookid, userid, status);
     }
 }

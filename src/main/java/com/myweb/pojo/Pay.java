@@ -3,28 +3,28 @@ package com.myweb.pojo;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Pay {
-    private int id;
+    private Integer id;
     private Integer bookid;
     private Integer userid;
     private BigDecimal payfee;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
+    @Basic
+    @Column(name = "id")
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "bookid", nullable = true)
+    @Column(name = "bookid")
     public Integer getBookid() {
         return bookid;
     }
@@ -34,7 +34,7 @@ public class Pay {
     }
 
     @Basic
-    @Column(name = "userid", nullable = true)
+    @Column(name = "userid")
     public Integer getUserid() {
         return userid;
     }
@@ -44,7 +44,7 @@ public class Pay {
     }
 
     @Basic
-    @Column(name = "payfee", nullable = true, precision = 2)
+    @Column(name = "payfee")
     public BigDecimal getPayfee() {
         return payfee;
     }
@@ -57,23 +57,16 @@ public class Pay {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Pay pay = (Pay) o;
-
-        if (id != pay.id) return false;
-        if (bookid != null ? !bookid.equals(pay.bookid) : pay.bookid != null) return false;
-        if (userid != null ? !userid.equals(pay.userid) : pay.userid != null) return false;
-        if (payfee != null ? !payfee.equals(pay.payfee) : pay.payfee != null) return false;
-
-        return true;
+        return Objects.equals(id, pay.id) &&
+                Objects.equals(bookid, pay.bookid) &&
+                Objects.equals(userid, pay.userid) &&
+                Objects.equals(payfee, pay.payfee);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (bookid != null ? bookid.hashCode() : 0);
-        result = 31 * result + (userid != null ? userid.hashCode() : 0);
-        result = 31 * result + (payfee != null ? payfee.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, bookid, userid, payfee);
     }
 }

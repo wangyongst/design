@@ -11,5 +11,9 @@ import java.util.List;
 @RepositoryDefinition(domainClass = User.class, idClass = Integer.class)
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    public List<User> findByAddress(String address);
+    public List<User> findByUsername(String username);
+
+    public List<User> findByUsernameAndPassword(String username,String password);
+
+    public List<User> findByOpenid(String openid);
 }

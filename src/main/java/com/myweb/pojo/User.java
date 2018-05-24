@@ -4,17 +4,20 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class User {
     private int id;
     private String username;
+    private String password;
     private String openid;
     private String phone;
     private String avatar;
+    private String createtime;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -24,7 +27,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "username", nullable = true, length = 255)
+    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -34,7 +37,17 @@ public class User {
     }
 
     @Basic
-    @Column(name = "openid", nullable = true, length = 255)
+    @Column(name = "password")
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Basic
+    @Column(name = "openid")
     public String getOpenid() {
         return openid;
     }
@@ -44,7 +57,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "phone", nullable = true, length = 255)
+    @Column(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -54,7 +67,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "avatar", nullable = true, length = 255)
+    @Column(name = "avatar")
     public String getAvatar() {
         return avatar;
     }
@@ -63,29 +76,33 @@ public class User {
         this.avatar = avatar;
     }
 
+    @Basic
+    @Column(name = "createtime")
+    public String getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(String createtime) {
+        this.createtime = createtime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
-        if (id != user.id) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (openid != null ? !openid.equals(user.openid) : user.openid != null) return false;
-        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
-        if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
-
-        return true;
+        return id == user.id &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(openid, user.openid) &&
+                Objects.equals(phone, user.phone) &&
+                Objects.equals(avatar, user.avatar) &&
+                Objects.equals(createtime, user.createtime);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (openid != null ? openid.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, username, password, openid, phone, avatar, createtime);
     }
 }
