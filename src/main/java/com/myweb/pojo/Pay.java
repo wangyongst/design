@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Table(name = "pay")
 public class Pay {
     private Integer id;
     private Integer bookid;

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Table(name = "book")
 public class Book {
     private int id;
     private String isbn;
@@ -16,7 +17,7 @@ public class Book {
     private String translator;
     private BigDecimal price;
     private String authorintro;
-    private Integer userId;
+    private Integer userid;
 
     @Id
     @Column(name = "id")
@@ -120,13 +121,13 @@ public class Book {
     }
 
     @Basic
-    @Column(name = "userId")
-    public Integer getUserId() {
-        return userId;
+    @Column(name = "userid")
+    public Integer getUserid() {
+        return userid;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     @Override
@@ -144,12 +145,12 @@ public class Book {
                 Objects.equals(translator, book.translator) &&
                 Objects.equals(price, book.price) &&
                 Objects.equals(authorintro, book.authorintro) &&
-                Objects.equals(userId, book.userId);
+                Objects.equals(userid, book.userid);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, isbn, title, author, image, rating, publisher, translator, price, authorintro, userId);
+        return Objects.hash(id, isbn, title, author, image, rating, publisher, translator, price, authorintro, userid);
     }
 }

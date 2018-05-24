@@ -39,7 +39,7 @@ public class OneController {
     @ApiOperation(value = "上架", notes = "用户扫描书上的isbn,通过豆瓣接口获得书详细信息并上架到书店")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isbn", value = "isbn（必需）", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "userId", value = "userId（必需）", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userid", value = "userid（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @PostMapping("/book/isbn")
