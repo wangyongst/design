@@ -105,7 +105,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result isbn(Book book) {
         Result result = new Result();
-        if (StringUtils.isBlank(book.getIsbn()) || book.getUserId() == 0) {
+        if (StringUtils.isBlank(book.getIsbn()) || book.getUserid() == 0) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
@@ -153,7 +153,7 @@ public class OneServiceImpl implements OneService {
         Book savedbook = bookRepository.save(book);
         Bookstore bookstore = new Bookstore();
         bookstore.setBookId(savedbook.getId());
-        bookstore.setOwnerId(book.getUserId());
+        bookstore.setOwnerId(book.getUserid());
         bookstore.setStauts(0);
         bookstoreRepository.save(bookstore);
         result.setStatus(1);
