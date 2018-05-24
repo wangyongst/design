@@ -105,7 +105,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result isbn(Book book) {
         Result result = new Result();
-        if (StringUtils.isBlank(book.getIsbn()) || book.getId() == 0) {
+        if (StringUtils.isBlank(book.getIsbn()) || book.getUserId() == 0) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
