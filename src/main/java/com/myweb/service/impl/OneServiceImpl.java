@@ -152,8 +152,8 @@ public class OneServiceImpl implements OneService {
         book.setRating(dbBook.getRating().getAverage());
         Book savedbook = bookRepository.save(book);
         Bookstore bookstore = new Bookstore();
-        bookstore.setBookId(savedbook.getId());
-        bookstore.setOwnerId(book.getUserid());
+        bookstore.setBookid(savedbook.getId());
+        bookstore.setOwnerid(book.getUserid());
         bookstore.setStauts(0);
         bookstoreRepository.save(bookstore);
         result.setStatus(1);
