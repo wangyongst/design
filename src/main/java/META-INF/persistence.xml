@@ -8,7 +8,7 @@
         <class>com.myweb.pojo.Record</class>
         <class>com.myweb.pojo.User</class>
         <properties>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/sharebooks"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/bookstore"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="root"/>

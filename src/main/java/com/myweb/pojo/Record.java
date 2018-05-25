@@ -9,7 +9,42 @@ public class Record {
     private int id;
     private Integer bookid;
     private Integer userid;
-    private String status;
+    private Integer status;
+    private String time;
+//    private Book book;
+//    private User user;
+//
+//    @ManyToOne
+//    @MapsId
+//    @JoinColumn(name = "userid" , insertable = false,updatable = false)
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
+//
+//    @ManyToOne
+//    @MapsId
+//    @JoinColumn(name = "bookid" , insertable = false,updatable = false)
+//    public Book getBook() {
+//        return book;
+//    }
+//
+//    public void setBook(Book book) {
+//        this.book = book;
+//    }
+
+    @Basic
+    @Column(name = "time")
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     @Id
     @Column(name = "id")
@@ -23,7 +58,7 @@ public class Record {
     }
 
     @Basic
-    @Column(name = "bookid")
+    @Column(name = "bookid",insertable = false,updatable = false)
     public Integer getBookid() {
         return bookid;
     }
@@ -33,7 +68,7 @@ public class Record {
     }
 
     @Basic
-    @Column(name = "userid")
+    @Column(name = "userid",insertable = false,updatable = false)
     public Integer getUserid() {
         return userid;
     }
@@ -44,11 +79,11 @@ public class Record {
 
     @Basic
     @Column(name = "status")
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -60,12 +95,13 @@ public class Record {
         return id == record.id &&
                 Objects.equals(bookid, record.bookid) &&
                 Objects.equals(userid, record.userid) &&
+                Objects.equals(time, record.time) &&
                 Objects.equals(status, record.status);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, bookid, userid, status);
+        return Objects.hash(id, bookid, userid, status,time);
     }
 }

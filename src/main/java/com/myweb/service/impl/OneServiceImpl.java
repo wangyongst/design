@@ -148,9 +148,9 @@ public class OneServiceImpl implements OneService {
         }
         book.setAuthorintro(dbBook.getAuthor_intro());
         book.setRating(dbBook.getRating().getAverage());
+        book.setCatalog(dbBook.getCatalog());
         bookRepository.save(book);
         Bookstore bookstore = new Bookstore();
-        //bookstore.setBookid(savedbook.getId());
         bookstore.setBook(book);
         bookstore.setOwnerid(book.getUserid());
         bookstore.setStauts(1);
@@ -168,10 +168,13 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         List<Bookstore> bookstoreList = new ArrayList<>();
-        if (bookstore.getStauts() == null ||bookstore.getStauts() == 0) {
-            bookstoreList = bookstoreRepository.findAllByOwnerid(bookstore.getOwnerid());
-        } else {
-            bookstoreList = bookstoreRepository.findAllByOwnerid(bookstore.getOwnerid());
+        if (bookstore.getStauts() == null || bookstore.getStauts() == 0) {
+            bookstoreList = bookstoreRepository.findAllByOwneridOrUserid(bookstore.getOwnerid(), bookstore.getOwnerid());
+        } else if(bookstore.getStauts() == 1 || bookstore.getStauts() == 2) {
+            bookstoreList = bookstoreRepository.findAllByOwneridAndStauts(bookstore.getOwnerid(), bookstore.getStauts());
+        }
+        else if(bookstore.getStauts() == 3) {
+            bookstoreList = bookstoreRepository.findAllByUseridAndStauts(bookstore.getOwnerid(), bookstore.getStauts());
         }
         if (bookstoreList.size() == 0) {
             result.setMessage("你的书架为空!");

@@ -10,11 +10,22 @@ public class Bookstore {
     private int id;
     private Integer bookid;
     private Integer ownerid;
+    private Integer userid;
     private Integer stauts;
     private BigDecimal deposit;
     private BigDecimal fee;
     private Integer days;
     private Book book;
+
+    @Basic
+    @Column(name = "userid")
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
 
     @OneToOne
     @MapsId

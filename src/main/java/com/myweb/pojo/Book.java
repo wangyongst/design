@@ -15,9 +15,20 @@ public class Book {
     private String rating;
     private String publisher;
     private String translator;
+    private String catalog;
     private BigDecimal price;
     private String authorintro;
     private Integer userid;
+
+    @Basic
+    @Column(name = "catalog")
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
+    }
 
     @Id
     @Column(name = "id")
@@ -145,12 +156,13 @@ public class Book {
                 Objects.equals(translator, book.translator) &&
                 Objects.equals(price, book.price) &&
                 Objects.equals(authorintro, book.authorintro) &&
+                Objects.equals(catalog, book.catalog) &&
                 Objects.equals(userid, book.userid);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, isbn, title, author, image, rating, publisher, translator, price, authorintro, userid);
+        return Objects.hash(id, isbn, title, author, image, rating, publisher, translator, price, authorintro, userid,catalog);
     }
 }

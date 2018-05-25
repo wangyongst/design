@@ -49,7 +49,7 @@ public class OneController {
     @ApiOperation(value = "下架", notes = "用户下载图书（仅可以下架自己上传的图书，且图书为自有状态，即status为1状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "bookid", value = "bookid（必需）,这个id是book的id", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "owerid", value = "owerid（必需)，这个id是user的id", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "ownerid", value = "ownerid（必需)，这个id是user的id", required = true, dataType = "Integer")
     })
     @ResponseBody
     @PostMapping("/bookstore/out")
@@ -59,7 +59,7 @@ public class OneController {
 
     @ApiOperation(value = "分类显示图书", notes = "查询用户书架所有的图书")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "owerid", value = "owerid（必需）,这个id是user的id", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "ownerid", value = "owerid（必需）,这个id是user的id", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "stauts", value = "stauts（可选）,0为全部（不传此参数时的默认值），1为自有，2为借出，3为借入", required = true, dataType = "Integer")
     })
     @ResponseBody
