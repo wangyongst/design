@@ -14,10 +14,22 @@ public class Bookstore {
     private BigDecimal deposit;
     private BigDecimal fee;
     private Integer days;
+    private Book book;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "bookid" , insertable = false,updatable = false)
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -27,7 +39,7 @@ public class Bookstore {
     }
 
     @Basic
-    @Column(name = "bookid")
+    @Column(name = "bookid", insertable = false,updatable = false)
     public Integer getBookid() {
         return bookid;
     }

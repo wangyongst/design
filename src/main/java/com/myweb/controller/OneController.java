@@ -52,7 +52,7 @@ public class OneController {
             @ApiImplicitParam(name = "owerid", value = "owerid（必需)，这个id是user的id", required = true, dataType = "Integer")
     })
     @ResponseBody
-    @PostMapping("/bookstore/out}")
+    @PostMapping("/bookstore/out")
     public Result out(@ModelAttribute Bookstore bookstore) {
         return oneService.out(bookstore);
     }
@@ -63,7 +63,7 @@ public class OneController {
             @ApiImplicitParam(name = "stauts", value = "stauts（可选）,0为全部（不传此参数时的默认值），1为自有，2为借出，3为借入", required = true, dataType = "Integer")
     })
     @ResponseBody
-    @GetMapping("/bookstore/list}")
+    @GetMapping("/bookstore/list")
     public Result list(@ModelAttribute Bookstore bookstore) {
         return oneService.list(bookstore);
     }
@@ -77,7 +77,7 @@ public class OneController {
             @ApiImplicitParam(name = "deposit", value = "押金数额（可选）,2位小数", required = true, dataType = "BigDecimal")
     })
     @ResponseBody
-    @PostMapping("/bookstore/set}")
+    @PostMapping("/bookstore/set")
     public Result set(@ModelAttribute Bookstore bookstore) {
         return oneService.set(bookstore);
     }

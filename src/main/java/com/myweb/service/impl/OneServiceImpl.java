@@ -148,9 +148,10 @@ public class OneServiceImpl implements OneService {
         }
         book.setAuthorintro(dbBook.getAuthor_intro());
         book.setRating(dbBook.getRating().getAverage());
-        Book savedbook = bookRepository.save(book);
+        bookRepository.save(book);
         Bookstore bookstore = new Bookstore();
-        bookstore.setBookid(savedbook.getId());
+        //bookstore.setBookid(savedbook.getId());
+        bookstore.setBook(book);
         bookstore.setOwnerid(book.getUserid());
         bookstore.setStauts(1);
         bookstoreRepository.save(bookstore);
@@ -167,7 +168,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         List<Bookstore> bookstoreList = new ArrayList<>();
-        if (bookstore.getStauts() == 0) {
+        if (bookstore.getStauts() == null ||bookstore.getStauts() == 0) {
             bookstoreList = bookstoreRepository.findAllByOwnerid(bookstore.getOwnerid());
         } else {
             bookstoreList = bookstoreRepository.findAllByOwnerid(bookstore.getOwnerid());
@@ -182,6 +183,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result out(Bookstore bookstore) {
         Result result = new Result();
         if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0) {
@@ -198,7 +200,7 @@ public class OneServiceImpl implements OneService {
             result.setStatus(1);
             return result;
         }
-        result.setMessage("这本书目前不是归还状态，不能下架！");
+        result.setMessage("这本书目前不是自有状态，不能下架！");
         return result;
     }
 
@@ -278,6 +280,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result set(Bookstore bookstore) {
         Result result = new Result();
         if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0) {
