@@ -10,7 +10,6 @@ public class Bookstore {
     private int id;
     private Integer bookid;
     private Integer ownerid;
-    private String location;
     private Integer stauts;
     private BigDecimal deposit;
     private BigDecimal fee;
@@ -45,16 +44,6 @@ public class Bookstore {
 
     public void setOwnerid(Integer ownerid) {
         this.ownerid = ownerid;
-    }
-
-    @Basic
-    @Column(name = "location")
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     @Basic
@@ -105,7 +94,6 @@ public class Bookstore {
         return id == bookstore.id &&
                 Objects.equals(bookid, bookstore.bookid) &&
                 Objects.equals(ownerid, bookstore.ownerid) &&
-                Objects.equals(location, bookstore.location) &&
                 Objects.equals(stauts, bookstore.stauts) &&
                 Objects.equals(deposit, bookstore.deposit) &&
                 Objects.equals(fee, bookstore.fee) &&
@@ -115,6 +103,6 @@ public class Bookstore {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, bookid, ownerid, location, stauts, deposit, fee, days);
+        return Objects.hash(id, bookid, ownerid, stauts, deposit, fee, days);
     }
 }

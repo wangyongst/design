@@ -1,10 +1,13 @@
 package com.myweb.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private int id;
     private String username;

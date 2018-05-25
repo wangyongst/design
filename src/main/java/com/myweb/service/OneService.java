@@ -15,6 +15,10 @@ public interface OneService {
 
     public Result isbn(Book book);
 
+    public Result list(Bookstore bookstore);
+
+    public Result out(Bookstore bookstore);
+
     public Result weixinCode(String code);
 
     public Result weixinLogin(User user);
@@ -22,4 +26,6 @@ public interface OneService {
     public Result regist(User user);
 
     public Result login(User user);
+
+    public Result set(Bookstore bookstore);
 }

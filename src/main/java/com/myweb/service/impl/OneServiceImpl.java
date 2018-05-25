@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,10 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -154,10 +152,53 @@ public class OneServiceImpl implements OneService {
         Bookstore bookstore = new Bookstore();
         bookstore.setBookid(savedbook.getId());
         bookstore.setOwnerid(book.getUserid());
-        bookstore.setStauts(0);
+        bookstore.setStauts(1);
         bookstoreRepository.save(bookstore);
         result.setStatus(1);
         result.setData(book);
+        return result;
+    }
+
+    @Override
+    public Result list(Bookstore bookstore) {
+        Result result = new Result();
+        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        List<Bookstore> bookstoreList = new ArrayList<>();
+        if (bookstore.getStauts() == 0) {
+            bookstoreList = bookstoreRepository.findAllByOwnerid(bookstore.getOwnerid());
+        } else {
+            bookstoreList = bookstoreRepository.findAllByOwnerid(bookstore.getOwnerid());
+        }
+        if (bookstoreList.size() == 0) {
+            result.setMessage("你的书架为空!");
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(bookstoreList);
+        return result;
+    }
+
+    @Override
+    public Result out(Bookstore bookstore) {
+        Result result = new Result();
+        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        List<Book> bookList = bookRepository.findAllByIdAndUserid(bookstore.getBookid(), bookstore.getOwnerid());
+        if (bookList.size() < 1) {
+            result.setMessage("未找到这本书,或这本书不是你上架的图书！");
+            return result;
+        }
+        int out = bookstoreRepository.deleteAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
+        if (out > 0) {
+            result.setStatus(1);
+            return result;
+        }
+        result.setMessage("这本书目前不是归还状态，不能下架！");
         return result;
     }
 
@@ -233,6 +274,33 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         result.setMessage("登录失败！");
+        return result;
+    }
+
+    @Override
+    public Result set(Bookstore bookstore) {
+        Result result = new Result();
+        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        List<Book> bookList = bookRepository.findAllByIdAndUserid(bookstore.getBookid(), bookstore.getOwnerid());
+        if (bookList.size() < 1) {
+            result.setMessage("未找到这本书,或这本书不是你上架的图书！");
+            return result;
+        }
+        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
+        if (bookstoreList.size() == 0) {
+            result.setMessage("这本书目前不是自有状态，不能变更属性！");
+            return result;
+        }
+        bookstoreList.forEach(e -> {
+            if (bookstore.getDeposit() != null) e.setDeposit(bookstore.getDeposit());
+            if (bookstore.getDays() != null) e.setDays(bookstore.getDays());
+            if (bookstore.getFee() != null) e.setFee(bookstore.getFee());
+            bookstoreRepository.save(e);
+        });
+        result.setStatus(1);
         return result;
     }
 

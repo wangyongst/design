@@ -11,4 +11,12 @@ import java.util.List;
 @Repository
 @RepositoryDefinition(domainClass = Bookstore.class, idClass = Integer.class)
 public interface BookstoreRepository extends JpaRepository<Bookstore,Integer> {
+
+    public List<Bookstore> findAllByOwnerid(int owerid);
+
+    public int deleteAllByBookidAndOwneridAndStauts(int bookid,int ownerid,int status);
+
+    public List<Bookstore> findAllByBookidAndOwneridAndStauts(int bookid,int ownerid,int status);
+
+    public List<Bookstore> findAllByOwneridAndStauts(int owerid,int status);
 }
