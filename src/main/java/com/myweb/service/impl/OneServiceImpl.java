@@ -174,7 +174,7 @@ public class OneServiceImpl implements OneService {
             bookstoreList = bookstoreRepository.findAllByOwneridAndStauts(bookstore.getOwnerid(), bookstore.getStauts());
         }
         else if(bookstore.getStauts() == 3) {
-            bookstoreList = bookstoreRepository.findAllByUseridAndStauts(bookstore.getOwnerid(), bookstore.getStauts());
+            bookstoreList = bookstoreRepository.findAllByUseridAndStauts(bookstore.getOwnerid(), 2);
         }
         if (bookstoreList.size() == 0) {
             result.setMessage("你的书架为空!");
