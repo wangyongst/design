@@ -57,10 +57,10 @@ public class OneController {
         return oneService.out(bookstore);
     }
 
-    @ApiOperation(value = "全部", notes = "查询用户书架所有的图书")
+    @ApiOperation(value = "分类显示图书", notes = "查询用户书架所有的图书")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "owerid", value = "owerid（必需）,这个id是user的id", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "stauts", value = "stauts（可选）,0为全部，1为自有，2为借出，3为借入", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "stauts", value = "stauts（可选）,0为全部（不传此参数时的默认值），1为自有，2为借出，3为借入", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/bookstore/list}")
@@ -68,7 +68,7 @@ public class OneController {
         return oneService.list(bookstore);
     }
 
-    @ApiOperation(value = "全部", notes = "设置图书属性（仅可以设置自己上传的图书，且图书为自有状态，即status为1状态")
+    @ApiOperation(value = "设置图书属性", notes = "设置图书属性（仅可以设置自己上传的图书，且图书为自有状态，即status为1状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "owerid", value = "owerid（必需）,这个id是user的id", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "bookid", value = "bookid（必需）,这个id是book的id", required = true, dataType = "Integer"),
@@ -77,7 +77,7 @@ public class OneController {
             @ApiImplicitParam(name = "deposit", value = "押金数额（可选）,2位小数", required = true, dataType = "BigDecimal")
     })
     @ResponseBody
-    @GetMapping("/bookstore/set}")
+    @PostMapping("/bookstore/set}")
     public Result set(@ModelAttribute Bookstore bookstore) {
         return oneService.set(bookstore);
     }
