@@ -1,54 +1,49 @@
 package com.myweb.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "record")
-public class Record {
-    private int id;
-    private Integer bookid;
-    private Integer userid;
-    private Integer status;
-    private String time;
-//    private Book book;
-//    private User user;
-//
-//    @ManyToOne
-//    @MapsId
-//    @JoinColumn(name = "userid" , insertable = false,updatable = false)
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-//
-//    @ManyToOne
-//    @MapsId
-//    @JoinColumn(name = "bookid" , insertable = false,updatable = false)
-//    public Book getBook() {
-//        return book;
-//    }
-//
-//    public void setBook(Book book) {
-//        this.book = book;
-//    }
-
-    @Basic
-    @Column(name = "time")
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
+public class Record implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "userid")
+    private User user;
+    @Basic
+    @Column(name = "status")
+    private Integer status;
+    @Basic
+    @Column(name = "time")
+    private String time;
+    @Basic
+    @Column(name = "letter")
+    private String letter;
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "bookstoreid")
+    private Bookstore bookstore;
+
+    @Basic
+    @Column(name = "bookstoreid",insertable = false,updatable = false)
+    private String bookstoreid;
+
+    public String getBookstoreid() {
+        return bookstoreid;
+    }
+
+    public void setBookstoreid(String bookstoreid) {
+        this.bookstoreid = bookstoreid;
+    }
+
     public int getId() {
         return id;
     }
@@ -57,28 +52,14 @@ public class Record {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "bookid",insertable = false,updatable = false)
-    public Integer getBookid() {
-        return bookid;
+    public User getUser() {
+        return user;
     }
 
-    public void setBookid(Integer bookid) {
-        this.bookid = bookid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Basic
-    @Column(name = "userid",insertable = false,updatable = false)
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
-
-    @Basic
-    @Column(name = "status")
     public Integer getStatus() {
         return status;
     }
@@ -87,21 +68,27 @@ public class Record {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Record record = (Record) o;
-        return id == record.id &&
-                Objects.equals(bookid, record.bookid) &&
-                Objects.equals(userid, record.userid) &&
-                Objects.equals(time, record.time) &&
-                Objects.equals(status, record.status);
+    public String getTime() {
+        return time;
     }
 
-    @Override
-    public int hashCode() {
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-        return Objects.hash(id, bookid, userid, status,time);
+    public String getLetter() {
+        return letter;
+    }
+
+    public void setLetter(String letter) {
+        this.letter = letter;
+    }
+
+    public Bookstore getBookstore() {
+        return bookstore;
+    }
+
+    public void setBookstore(Bookstore bookstore) {
+        this.bookstore = bookstore;
     }
 }

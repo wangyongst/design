@@ -3,23 +3,37 @@ package com.myweb.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
-    private int id;
-    private String username;
-    private String password;
-    private String openid;
-    private String phone;
-    private String avatar;
-    private String createtime;
-
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private int id;
+    @Basic
+    @Column(name = "username")
+    private String username;
+    @Basic
+    @Column(name = "password")
+    private String password;
+    @Basic
+    @Column(name = "openid")
+    private String openid;
+    @Basic
+    @Column(name = "phone")
+    private String phone;
+    @Basic
+    @Column(name = "avatar")
+    private String avatar;
+    @Basic
+    @Column(name = "createtime")
+    private String createtime;
+
     public int getId() {
         return id;
     }
@@ -28,8 +42,6 @@ public class User {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -38,8 +50,6 @@ public class User {
         this.username = username;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -48,8 +58,6 @@ public class User {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "openid")
     public String getOpenid() {
         return openid;
     }
@@ -58,8 +66,6 @@ public class User {
         this.openid = openid;
     }
 
-    @Basic
-    @Column(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -68,8 +74,6 @@ public class User {
         this.phone = phone;
     }
 
-    @Basic
-    @Column(name = "avatar")
     public String getAvatar() {
         return avatar;
     }
@@ -78,33 +82,11 @@ public class User {
         this.avatar = avatar;
     }
 
-    @Basic
-    @Column(name = "createtime")
     public String getCreatetime() {
         return createtime;
     }
 
     public void setCreatetime(String createtime) {
         this.createtime = createtime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id &&
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(openid, user.openid) &&
-                Objects.equals(phone, user.phone) &&
-                Objects.equals(avatar, user.avatar) &&
-                Objects.equals(createtime, user.createtime);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, username, password, openid, phone, avatar, createtime);
     }
 }

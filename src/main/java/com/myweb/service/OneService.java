@@ -2,6 +2,7 @@ package com.myweb.service;
 
 
 import com.myweb.pojo.*;
+import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,21 +12,21 @@ import javax.servlet.http.HttpSession;
 
 public interface OneService {
 
-    public Result scan(Book book);
+    public Result scan(OneParameter oneParameter);
 
-    public Result isbn(Book book);
+    public Result isbn(OneParameter oneParameter);
 
-    public Result list(Bookstore bookstore);
+    public Result list(OneParameter oneParameter);
 
-    public Result out(Bookstore bookstore);
+    public Result out(OneParameter oneParameter);
 
     public Result weixinCode(String code);
 
-    public Result weixinLogin(User user);
+    public Result weixinLogin(OneParameter oneParameter);
 
-    public Result regist(User user);
+    public Result regist(OneParameter oneParameter);
 
-    public Result login(User user);
+    public Result login(OneParameter oneParameter);
 
-    public Result set(Bookstore bookstore);
+    public Result set(OneParameter oneParameter);
 }

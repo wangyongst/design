@@ -9,6 +9,7 @@ import com.myweb.pojo.User;
 import com.myweb.service.OneService;
 import com.myweb.service.TwoService;
 import com.myweb.vo.DBBook;
+import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import com.utils.WeixinUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,120 +51,332 @@ public class TwoServiceImpl implements TwoService {
     private BookstoreRepository bookstoreRepository;
 
     @Autowired
-    private FollowRepository followRepository;
-
-    @Autowired
-    private PayRepository payRepository;
-
-    @Autowired
     private RecordRepository recordRepository;
 
 
     @Override
-    public Result borrowRequest(Record record) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result borrowRequest(TwoParameter twoParameter) {
         Result result = new Result();
-        if (record.getBookid() == null || record.getBookid() == 0 || record.getUserid() == null || record.getUserid() == 0) {
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndStauts(record.getBookid(), 1);
-        if (bookstoreList.size() != 1) {
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 1) {
             result.setMessage("未找到这本书,或这本书不可借！");
             return result;
         }
+        Record record = new Record();
+        record.setUser(userRepository.findOne(twoParameter.getUserid()));
+        if (StringUtils.isNotBlank(twoParameter.getLetter())) record.setLetter(twoParameter.getLetter());
         record.setStatus(1);
         record.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        record.setBookstore(bookstore);
         recordRepository.save(record);
         result.setStatus(1);
-        result.setData(record);
+        result.setData(bookstore);
         return result;
     }
 
     @Override
-    public Result borrowAgree(Bookstore bookstore) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result returnRequest(TwoParameter twoParameter) {
         Result result = new Result();
-        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0 || bookstore.getUserid() == null || bookstore.getUserid() == 0) {
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
-        if (bookstoreList.size() != 1) {
-            result.setMessage("未找到这本书,或这本书不可借出！");
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 2 || bookstore.getUser().getId() != twoParameter.getUserid()) {
+            result.setMessage("未找到这本书,或这本书不可还！");
             return result;
         }
-        List<Record> recordList = recordRepository.findAllByBookidAndUseridAndStatus(bookstore.getBookid(),bookstore.getUserid(),1);
-        if (bookstoreList.size() == 0) {
-            result.setMessage("未找借书申请！");
-            return result;
-        }
-        recordList.forEach(e->{
-            e.setStatus(2);
-            e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            recordRepository.save(e);
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 7) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(8);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
         });
-
         result.setStatus(1);
-        result.setData(recordList);
+        result.setData(bookstore);
         return result;
     }
 
     @Override
-    public Result borrowDisagree(Bookstore bookstore) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result borrowAgree(TwoParameter twoParameter) {
         Result result = new Result();
-        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0 || bookstore.getUserid() == null || bookstore.getUserid() == 0) {
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
-        if (bookstoreList.size() != 1) {
-            result.setMessage("未找到这本书,或这本书不可借出！");
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 1 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可借！");
             return result;
         }
-        List<Record> recordList = recordRepository.findAllByBookidAndUseridAndStatus(bookstore.getBookid(),bookstore.getUserid(),1);
-        if (bookstoreList.size() == 0) {
-            result.setMessage("未找借书申请！");
-            return result;
-        }
-        recordList.forEach(e->{
-            e.setStatus(3);
-            e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            recordRepository.save(e);
+        bookstore.getRecord().forEach(e -> {
+            if (e.getStatus() == 1 && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(2);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
         });
-
         result.setStatus(1);
-        result.setData(recordList);
+        result.setData(bookstore);
         return result;
     }
 
     @Override
-    public Result borrowConfirm(Bookstore bookstore) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result borrowDisagree(TwoParameter twoParameter) {
         Result result = new Result();
-        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0 || bookstore.getUserid() == null || bookstore.getUserid() == 0) {
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
-        if (bookstoreList.size() != 1) {
-            result.setMessage("未找到这本书,或这本书不可借出！");
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 1 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可借！");
             return result;
         }
-        List<Record> recordList = recordRepository.findAllByBookidAndUseridAndStatus(bookstore.getBookid(),bookstore.getUserid(),5);
-        if (bookstoreList.size() == 0) {
-            result.setMessage("未找借书申请！");
-            return result;
-        }
-        recordList.forEach(e->{
-            e.setStatus(6);
-            e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            recordRepository.save(e);
-        });
-        bookstoreList.forEach(e->{
-            e.setUserid(bookstore.getUserid());
-            e.setStauts(2);
-            bookstoreRepository.save(e);
+
+        bookstore.getRecord().forEach(e -> {
+            if (e.getStatus() == 1 && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(3);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
         });
         result.setStatus(1);
-        result.setData(bookstoreList);
+        result.setData(bookstore);
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result returnDisagree(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 2 || bookstore.getUser().getId() != twoParameter.getUserid()) {
+            result.setMessage("未找到这本书,或这本书不可还！");
+            return result;
+        }
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 10) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(11);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result borrowConfirm(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 1 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可借！");
+            return result;
+        }
+
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 6 || e.getStatus() == 4) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(7);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+                bookstore.setUser(userRepository.findOne(twoParameter.getUserid()));
+                bookstoreRepository.save(bookstore);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result returnAgree(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 2 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可还！");
+            return result;
+        }
+
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 10) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(12);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+                bookstore.setUser(null);
+                bookstoreRepository.save(bookstore);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result returnFee(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 2 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可还！");
+            return result;
+        }
+
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 9 || e.getStatus() == 11) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(10);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result returnConfirm(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 2 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可还！");
+            return result;
+        }
+
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 8) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(9);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result returnOk(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 2 || bookstore.getOwner().getId() != twoParameter.getOwnerid()) {
+            result.setMessage("未找到这本书,或这本书不可还！");
+            return result;
+        }
+
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 9|| e.getStatus() == 11) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(12);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
+    @Override
+    public Result borrowMyrequest(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        if (twoParameter.getStatus() == null || twoParameter.getStatus() == 0) {
+            result.setStatus(1);
+            result.setData(recordRepository.findAllByUserid(twoParameter.getUserid()));
+        }
+        result.setStatus(1);
+        result.setData(recordRepository.findAllByUseridAndStatus(twoParameter.getUserid(), twoParameter.getStatus()));
+        return result;
+    }
+
+    @Override
+    public Result borrowTorequest(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getOwnerid() == null || twoParameter.getOwnerid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        if (twoParameter.getStatus() == null || twoParameter.getStatus() == 0) {
+            result.setStatus(1);
+            result.setData(recordRepository.findAllByOwnerid(twoParameter.getOwnerid()));
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(recordRepository.findAllByOwneridAndStatus(twoParameter.getOwnerid(), twoParameter.getStatus()));
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result borrowStart(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 1) {
+            result.setMessage("未找到这本书,或这本书不可借！");
+            return result;
+        }
+
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 2) && e.getUser().getId() == twoParameter.getUserid()) {
+                if (bookstore.getDeposit() == null || bookstore.getDeposit().intValue() == 0) {
+                    e.setStatus(4);
+
+                } else {
+                    e.setStatus(5);
+                }
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
         return result;
     }
 }

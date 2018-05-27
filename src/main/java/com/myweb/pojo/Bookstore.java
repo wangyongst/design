@@ -1,46 +1,50 @@
 package com.myweb.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "bookstore")
-public class Bookstore {
-    private int id;
-    private Integer bookid;
-    private Integer ownerid;
-    private Integer userid;
-    private Integer stauts;
-    private BigDecimal deposit;
-    private BigDecimal fee;
-    private Integer days;
-    private Book book;
-
-    @Basic
-    @Column(name = "userid")
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "bookid" , insertable = false,updatable = false)
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
+public class Bookstore implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Basic
+    @Column(name = "status")
+    private Integer status;
+    @Basic
+    @Column(name = "deposit")
+    private BigDecimal deposit;
+    @Basic
+    @Column(name = "fee")
+    private BigDecimal fee;
+    @Basic
+    @Column(name = "days")
+    private Integer days;
+    @Basic
+    @Column(name = "weight")
+    private Integer weigth;
+    @OneToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "bookid", referencedColumnName = "id")
+    private Book book;
+    @OneToMany(mappedBy = "bookstore",cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    private Set<Record> record =  new HashSet<Record>();;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "ownerid", referencedColumnName = "id")
+    private User owner;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    private User user;
+
     public int getId() {
         return id;
     }
@@ -49,38 +53,14 @@ public class Bookstore {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "bookid", insertable = false,updatable = false)
-    public Integer getBookid() {
-        return bookid;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setBookid(Integer bookid) {
-        this.bookid = bookid;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    @Basic
-    @Column(name = "ownerid")
-    public Integer getOwnerid() {
-        return ownerid;
-    }
-
-    public void setOwnerid(Integer ownerid) {
-        this.ownerid = ownerid;
-    }
-
-    @Basic
-    @Column(name = "stauts")
-    public Integer getStauts() {
-        return stauts;
-    }
-
-    public void setStauts(Integer stauts) {
-        this.stauts = stauts;
-    }
-
-    @Basic
-    @Column(name = "deposit")
     public BigDecimal getDeposit() {
         return deposit;
     }
@@ -89,8 +69,6 @@ public class Bookstore {
         this.deposit = deposit;
     }
 
-    @Basic
-    @Column(name = "fee")
     public BigDecimal getFee() {
         return fee;
     }
@@ -99,8 +77,6 @@ public class Bookstore {
         this.fee = fee;
     }
 
-    @Basic
-    @Column(name = "days")
     public Integer getDays() {
         return days;
     }
@@ -109,23 +85,43 @@ public class Bookstore {
         this.days = days;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bookstore bookstore = (Bookstore) o;
-        return id == bookstore.id &&
-                Objects.equals(bookid, bookstore.bookid) &&
-                Objects.equals(ownerid, bookstore.ownerid) &&
-                Objects.equals(stauts, bookstore.stauts) &&
-                Objects.equals(deposit, bookstore.deposit) &&
-                Objects.equals(fee, bookstore.fee) &&
-                Objects.equals(days, bookstore.days);
+    public Integer getWeigth() {
+        return weigth;
     }
 
-    @Override
-    public int hashCode() {
+    public void setWeigth(Integer weigth) {
+        this.weigth = weigth;
+    }
 
-        return Objects.hash(id, bookid, ownerid, stauts, deposit, fee, days);
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Set<Record> getRecord() {
+        return record;
+    }
+
+    public void setRecord(Set<Record> record) {
+        this.record = record;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -7,6 +7,7 @@ import com.myweb.pojo.Bookstore;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
 import com.myweb.vo.DBBook;
+import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import com.utils.WeixinUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,25 +48,19 @@ public class OneServiceImpl implements OneService {
     private BookstoreRepository bookstoreRepository;
 
     @Autowired
-    private FollowRepository followRepository;
-
-    @Autowired
-    private PayRepository payRepository;
-
-    @Autowired
     private RecordRepository recordRepository;
 
     @Override
-    public Result scan(Book book) {
+    public Result scan(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(book.getIsbn())) {
+        if (StringUtils.isBlank(oneParameter.getIsbn())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
         String url = "https://api.douban.com/v2/book/isbn/";
         String response = null;
         try {
-            response = restTemplate.getForObject(url + book.getIsbn(), String.class);
+            response = restTemplate.getForObject(url + oneParameter.getIsbn(), String.class);
         } catch (RestClientException e) {
             result.setMessage("Douban api has exception!");
             return result;
@@ -82,6 +78,7 @@ public class OneServiceImpl implements OneService {
         for (String translator : dbBook.getTranslator()) {
             translators = translators + "," + translator;
         }
+        Book book = new Book();
         if (StringUtils.isNotBlank(translators)) {
             book.setTranslator(translators.substring(1));
         }
@@ -92,8 +89,8 @@ public class OneServiceImpl implements OneService {
         if (StringUtils.isNotBlank(dbBook.getPrice())) {
             book.setPrice(new BigDecimal(dbBook.getPrice().substring(0, dbBook.getPrice().length() - 1)));
         }
-        book.setAuthorintro(dbBook.getAuthor_intro());
         book.setRating(dbBook.getRating().getAverage());
+        book.setSummary(dbBook.getSummary());
         result.setStatus(1);
         result.setData(book);
         return result;
@@ -101,16 +98,16 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result isbn(Book book) {
+    public Result isbn(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(book.getIsbn()) || book.getUserid() == 0) {
+        if (StringUtils.isBlank(oneParameter.getIsbn()) || oneParameter.getUserid() == 0) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
         String url = "https://api.douban.com/v2/book/isbn/";
         String response = null;
         try {
-            response = restTemplate.getForObject(url + book.getIsbn(), String.class);
+            response = restTemplate.getForObject(url + oneParameter.getIsbn(), String.class);
         } catch (RestClientException e) {
             result.setMessage("从豆瓣获取图书信息失败!");
             return result;
@@ -128,10 +125,10 @@ public class OneServiceImpl implements OneService {
         for (String author : dbBook.getAuthor()) {
             authors = authors + "," + author;
         }
+        Book book = new Book();
         if (StringUtils.isNotBlank(authors)) {
             book.setAuthor(authors.substring(1));
         }
-
         String translators = "";
         for (String translator : dbBook.getTranslator()) {
             translators = translators + "," + translator;
@@ -146,14 +143,13 @@ public class OneServiceImpl implements OneService {
         if (StringUtils.isNotBlank(dbBook.getPrice())) {
             book.setPrice(new BigDecimal(dbBook.getPrice().substring(0, dbBook.getPrice().length() - 1)));
         }
-        book.setAuthorintro(dbBook.getAuthor_intro());
         book.setRating(dbBook.getRating().getAverage());
-        book.setCatalog(dbBook.getCatalog());
+        book.setSummary(dbBook.getSummary());
         bookRepository.save(book);
         Bookstore bookstore = new Bookstore();
         bookstore.setBook(book);
-        bookstore.setOwnerid(book.getUserid());
-        bookstore.setStauts(1);
+        bookstore.setOwner(userRepository.findOne(oneParameter.getUserid()));
+        bookstore.setStatus(1);
         bookstoreRepository.save(bookstore);
         result.setStatus(1);
         result.setData(book);
@@ -161,20 +157,20 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    public Result list(Bookstore bookstore) {
+    public Result list(OneParameter oneParameter) {
         Result result = new Result();
-        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0) {
+        if (oneParameter.getOwnerid() == null || oneParameter.getOwnerid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
         List<Bookstore> bookstoreList = new ArrayList<>();
-        if (bookstore.getStauts() == null || bookstore.getStauts() == 0) {
-            bookstoreList = bookstoreRepository.findAllByOwneridOrUserid(bookstore.getOwnerid(), bookstore.getOwnerid());
-        } else if(bookstore.getStauts() == 1 || bookstore.getStauts() == 2) {
-            bookstoreList = bookstoreRepository.findAllByOwneridAndStauts(bookstore.getOwnerid(), bookstore.getStauts());
+        if (oneParameter.getStatus() == null || oneParameter.getStatus() == 0) {
+            bookstoreList = bookstoreRepository.findAllByOwneridOrUserid(oneParameter.getOwnerid(), oneParameter.getOwnerid());
+        } else if(oneParameter.getStatus() == 1 || oneParameter.getStatus() == 2) {
+            bookstoreList = bookstoreRepository.findAllByOwneridAndStatus(oneParameter.getOwnerid(), oneParameter.getStatus());
         }
-        else if(bookstore.getStauts() == 3) {
-            bookstoreList = bookstoreRepository.findAllByUseridAndStauts(bookstore.getOwnerid(), 2);
+        else if(oneParameter.getStatus() == 3) {
+            bookstoreList = bookstoreRepository.findAllByUseridAndStatus(oneParameter.getOwnerid(), 2);
         }
         if (bookstoreList.size() == 0) {
             result.setMessage("你的书架为空!");
@@ -187,23 +183,26 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result out(Bookstore bookstore) {
+    public Result out(OneParameter oneParameter) {
         Result result = new Result();
-        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0) {
+        if (oneParameter.getOwnerid() == null || oneParameter.getOwnerid() == 0 || StringUtils.isBlank(oneParameter.getBookids())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<Book> bookList = bookRepository.findAllByIdAndUserid(bookstore.getBookid(), bookstore.getOwnerid());
-        if (bookList.size() < 1) {
-            result.setMessage("未找到这本书,或这本书不是你上架的图书！");
-            return result;
+        List<Integer> bookids = new ArrayList<>();
+        String[] ids = oneParameter.getBookids().split(",");
+        for(String id : ids){
+            bookids.add(Integer.parseInt(id));
         }
-        int out = bookstoreRepository.deleteAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
-        if (out > 0) {
+        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidsAndOwneridAndStatus(bookids, oneParameter.getOwnerid(),1);
+        if (bookstoreList.size() > 0) {
+           bookstoreList.forEach(e->{
+               bookstoreRepository.delete(e);
+           });
             result.setStatus(1);
-            return result;
+        }else{
+            result.setMessage("未找到这本书,或这本书不是自有状态，不可下架！");
         }
-        result.setMessage("这本书目前不是自有状态，不能下架！");
         return result;
     }
 
@@ -246,16 +245,19 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result regist(User user) {
+    public Result regist(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword()) || user.getId() != 0) {
+        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getPassword()) || oneParameter.getId() != 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        if (userRepository.findByUsername(user.getUsername()).size() > 0) {
+        if (userRepository.findByUsername(oneParameter.getUsername()).size() > 0) {
             result.setMessage("用户名已经被占用!");
             return result;
         }
+        User user = new User();
+        user.setUsername(oneParameter.getUsername());
+        user.setPassword(oneParameter.getPassword());
         userRepository.save(user);
         result.setStatus(1);
         result.setData(user);
@@ -263,13 +265,13 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    public Result login(User user) {
+    public Result login(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())) {
+        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getPassword())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<User> userList = userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+        List<User> userList = userRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
         if (userList.size() == 1) {
             result.setStatus(1);
             result.setData(userList.get(0));
@@ -284,40 +286,36 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result set(Bookstore bookstore) {
+    public Result set(OneParameter oneParameter) {
         Result result = new Result();
-        if (bookstore.getOwnerid() == null || bookstore.getOwnerid() == 0 || bookstore.getBookid() == null || bookstore.getBookid() == 0) {
+        if (oneParameter.getOwnerid() == null || oneParameter.getOwnerid() == 0 || oneParameter.getBookid() == null || oneParameter.getBookid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<Book> bookList = bookRepository.findAllByIdAndUserid(bookstore.getBookid(), bookstore.getOwnerid());
-        if (bookList.size() < 1) {
-            result.setMessage("未找到这本书,或这本书不是你上架的图书！");
-            return result;
+        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStatus(oneParameter.getBookid().intValue(), oneParameter.getOwnerid().intValue(), 1);
+        if (bookstoreList.size() > 0) {
+            bookstoreList.forEach(e -> {
+                if (oneParameter.getDeposit() != null) e.setDeposit(oneParameter.getDeposit());
+                if (oneParameter.getDays() != null) e.setDays(oneParameter.getDays());
+                if (oneParameter.getFee() != null) e.setFee(oneParameter.getFee());
+                e.setWeigth(oneParameter.getWeigth());
+                bookstoreRepository.save(e);
+            });
+            result.setStatus(1);
+        }else {
+            result.setMessage("未找到这本书,或这本书不是自有状态，不可变更属性！");
         }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStauts(bookstore.getBookid(), bookstore.getOwnerid(), 1);
-        if (bookstoreList.size() == 0) {
-            result.setMessage("这本书目前不是自有状态，不能变更属性！");
-            return result;
-        }
-        bookstoreList.forEach(e -> {
-            if (bookstore.getDeposit() != null) e.setDeposit(bookstore.getDeposit());
-            if (bookstore.getDays() != null) e.setDays(bookstore.getDays());
-            if (bookstore.getFee() != null) e.setFee(bookstore.getFee());
-            bookstoreRepository.save(e);
-        });
-        result.setStatus(1);
         return result;
     }
 
     @Override
-    public Result weixinLogin(User user) {
+    public Result weixinLogin(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(user.getOpenid())) {
+        if (StringUtils.isBlank(oneParameter.getOpenid())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        List<User> userList = userRepository.findByOpenid(user.getOpenid());
+        List<User> userList = userRepository.findByOpenid(oneParameter.getOpenid());
         if (userList.size() == 1) {
             result.setStatus(1);
             result.setData(userList.get(0));

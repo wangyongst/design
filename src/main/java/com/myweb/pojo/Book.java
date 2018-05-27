@@ -1,38 +1,46 @@
 package com.myweb.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 @Table(name = "book")
-public class Book {
-    private int id;
-    private String isbn;
-    private String title;
-    private String author;
-    private String image;
-    private String rating;
-    private String publisher;
-    private String translator;
-    private String catalog;
-    private BigDecimal price;
-    private String authorintro;
-    private Integer userid;
-
-    @Basic
-    @Column(name = "catalog")
-    public String getCatalog() {
-        return catalog;
-    }
-
-    public void setCatalog(String catalog) {
-        this.catalog = catalog;
-    }
-
+public class Book implements Serializable{
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+    @Basic
+    @Column(name = "isbn")
+    private String isbn;
+    @Basic
+    @Column(name = "title")
+    private String title;
+    @Basic
+    @Column(name = "author")
+    private String author;
+    @Basic
+    @Column(name = "image")
+    private String image;
+    @Basic
+    @Column(name = "rating")
+    private String rating;
+    @Basic
+    @Column(name = "publisher")
+    private String publisher;
+    @Basic
+    @Column(name = "translator")
+    private String translator;
+    @Basic
+    @Column(name = "price")
+    private BigDecimal price;
+    @Basic
+    @Column(name = "summary")
+    private String summary;
+
     public int getId() {
         return id;
     }
@@ -41,8 +49,6 @@ public class Book {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "isbn")
     public String getIsbn() {
         return isbn;
     }
@@ -51,8 +57,6 @@ public class Book {
         this.isbn = isbn;
     }
 
-    @Basic
-    @Column(name = "title")
     public String getTitle() {
         return title;
     }
@@ -61,8 +65,6 @@ public class Book {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "author")
     public String getAuthor() {
         return author;
     }
@@ -71,8 +73,6 @@ public class Book {
         this.author = author;
     }
 
-    @Basic
-    @Column(name = "image")
     public String getImage() {
         return image;
     }
@@ -81,8 +81,6 @@ public class Book {
         this.image = image;
     }
 
-    @Basic
-    @Column(name = "rating")
     public String getRating() {
         return rating;
     }
@@ -91,8 +89,6 @@ public class Book {
         this.rating = rating;
     }
 
-    @Basic
-    @Column(name = "publisher")
     public String getPublisher() {
         return publisher;
     }
@@ -101,8 +97,6 @@ public class Book {
         this.publisher = publisher;
     }
 
-    @Basic
-    @Column(name = "translator")
     public String getTranslator() {
         return translator;
     }
@@ -111,58 +105,19 @@ public class Book {
         this.translator = translator;
     }
 
-    @Basic
-    @Column(name = "price")
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    @Basic
-    @Column(name = "authorintro")
-    public String getAuthorintro() {
-        return authorintro;
-    }
-
-    public void setAuthorintro(String authorintro) {
-        this.authorintro = authorintro;
-    }
-
-    @Basic
-    @Column(name = "userid")
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return id == book.id &&
-                Objects.equals(isbn, book.isbn) &&
-                Objects.equals(title, book.title) &&
-                Objects.equals(author, book.author) &&
-                Objects.equals(image, book.image) &&
-                Objects.equals(rating, book.rating) &&
-                Objects.equals(publisher, book.publisher) &&
-                Objects.equals(translator, book.translator) &&
-                Objects.equals(price, book.price) &&
-                Objects.equals(authorintro, book.authorintro) &&
-                Objects.equals(catalog, book.catalog) &&
-                Objects.equals(userid, book.userid);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, isbn, title, author, image, rating, publisher, translator, price, authorintro, userid,catalog);
     }
 }

@@ -10,7 +10,4 @@ import java.util.List;
 @Repository
 @RepositoryDefinition(domainClass = Book.class, idClass = Integer.class)
 public interface BookRepository extends JpaRepository<Book, Integer> {
-
-    public List<Book> findAllByIdAndUserid(int id, int userid);
-
 }
