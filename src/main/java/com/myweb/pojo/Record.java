@@ -27,22 +27,10 @@ public class Record implements Serializable {
     @Basic
     @Column(name = "letter")
     private String letter;
-    @JsonIgnore
+
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "bookstoreid")
     private Bookstore bookstore;
-
-    @Basic
-    @Column(name = "bookstoreid",insertable = false,updatable = false)
-    private String bookstoreid;
-
-    public String getBookstoreid() {
-        return bookstoreid;
-    }
-
-    public void setBookstoreid(String bookstoreid) {
-        this.bookstoreid = bookstoreid;
-    }
 
     public int getId() {
         return id;

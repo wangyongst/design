@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "bookstore")
@@ -37,7 +34,7 @@ public class Bookstore implements Serializable {
     @JoinColumn(name = "bookid", referencedColumnName = "id")
     private Book book;
     @OneToMany(mappedBy = "bookstore",cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    private Set<Record> record =  new HashSet<Record>();;
+    private List<Record> record =  new ArrayList<>();;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "ownerid", referencedColumnName = "id")
     private User owner;
@@ -101,11 +98,11 @@ public class Bookstore implements Serializable {
         this.book = book;
     }
 
-    public Set<Record> getRecord() {
+    public List<Record> getRecord() {
         return record;
     }
 
-    public void setRecord(Set<Record> record) {
+    public void setRecord(List<Record> record) {
         this.record = record;
     }
 

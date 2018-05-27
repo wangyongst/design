@@ -176,6 +176,11 @@ public class OneServiceImpl implements OneService {
             result.setMessage("你的书架为空!");
             return result;
         }
+        for( int i = 0 ; i < bookstoreList.size() ; i ++){
+            for(int t = 0 ; t < bookstoreList.get(i).getRecord().size() ; t ++){
+                bookstoreList.get(i).getRecord().get(t).setBookstore(null);
+            }
+        }
         result.setStatus(1);
         result.setData(bookstoreList);
         return result;
