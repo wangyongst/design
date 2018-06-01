@@ -104,6 +104,32 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result borrowAccept(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getBookstoreid() == null || twoParameter.getBookstoreid() == 0 || twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Bookstore bookstore = bookstoreRepository.findOne(twoParameter.getBookstoreid());
+        if (bookstore == null || bookstore.getStatus() != 1) {
+            result.setMessage("未找到这本书,或这本书不可借！");
+            return result;
+        }
+        bookstore.getRecord().forEach(e -> {
+            if ((e.getStatus() == 13) && e.getUser().getId() == twoParameter.getUserid()) {
+                e.setStatus(7);
+                e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                recordRepository.save(e);
+            }
+        });
+        result.setStatus(1);
+        result.setData(bookstore);
+        return result;
+    }
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result borrowAgree(TwoParameter twoParameter) {
@@ -118,16 +144,13 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if (e.getStatus() == 1 && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(2);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -148,16 +171,13 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if (e.getStatus() == 1 && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(3);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -179,16 +199,13 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if ((e.getStatus() == 10) && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(11);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -210,18 +227,16 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if ((e.getStatus() == 6 || e.getStatus() == 4) && e.getUser().getId() == twoParameter.getUserid()) {
-                e.setStatus(7);
+                e.setStatus(13);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
                 bookstore.setUser(userRepository.findOne(twoParameter.getUserid()));
+                bookstore.setStatus(2);
                 bookstoreRepository.save(bookstore);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -241,20 +256,17 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("未找到这本书,或这本书不可还！");
             return result;
         }
-
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if ((e.getStatus() == 10) && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(12);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
                 bookstore.setUser(null);
+                bookstore.setStatus(1);
                 bookstoreRepository.save(bookstore);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -275,16 +287,13 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if ((e.getStatus() == 9 || e.getStatus() == 11) && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(10);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -305,16 +314,13 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if ((e.getStatus() == 8) && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(9);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -335,16 +341,16 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
-            if ((e.getStatus() == 9|| e.getStatus() == 11) && e.getUser().getId() == twoParameter.getUserid()) {
+            if ((e.getStatus() == 9 || e.getStatus() == 11) && e.getUser().getId() == twoParameter.getUserid()) {
                 e.setStatus(12);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
+                bookstore.setUser(null);
+                bookstore.setStatus(1);
+                bookstoreRepository.save(bookstore);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);
@@ -361,11 +367,8 @@ public class TwoServiceImpl implements TwoService {
         }
         if (twoParameter.getStatus() == null || twoParameter.getStatus() == 0) {
             recordList = recordRepository.findAllByUserid(twoParameter.getUserid());
-        }else{
-            recordList =recordRepository.findAllByUseridAndStatus(twoParameter.getUserid(), twoParameter.getStatus());
-        }
-        for(int i = 0 ; i < recordList.size() ; i ++){
-            recordList.get(i).getBookstore().setRecord(null);
+        } else {
+            recordList = recordRepository.findAllByUseridAndStatus(twoParameter.getUserid(), twoParameter.getStatus());
         }
         result.setStatus(1);
         result.setData(recordList);
@@ -382,11 +385,8 @@ public class TwoServiceImpl implements TwoService {
         }
         if (twoParameter.getStatus() == null || twoParameter.getStatus() == 0) {
             recordList = recordRepository.findAllByOwnerid(twoParameter.getOwnerid());
-        }else {
+        } else {
             recordList = recordRepository.findAllByOwneridAndStatus(twoParameter.getOwnerid(), twoParameter.getStatus());
-        }
-        for(int i = 0 ; i < recordList.size() ; i ++){
-            recordList.get(i).getBookstore().setRecord(null);
         }
         result.setStatus(1);
         result.setData(recordList);
@@ -407,21 +407,17 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         List<Record> recordList = bookstore.getRecord();
-        for(int i = 0 ; i < recordList.size() ; i ++){
+        for (int i = 0; i < recordList.size(); i++) {
             Record e = recordList.get(i);
             if ((e.getStatus() == 2) && e.getUser().getId() == twoParameter.getUserid()) {
                 if (bookstore.getDeposit() == null || bookstore.getDeposit().intValue() == 0) {
                     e.setStatus(4);
-
                 } else {
                     e.setStatus(5);
                 }
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
             }
-        }
-        for(int t = 0 ; t < bookstore.getRecord().size() ; t ++){
-            bookstore.getRecord().get(t).setBookstore(null);
         }
         result.setStatus(1);
         result.setData(bookstore);

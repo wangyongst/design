@@ -27,9 +27,8 @@ public class Record implements Serializable {
     @Basic
     @Column(name = "letter")
     private String letter;
-
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "bookstoreid")
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH ,CascadeType.PERSIST})
+    @JoinColumn(name = "bookstoreid",referencedColumnName = "id")
     private Bookstore bookstore;
 
     public int getId() {

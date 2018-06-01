@@ -13,7 +13,17 @@ public class OneParameter {
     private BigDecimal deposit;
     private BigDecimal fee;
     private Integer days;
-    private Integer weigth;
+    private Integer weight;
+    private Integer length;
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
     private String isbn;
     private String username;
     private String password;
@@ -84,13 +94,9 @@ public class OneParameter {
         this.days = days;
     }
 
-    public Integer getWeigth() {
-        return weigth;
-    }
+    public Integer getWeight() {        return weight;    }
 
-    public void setWeigth(Integer weigth) {
-        this.weigth = weigth;
-    }
+    public void setWeight(Integer weight) {        this.weight = weight;    }
 
     public String getIsbn() {
         return isbn;

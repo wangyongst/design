@@ -20,6 +20,8 @@ public interface TwoService {
 
     public Result returnAgree(TwoParameter twoParameter);
 
+    public Result borrowAccept(TwoParameter twoParameter);
+
     public Result returnOk(TwoParameter twoParameter);
 
     public Result borrowDisagree(TwoParameter twoParameter);

@@ -70,7 +70,8 @@ public class OneController {
             @ApiImplicitParam(name = "days", value = "归还天数（可选）,整数", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "fee", value = "借阅费用（可选）,2位小数", required = true, dataType = "BigDecimal"),
             @ApiImplicitParam(name = "deposit", value = "押金数额（可选）,2位小数", required = true, dataType = "BigDecimal"),
-            @ApiImplicitParam(name = "weight", value = "单位（可选，默认为0）0天，1周，2月", required = true, dataType = "BigDecimal")
+            @ApiImplicitParam(name = "weight", value = "单位（可选，默认为0）0天，1周，2月", required = true, dataType = "BigDecimal"),
+            @ApiImplicitParam(name = "length", value = "租期单位（可选，默认为0）0天，1周，2月", required = true, dataType = "BigDecimal")
     })
     @ResponseBody
     @PostMapping("/bookstore/set")

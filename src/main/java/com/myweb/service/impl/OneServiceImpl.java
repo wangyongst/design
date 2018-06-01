@@ -303,7 +303,8 @@ public class OneServiceImpl implements OneService {
                 if (oneParameter.getDeposit() != null) e.setDeposit(oneParameter.getDeposit());
                 if (oneParameter.getDays() != null) e.setDays(oneParameter.getDays());
                 if (oneParameter.getFee() != null) e.setFee(oneParameter.getFee());
-                e.setWeigth(oneParameter.getWeigth());
+                if (oneParameter.getLength() != null) e.setLength(oneParameter.getLength());
+                if (oneParameter.getWeight() != null) e.setWeight(oneParameter.getWeight());
                 bookstoreRepository.save(e);
             });
             result.setStatus(1);

@@ -28,8 +28,11 @@ public class Bookstore implements Serializable {
     @Column(name = "days")
     private Integer days;
     @Basic
+    @Column(name = "length")
+    private Integer length;
+    @Basic
     @Column(name = "weight")
-    private Integer weigth;
+    private Integer weight;
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "bookid", referencedColumnName = "id")
     private Book book;
@@ -41,6 +44,14 @@ public class Bookstore implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "userid", referencedColumnName = "id")
     private User user;
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
 
     public int getId() {
         return id;
@@ -82,12 +93,12 @@ public class Bookstore implements Serializable {
         this.days = days;
     }
 
-    public Integer getWeigth() {
-        return weigth;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setWeigth(Integer weigth) {
-        this.weigth = weigth;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Book getBook() {
