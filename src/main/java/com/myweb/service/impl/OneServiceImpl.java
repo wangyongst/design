@@ -382,7 +382,7 @@ public class OneServiceImpl implements OneService {
             fileNameIn = saveImg(multipartFile, fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
             if (StringUtils.isNotBlank(fileNameIn)) {
                 result.setStatus(1);
-                result.setData(fileName);
+                result.setData(fileNameIn);
                 return result;
             }
         } catch (IOException e) {

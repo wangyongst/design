@@ -26,7 +26,6 @@ public class Swagger2 {
                 .paths(PathSelectors.any())
                 .build();
     }
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Book API （Java）")
@@ -35,6 +34,4 @@ public class Swagger2 {
                 .version("1.0")
                 .build();
     }
-
-
 }

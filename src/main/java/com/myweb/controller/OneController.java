@@ -43,9 +43,7 @@ public class OneController {
         return oneService.isbn(oneParameter);
     }
 
-
-
-    @ApiOperation(value = "自定义图书上加", notes = "用户自定义图书上架到书店")
+    @ApiOperation(value = "自定义图书上架", notes = "用户自定义图书上架到书店")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "书名（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "author", value = "作者（必需）", required = true, dataType = "String"),
@@ -59,13 +57,13 @@ public class OneController {
         return oneService.up(book,userid);
     }
 
-    @ApiOperation(value = "上传图片", notes = "用户自定义上传图片")
+    @ApiOperation(value = "上传图片", notes = "用户自定义上传图片，返回为服务器图片名")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "image", value = "图片（必需）", required = true, dataType = "String")
+            @ApiImplicitParam(name = "multipartFile", value = "图片（必需）", required = true, dataType = "String")
     })
     @ResponseBody
     @PostMapping("/book/upload")
-    public Result upload(@RequestParam("avatarFile") MultipartFile multipartFile) {
+    public Result upload(@RequestParam("multipartFile") MultipartFile multipartFile) {
         return oneService.upload(multipartFile);
     }
 
