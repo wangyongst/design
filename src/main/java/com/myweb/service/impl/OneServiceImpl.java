@@ -202,6 +202,7 @@ public class OneServiceImpl implements OneService {
         List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidsAndOwneridAndStatus(bookids, oneParameter.getOwnerid(),1);
         if (bookstoreList.size() > 0) {
            bookstoreList.forEach(e->{
+               e.getRecord().forEach(t-> recordRepository.delete(t));
                bookstoreRepository.delete(e);
            });
             result.setStatus(1);
