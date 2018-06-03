@@ -16,6 +16,10 @@ public interface OneService {
 
     public Result isbn(OneParameter oneParameter);
 
+    public Result up(Book book,Integer userid);
+
+    public Result upload(MultipartFile multipartFile);
+
     public Result list(OneParameter oneParameter);
 
     public Result out(OneParameter oneParameter);

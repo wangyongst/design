@@ -1,6 +1,7 @@
 package com.myweb.controller;
 
 
+import com.myweb.pojo.Book;
 import com.myweb.service.OneService;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api
 @CrossOrigin("*")
@@ -40,6 +42,33 @@ public class OneController {
     public Result isbn(@ModelAttribute OneParameter oneParameter) {
         return oneService.isbn(oneParameter);
     }
+
+
+
+    @ApiOperation(value = "自定义图书上加", notes = "用户自定义图书上架到书店")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "title", value = "书名（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "author", value = "作者（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "image", value = "图片（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "summary", value = "图书介绍（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "userid", value = "所有人（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/book/up")
+    public Result up(@ModelAttribute Book book,@RequestParam Integer userid) {
+        return oneService.up(book,userid);
+    }
+
+    @ApiOperation(value = "上传图片", notes = "用户自定义上传图片")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "image", value = "图片（必需）", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @PostMapping("/book/upload")
+    public Result upload(@RequestParam("avatarFile") MultipartFile multipartFile) {
+        return oneService.upload(multipartFile);
+    }
+
 
     @ApiOperation(value = "下架", notes = "用户下载图书（仅可以下架自己上传的图书，且图书为自有状态，即status为1状态")
     @ApiImplicitParams({

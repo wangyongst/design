@@ -10,19 +10,22 @@ import com.myweb.vo.DBBook;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import com.utils.WeixinUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,9 @@ public class OneServiceImpl implements OneService {
 
     @Autowired
     private RecordRepository recordRepository;
+
+    @Value("${custom.location.img}")
+    private String location;
 
     @Override
     public Result scan(OneParameter oneParameter) {
@@ -334,4 +340,73 @@ public class OneServiceImpl implements OneService {
         result.setMessage("登录失败！");
         return result;
     }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result up(Book book,Integer userid) {
+        Result result = new Result();
+        if (StringUtils.isBlank(book.getImage()) || StringUtils.isBlank(book.getTitle()) || StringUtils.isBlank(book.getAuthor()) || StringUtils.isBlank(book.getSummary()) || userid == null || userid == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
+        bookRepository.save(book);
+        Bookstore bookstore = new Bookstore();
+        bookstore.setBook(book);
+        bookstore.setOwner(userRepository.findOne(userid));
+        bookstore.setStatus(1);
+        bookstoreRepository.save(bookstore);
+        result.setStatus(1);
+        result.setData(book);
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result upload(MultipartFile multipartFile) {
+        Result result = new Result();
+        if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
+        String contentType = multipartFile.getContentType();
+        if (!contentType.contains("")) {
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
+        String fileName = multipartFile.getOriginalFilename();
+        //处理图片
+        String fileNameIn = null;
+        try {
+            fileNameIn = saveImg(multipartFile, fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
+            if (StringUtils.isNotBlank(fileNameIn)) {
+                result.setStatus(1);
+                result.setData(fileName);
+                return result;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String saveImg(MultipartFile multipartFile, String fileType) throws IOException {
+        File file = new File(location);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
+        String fileName = RandomStringUtils.randomAlphanumeric(8) + "." + fileType;
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(location + File.separator + fileName));
+        byte[] bs = new byte[1024];
+        int len;
+        while ((len = fileInputStream.read(bs)) != -1) {
+            bos.write(bs, 0, len);
+        }
+        bos.flush();
+        bos.close();
+        return fileName;
+    }
+
 }

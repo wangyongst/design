@@ -123,6 +123,9 @@ public class TwoServiceImpl implements TwoService {
                 e.setStatus(7);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
+                bookstore.setUser(userRepository.findOne(twoParameter.getUserid()));
+                bookstore.setStatus(2);
+                bookstoreRepository.save(bookstore);
             }
         });
         result.setStatus(1);
@@ -233,9 +236,6 @@ public class TwoServiceImpl implements TwoService {
                 e.setStatus(13);
                 e.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                 recordRepository.save(e);
-                bookstore.setUser(userRepository.findOne(twoParameter.getUserid()));
-                bookstore.setStatus(2);
-                bookstoreRepository.save(bookstore);
             }
         }
         result.setStatus(1);
