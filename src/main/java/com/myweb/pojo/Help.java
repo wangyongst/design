@@ -49,6 +49,24 @@ public class Help implements Serializable {
     @Column(name = "draft", nullable = true)
     private Integer draft;
     @Basic
+    @Column(name = "studied", nullable = true)
+    private Integer studied;
+    @Basic
+    @Column(name = "read", nullable = true)
+    private Integer read;
+    @Basic
+    @Column(name = "forwarded", nullable = true)
+    private Integer forwarded;
+    @Basic
+    @Column(name = "fans", nullable = true)
+    private Integer fans;
+    @Basic
+    @Column(name = "clicked", nullable = true)
+    private Integer clicked;
+    @Basic
+    @Column(name = "recommend", nullable = true)
+    private Integer recommend;
+    @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
 
@@ -146,6 +164,54 @@ public class Help implements Serializable {
 
     public void setDraft(Integer draft) {
         this.draft = draft;
+    }
+
+    public Integer getStudied() {
+        return studied;
+    }
+
+    public void setStudied(Integer studied) {
+        this.studied = studied;
+    }
+
+    public Integer getRead() {
+        return read;
+    }
+
+    public void setRead(Integer read) {
+        this.read = read;
+    }
+
+    public Integer getForwarded() {
+        return forwarded;
+    }
+
+    public void setForwarded(Integer forwarded) {
+        this.forwarded = forwarded;
+    }
+
+    public Integer getFans() {
+        return fans;
+    }
+
+    public void setFans(Integer fans) {
+        this.fans = fans;
+    }
+
+    public Integer getClicked() {
+        return clicked;
+    }
+
+    public void setClicked(Integer clicked) {
+        this.clicked = clicked;
+    }
+
+    public Integer getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(Integer recommend) {
+        this.recommend = recommend;
     }
 
     public String getCreatetime() {

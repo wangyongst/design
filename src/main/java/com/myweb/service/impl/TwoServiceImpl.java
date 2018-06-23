@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
-@Service("OneService")
+@Service("TwoService")
 @SuppressWarnings("All")
 @Transactional(readOnly = true)
 public class TwoServiceImpl implements TwoService {
@@ -36,7 +37,7 @@ public class TwoServiceImpl implements TwoService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result help(TwoParameter twoParameter) {
+    public Result seek(TwoParameter twoParameter) {
         Result result = new Result();
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0 || twoParameter.getAudience() == null || twoParameter.getAudience() == 0 || twoParameter.getDraft() == null || twoParameter.getDraft() == 0 || StringUtils.isBlank(twoParameter.getImage()) || StringUtils.isBlank(twoParameter.getTag()) || StringUtils.isBlank(twoParameter.getDesign())) {
             result.setMessage("必须的参数不能为空!");
@@ -68,8 +69,7 @@ public class TwoServiceImpl implements TwoService {
 
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result userHelp(TwoParameter twoParameter) {
+    public Result user(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
@@ -81,10 +81,10 @@ public class TwoServiceImpl implements TwoService {
         } else {
             if (twoParameter.getDraft() == null || twoParameter.getDraft() == 0) {
                 result.setStatus(1);
-                result.setData(helpRepository.findByUserid(twoParameter.getUserid()));
+                result.setData(helpRepository.findByUserid(twoParameter.getUserid(), pageable));
             } else {
                 result.setStatus(1);
-                result.setData(helpRepository.findByUseridAndDraft(twoParameter.getUserid(), twoParameter.getDraft()));
+                result.setData(helpRepository.findByUseridAndDraft(twoParameter.getUserid(), twoParameter.getDraft(), pageable));
             }
         }
         return result;

@@ -11,11 +11,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Api
 @CrossOrigin("*")
@@ -41,20 +41,23 @@ public class TwoController {
 
     })
     @ResponseBody
-    @PostMapping("/seek/help ")
-    public Result help (@ModelAttribute TwoParameter twoParameter) {
-        return twoService.help(twoParameter);
+    @PostMapping("/help/seek")
+    public Result seek(@ModelAttribute TwoParameter twoParameter) {
+        return twoService.seek(twoParameter);
     }
 
     @ApiOperation(value = "已发求助", notes = "已发求助")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "draft", value = "发布方式 （可选，0,全部，1草稿，2，隐藏，3未通过审核，4已经发表）", required = true, dataType = "Integer")
-
+            @ApiImplicitParam(name = "draft", value = "发布方式 （可选，0,全部，1草稿，2，隐藏，3未通过审核，4已经发表）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pageNumber", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer"),
     })
     @ResponseBody
-    @PostMapping("/user/help ")
-    public Result userHelp (@ModelAttribute TwoParameter twoParameter) {
-        return twoService.userHelp(twoParameter);
+    @GetMapping("/help/user")
+    public Result user(@ModelAttribute TwoParameter twoParameter, @RequestParam Integer pageNumber) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (pageNumber == null) pageNumber = 0;
+        Pageable pageable = new PageRequest(pageNumber, 10, sort);
+        return twoService.user(twoParameter, pageable);
     }
 }
