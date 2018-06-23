@@ -1,7 +1,6 @@
 package com.myweb.controller;
 
 
-import com.myweb.pojo.Book;
 import com.myweb.service.OneService;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
