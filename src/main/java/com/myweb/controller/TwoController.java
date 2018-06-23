@@ -61,7 +61,7 @@ public class TwoController {
         return twoService.user(twoParameter, pageable);
     }
 
-    @ApiOperation(value = "已发求助", notes = "已发求助")
+    @ApiOperation(value = "删除求助", notes = "删除求助")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "helpids", value = "求助id(必需），有多个时以，号隔开，如1，2，3", required = true, dataType = "String"),
