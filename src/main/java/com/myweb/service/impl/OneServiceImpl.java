@@ -1,6 +1,7 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.*;
+import com.myweb.pojo.Follow;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
 import com.myweb.vo.OneParameter;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,6 +28,9 @@ public class OneServiceImpl implements OneService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -163,6 +168,93 @@ public class OneServiceImpl implements OneService {
             userRepository.save(user);
             result.setStatus(1);
             result.setData(user);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result follow(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            User touser = userRepository.findOne(oneParameter.getTouserid());
+            if (touser == null) {
+                result.setMessage("要关注的用户不存在!");
+            } else {
+                Follow follow = new Follow();
+                follow.setUser(user);
+                follow.setFollow(touser);
+                followRepository.save(follow);
+                result.setStatus(1);
+                result.setData(user);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result unfollow(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            User touser = userRepository.findOne(oneParameter.getTouserid());
+            if (touser == null) {
+                result.setMessage("要取消关注的用户不存在!");
+            } else {
+                List<Follow> follows = followRepository.findByUserAndFollow(user, touser);
+                follows.forEach(e -> {
+                    followRepository.delete(e);
+                });
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Result followMy(OneParameter oneParameter, Pageable pageable) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            result.setStatus(1);
+            result.setData(followRepository.findByUser(user, pageable));
+        }
+        return result;
+    }
+
+    @Override
+    public Result followMe(OneParameter oneParameter, Pageable pageable) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            result.setStatus(1);
+            result.setData(followRepository.findByFollow(user, pageable));
         }
         return result;
     }

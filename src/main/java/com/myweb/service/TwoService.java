@@ -10,5 +10,7 @@ public interface TwoService {
 
     public Result seek(TwoParameter twoParameter);
 
-    public Result user(TwoParameter twoParameter,Pageable pageable);
+    public Result user(TwoParameter twoParameter, Pageable pageable);
+
+    public Result delete(TwoParameter twoParameter, String helpids);
 }

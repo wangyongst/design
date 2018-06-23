@@ -15,6 +15,15 @@ public class TwoParameter {
     private Integer background;
     private Integer set;
     private Integer draft;
+    private Integer page;
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
 
     public Integer getUserid() {
         return userid;

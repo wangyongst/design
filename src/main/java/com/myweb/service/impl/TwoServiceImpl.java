@@ -89,4 +89,28 @@ public class TwoServiceImpl implements TwoService {
         }
         return result;
     }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result delete(TwoParameter twoParameter, String helpids) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0 || StringUtils.isBlank(helpids)) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            String[] ids = helpids.split(",");
+            for (String id : ids) {
+                if (StringUtils.isNotBlank(id)) {
+                    helpRepository.delete(Integer.parseInt(id));
+                }
+            }
+            result.setStatus(1);
+        }
+        return result;
+    }
 }

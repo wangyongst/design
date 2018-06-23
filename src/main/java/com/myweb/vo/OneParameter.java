@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 public class OneParameter {
     private Integer userid;
+    private Integer touserid;
     private String username;
     private String password;
     private String avatar;
@@ -14,6 +15,23 @@ public class OneParameter {
     private String jobs;
     private String sex;
     private String password2;
+    private Integer page;
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getTouserid() {
+        return touserid;
+    }
+
+    public void setTouserid(Integer touserid) {
+        this.touserid = touserid;
+    }
 
     public String getPassword2() {
         return password2;

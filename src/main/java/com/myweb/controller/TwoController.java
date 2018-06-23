@@ -50,14 +50,25 @@ public class TwoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "draft", value = "发布方式 （可选，0,全部，1草稿，2，隐藏，3未通过审核，4已经发表）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pageNumber", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/user")
-    public Result user(@ModelAttribute TwoParameter twoParameter, @RequestParam Integer pageNumber) {
+    public Result user(@ModelAttribute TwoParameter twoParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
-        if (pageNumber == null) pageNumber = 0;
-        Pageable pageable = new PageRequest(pageNumber, 10, sort);
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
         return twoService.user(twoParameter, pageable);
+    }
+
+    @ApiOperation(value = "已发求助", notes = "已发求助")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "helpids", value = "求助id(必需），有多个时以，号隔开，如1，2，3", required = true, dataType = "String"),
+    })
+    @ResponseBody
+    @PostMapping("/help/delete")
+    public Result delete(@ModelAttribute TwoParameter twoParameter, @RequestParam String helpids) {
+        return twoService.delete(twoParameter, helpids);
     }
 }

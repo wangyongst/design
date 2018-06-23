@@ -10,6 +10,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,5 +99,55 @@ public class OneController {
     @PostMapping("/user/set/email")
     public Result setEmail(@ModelAttribute OneParameter oneParameter) {
         return oneService.setEmail(oneParameter);
+    }
+
+    @ApiOperation(value = "我的关注", notes = "我的关注")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/user/follow/my")
+    public Result followMy(@ModelAttribute OneParameter oneParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        return oneService.followMy(oneParameter,pageable);
+    }
+
+    @ApiOperation(value = "我的粉丝", notes = "我的粉丝")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/user/follow/me")
+    public Result followMe(@ModelAttribute OneParameter oneParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        return oneService.followMe(oneParameter,pageable);
+    }
+
+    @ApiOperation(value = "关注", notes = "关注")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "要关注的用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/user/follow")
+    public Result follow(@ModelAttribute OneParameter oneParameter) {
+        return oneService.follow(oneParameter);
+    }
+
+    @ApiOperation(value = "取消关注", notes = "取消关注")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "要取消关注的用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/user/unfollow")
+    public Result unfollow(@ModelAttribute OneParameter oneParameter) {
+        return oneService.unfollow(oneParameter);
     }
 }
