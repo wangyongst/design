@@ -1,29 +1,19 @@
 package com.myweb.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
-import com.myweb.vo.DBBook;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,227 +25,13 @@ public class OneServiceImpl implements OneService {
     private static final Logger logger = LogManager.getLogger(OneServiceImpl.class);
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private BookstoreRepository bookstoreRepository;
-
-    @Autowired
-    private RecordRepository recordRepository;
-
-    @Value("${custom.location.img}")
-    private String location;
-
-    @Override
-    public Result scan(OneParameter oneParameter) {
-        Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getIsbn())) {
-            result.setMessage("The required parameters are empty!");
-            return result;
-        }
-        String url = "https://api.douban.com/v2/book/isbn/";
-        String response = null;
-        try {
-            response = restTemplate.getForObject(url + oneParameter.getIsbn(), String.class);
-        } catch (RestClientException e) {
-            result.setMessage("Douban api has exception!");
-            return result;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        DBBook dbBook = null;
-        try {
-            dbBook = mapper.readValue(response, DBBook.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            result.setMessage("Douban api result has exception!");
-            return result;
-        }
-        String translators = "";
-        for (String translator : dbBook.getTranslator()) {
-            translators = translators + "," + translator;
-        }
-        Book book = new Book();
-        if (StringUtils.isNotBlank(translators)) {
-            book.setTranslator(translators.substring(1));
-        }
-        book.setIsbn(dbBook.getIsbn10() + "," + dbBook.getIsbn13());
-        book.setTitle(dbBook.getTitle());
-        book.setImage(dbBook.getImage());
-        book.setPublisher(dbBook.getPublisher());
-        if (StringUtils.isNotBlank(dbBook.getPrice())) {
-            book.setPrice(new BigDecimal(dbBook.getPrice().substring(0, dbBook.getPrice().length() - 1)));
-        }
-        book.setRating(dbBook.getRating().getAverage());
-        book.setSummary(dbBook.getSummary());
-        result.setStatus(1);
-        result.setData(book);
-        return result;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result isbn(OneParameter oneParameter) {
-        Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getIsbn()) || oneParameter.getUserid() == 0) {
-            result.setMessage("The required parameters are empty!");
-            return result;
-        }
-        String url = "https://api.douban.com/v2/book/isbn/";
-        String response = null;
-        try {
-            response = restTemplate.getForObject(url + oneParameter.getIsbn(), String.class);
-        } catch (RestClientException e) {
-            result.setMessage("从豆瓣获取图书信息失败!");
-            return result;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        DBBook dbBook = null;
-        try {
-            dbBook = mapper.readValue(response, DBBook.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            result.setMessage("从豆瓣获取图书信息失败!");
-            return result;
-        }
-        String authors = "";
-        for (String author : dbBook.getAuthor()) {
-            authors = authors + "," + author;
-        }
-        Book book = new Book();
-        if (StringUtils.isNotBlank(authors)) {
-            book.setAuthor(authors.substring(1));
-        }
-        String translators = "";
-        for (String translator : dbBook.getTranslator()) {
-            translators = translators + "," + translator;
-        }
-        if (StringUtils.isNotBlank(translators)) {
-            book.setTranslator(translators.substring(1));
-        }
-        book.setIsbn(dbBook.getIsbn10() + "," + dbBook.getIsbn13());
-        book.setTitle(dbBook.getTitle());
-        book.setImage(dbBook.getImage());
-        book.setPublisher(dbBook.getPublisher());
-        if (StringUtils.isNotBlank(dbBook.getPrice())) {
-            book.setPrice(new BigDecimal(dbBook.getPrice().substring(0, dbBook.getPrice().length() - 1)));
-        }
-        book.setRating(dbBook.getRating().getAverage());
-        book.setSummary(dbBook.getSummary());
-        bookRepository.save(book);
-        Bookstore bookstore = new Bookstore();
-        bookstore.setBook(book);
-        bookstore.setOwner(userRepository.findOne(oneParameter.getUserid()));
-        bookstore.setStatus(1);
-        bookstoreRepository.save(bookstore);
-        result.setStatus(1);
-        result.setData(book);
-        return result;
-    }
-
-    @Override
-    public Result list(OneParameter oneParameter) {
-        Result result = new Result();
-        if (oneParameter.getOwnerid() == null || oneParameter.getOwnerid() == 0) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        List<Bookstore> bookstoreList = new ArrayList<>();
-        if (oneParameter.getStatus() == null || oneParameter.getStatus() == 0) {
-            bookstoreList = bookstoreRepository.findAllByOwneridOrUserid(oneParameter.getOwnerid(), oneParameter.getOwnerid());
-        } else if(oneParameter.getStatus() == 1 || oneParameter.getStatus() == 2) {
-            bookstoreList = bookstoreRepository.findAllByOwneridAndStatus(oneParameter.getOwnerid(), oneParameter.getStatus());
-        }
-        else if(oneParameter.getStatus() == 3) {
-            bookstoreList = bookstoreRepository.findAllByUseridAndStatus(oneParameter.getOwnerid(), 2);
-        }
-        if (bookstoreList.size() == 0) {
-            result.setMessage("你的书架为空!");
-            return result;
-        }
-        for( int i = 0 ; i < bookstoreList.size() ; i ++){
-            for(int t = 0 ; t < bookstoreList.get(i).getRecord().size() ; t ++){
-                bookstoreList.get(i).getRecord().get(t).setBookstore(null);
-            }
-        }
-        result.setStatus(1);
-        result.setData(bookstoreList);
-        return result;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result out(OneParameter oneParameter) {
-        Result result = new Result();
-        if (oneParameter.getOwnerid() == null || oneParameter.getOwnerid() == 0 || StringUtils.isBlank(oneParameter.getBookids())) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        List<Integer> bookids = new ArrayList<>();
-        String[] ids = oneParameter.getBookids().split(",");
-        for(String id : ids){
-            bookids.add(Integer.parseInt(id));
-        }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidsAndOwneridAndStatus(bookids, oneParameter.getOwnerid(),1);
-        if (bookstoreList.size() > 0) {
-           bookstoreList.forEach(e->{
-               e.getRecord().forEach(t-> recordRepository.delete(t));
-               bookstoreRepository.delete(e);
-           });
-            result.setStatus(1);
-        }else{
-            result.setMessage("未找到这本书,或这本书不是自有状态，不可下架！");
-        }
-        return result;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result weixinCode(String code) {
-        Result result = new Result();
-        if (StringUtils.isBlank(code)) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        String response = WeixinUtils.getOpenId(restTemplate, code);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            User user = mapper.readValue(response, User.class);
-            if (StringUtils.isNotBlank(user.getOpenid())) {
-                List<User> userList = userRepository.findByOpenid(user.getOpenid());
-                if (userList.size() == 1) {
-                    result.setStatus(1);
-                    result.setData(userList.get(0));
-                    return result;
-                } else if (userList.size() == 0) {
-                    userRepository.save(user);
-                    result.setStatus(1);
-                    result.setData(user);
-                    return result;
-                } else {
-                    result.setMessage("openid存在重复记录");
-                    return result;
-                }
-            } else {
-                result.setMessage("授权失败，无法获取openid");
-                return result;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result regist(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getPassword()) || oneParameter.getId() != 0) {
+        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getEmail()) || StringUtils.isBlank(oneParameter.getNickname())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
@@ -266,6 +42,8 @@ public class OneServiceImpl implements OneService {
         User user = new User();
         user.setUsername(oneParameter.getUsername());
         user.setPassword(oneParameter.getPassword());
+        user.setEmail(oneParameter.getEmail());
+        user.setNickname(oneParameter.getNickname());
         userRepository.save(user);
         result.setStatus(1);
         result.setData(user);
@@ -275,134 +53,117 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result login(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getPassword())) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        List<User> userList = userRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
-        if (userList.size() == 1) {
-            result.setStatus(1);
-            result.setData(userList.get(0));
-            return result;
-        } else if (userList.size() == 0) {
-            result.setMessage("用户不存在或密码错误！");
-            return result;
-        }
-        result.setMessage("登录失败！");
-        return result;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result set(OneParameter oneParameter) {
-        Result result = new Result();
-        if (oneParameter.getOwnerid() == null || oneParameter.getOwnerid() == 0 || oneParameter.getBookid() == null || oneParameter.getBookid() == 0) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        List<Bookstore> bookstoreList = bookstoreRepository.findAllByBookidAndOwneridAndStatus(oneParameter.getBookid().intValue(), oneParameter.getOwnerid().intValue(), 1);
-        if (bookstoreList.size() > 0) {
-            bookstoreList.forEach(e -> {
-                if (oneParameter.getDeposit() != null) e.setDeposit(oneParameter.getDeposit());
-                if (oneParameter.getDays() != null) e.setDays(oneParameter.getDays());
-                if (oneParameter.getFee() != null) e.setFee(oneParameter.getFee());
-                if (oneParameter.getLength() != null) e.setLength(oneParameter.getLength());
-                if (oneParameter.getWeight() != null) e.setWeight(oneParameter.getWeight());
-                bookstoreRepository.save(e);
-            });
-            result.setStatus(1);
-        }else {
-            result.setMessage("未找到这本书,或这本书不是自有状态，不可变更属性！");
-        }
-        return result;
-    }
-
-    @Override
-    public Result weixinLogin(OneParameter oneParameter) {
-        Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getOpenid())) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        List<User> userList = userRepository.findByOpenid(oneParameter.getOpenid());
-        if (userList.size() == 1) {
-            result.setStatus(1);
-            result.setData(userList.get(0));
-            return result;
-        } else if (userList.size() == 0) {
-            result.setMessage("用户不存在！");
-            return result;
-        }
-        result.setMessage("登录失败！");
-        return result;
-    }
-
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result up(Book book,Integer userid) {
-        Result result = new Result();
-        if (StringUtils.isBlank(book.getImage()) || StringUtils.isBlank(book.getTitle()) || StringUtils.isBlank(book.getAuthor()) || StringUtils.isBlank(book.getSummary()) || userid == null || userid == 0) {
-            result.setMessage("The required parameters are empty!");
-            return result;
-        }
-        bookRepository.save(book);
-        Bookstore bookstore = new Bookstore();
-        bookstore.setBook(book);
-        bookstore.setOwner(userRepository.findOne(userid));
-        bookstore.setStatus(1);
-        bookstoreRepository.save(bookstore);
-        result.setStatus(1);
-        result.setData(book);
-        return result;
-    }
-
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result upload(MultipartFile multipartFile) {
-        Result result = new Result();
-        if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
-            result.setMessage("The required parameters are empty!");
-            return result;
-        }
-        String contentType = multipartFile.getContentType();
-        if (!contentType.contains("")) {
-            result.setMessage("The required parameters are empty!");
-            return result;
-        }
-        String fileName = multipartFile.getOriginalFilename();
-        //处理图片
-        String fileNameIn = null;
-        try {
-            fileNameIn = saveImg(multipartFile, fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
-            if (StringUtils.isNotBlank(fileNameIn)) {
+        if (StringUtils.isNotBlank(oneParameter.getUsername()) || StringUtils.isNotBlank(oneParameter.getPassword())) {
+            List<User> userList = userRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
+            if (userList.size() == 1) {
                 result.setStatus(1);
-                result.setData(fileNameIn);
+                result.setData(userList.get(0));
+                return result;
+            } else if (userList.size() == 0) {
+                result.setMessage("用户不存在或密码错误！");
                 return result;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else if (StringUtils.isNotBlank(oneParameter.getEmail()) || StringUtils.isNotBlank(oneParameter.getPassword())) {
+            List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getEmail(), oneParameter.getPassword());
+            if (userList.size() == 1) {
+                result.setStatus(1);
+                result.setData(userList.get(0));
+                return result;
+            } else if (userList.size() == 0) {
+                result.setMessage("邮箱不存在或密码错误！");
+                return result;
+            }
+        } else {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setMessage("登录失败！");
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result setBasic(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getNickname())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            user.setUsername(oneParameter.getUsername());
+            user.setNickname(oneParameter.getNickname());
+            user.setMobile(oneParameter.getMobile());
+            user.setJobs(oneParameter.getJobs());
+            user.setSex(oneParameter.getSex());
+            userRepository.save(user);
+            result.setStatus(1);
+            result.setData(user);
         }
         return result;
     }
 
-    public String saveImg(MultipartFile multipartFile, String fileType) throws IOException {
-        File file = new File(location);
-        if (!file.exists()) {
-            file.mkdirs();
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result setAvatar(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getAvatar())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
         }
-        FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
-        String fileName = RandomStringUtils.randomAlphanumeric(8) + "." + fileType;
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(location + File.separator + fileName));
-        byte[] bs = new byte[1024];
-        int len;
-        while ((len = fileInputStream.read(bs)) != -1) {
-            bos.write(bs, 0, len);
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            user.setAvatar(oneParameter.getAvatar());
+            userRepository.save(user);
+            result.setStatus(1);
+            result.setData(user);
         }
-        bos.flush();
-        bos.close();
-        return fileName;
+        return result;
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result setPassword(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getPassword2())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else if (StringUtils.equals(user.getPassword(), oneParameter.getPassword())) {
+            user.setPassword(oneParameter.getPassword2());
+            userRepository.save(user);
+            result.setStatus(1);
+            result.setData(user);
+        } else {
+            result.setMessage("未找到这个用户,或旧密码不正确！");
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result setEmail(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getEmail())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            user.setEmail(oneParameter.getEmail());
+            userRepository.save(user);
+            result.setStatus(1);
+            result.setData(user);
+        }
+        return result;
+    }
 }

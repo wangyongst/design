@@ -1,49 +1,34 @@
 package com.myweb.vo;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 public class OneParameter {
-    private Integer id;
     private Integer userid;
-    private Integer ownerid;
-    private Integer bookid;
-    private String bookids;
-    private Integer bookstoreid;
-    private Integer status;
-    private BigDecimal deposit;
-    private BigDecimal fee;
-    private Integer days;
-    private Integer weight;
-    private Integer length;
-
-    public Integer getLength() {
-        return length;
-    }
-
-    public void setLength(Integer length) {
-        this.length = length;
-    }
-
-    private String isbn;
     private String username;
     private String password;
-    private String openid;
+    private String avatar;
+    private String nickname;
+    private String email;
+    private String mobile;
+    private String jobs;
+    private String sex;
+    private String password2;
 
-
-    public String getBookids() {
-        return bookids;
+    public String getPassword2() {
+        return password2;
     }
 
-    public void setBookids(String bookids) {
-        this.bookids = bookids;
+    public void setPassword2(String password2) {
+        this.password2 = password2;
     }
 
-    public Integer getBookstoreid() {
-        return bookstoreid;
+    public Integer getUserid() {
+        return userid;
     }
 
-    public void setBookstoreid(Integer bookstoreid) {
-        this.bookstoreid = bookstoreid;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     public String getUsername() {
@@ -62,87 +47,51 @@ public class OneParameter {
         this.password = password;
     }
 
-    public String getOpenid() {
-        return openid;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public BigDecimal getDeposit() {
-        return deposit;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setDeposit(BigDecimal deposit) {
-        this.deposit = deposit;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public BigDecimal getFee() {
-        return fee;
+    public String getEmail() {
+        return email;
     }
 
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Integer getDays() {
-        return days;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setDays(Integer days) {
-        this.days = days;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public Integer getWeight() {        return weight;    }
-
-    public void setWeight(Integer weight) {        this.weight = weight;    }
-
-    public String getIsbn() {
-        return isbn;
+    public String getJobs() {
+        return jobs;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setJobs(String jobs) {
+        this.jobs = jobs;
     }
 
-    public Integer getId() {
-        return id;
+    public String getSex() {
+        return sex;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
-
-    public Integer getOwnerid() {
-        return ownerid;
-    }
-
-    public void setOwnerid(Integer ownerid) {
-        this.ownerid = ownerid;
-    }
-
-    public Integer getBookid() {
-        return bookid;
-    }
-
-    public void setBookid(Integer bookid) {
-        this.bookid = bookid;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

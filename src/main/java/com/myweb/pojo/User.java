@@ -13,26 +13,35 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Basic
-    @Column(name = "username")
+    @Column(name = "username", nullable = true, length = 255)
     private String username;
     @Basic
-    @Column(name = "password")
+    @Column(name = "password", nullable = true, length = 255)
     private String password;
     @Basic
-    @Column(name = "openid")
-    private String openid;
-    @Basic
-    @Column(name = "phone")
-    private String phone;
-    @Basic
-    @Column(name = "avatar")
+    @Column(name = "avatar", nullable = true, length = 255)
     private String avatar;
     @Basic
-    @Column(name = "createtime")
+    @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+    @Basic
+    @Column(name = "nickname", nullable = true, length = 255)
+    private String nickname;
+    @Basic
+    @Column(name = "email", nullable = true, length = 255)
+    private String email;
+    @Basic
+    @Column(name = "mobile", nullable = true, length = 255)
+    private String mobile;
+    @Basic
+    @Column(name = "jobs", nullable = true, length = 255)
+    private String jobs;
+    @Basic
+    @Column(name = "sex", nullable = true, length = 255)
+    private String sex;
 
     public int getId() {
         return id;
@@ -58,22 +67,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -88,5 +81,45 @@ public class User implements Serializable {
 
     public void setCreatetime(String createtime) {
         this.createtime = createtime;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(String jobs) {
+        this.jobs = jobs;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

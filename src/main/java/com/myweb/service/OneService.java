@@ -12,25 +12,15 @@ import javax.servlet.http.HttpSession;
 
 public interface OneService {
 
-    public Result scan(OneParameter oneParameter);
-
-    public Result isbn(OneParameter oneParameter);
-
-    public Result up(Book book,Integer userid);
-
-    public Result upload(MultipartFile multipartFile);
-
-    public Result list(OneParameter oneParameter);
-
-    public Result out(OneParameter oneParameter);
-
-    public Result weixinCode(String code);
-
-    public Result weixinLogin(OneParameter oneParameter);
-
     public Result regist(OneParameter oneParameter);
 
     public Result login(OneParameter oneParameter);
 
-    public Result set(OneParameter oneParameter);
+    public Result setBasic(OneParameter oneParameter);
+
+    public Result setAvatar(OneParameter oneParameter);
+
+    public Result setPassword(OneParameter oneParameter);
+
+    public Result setEmail(OneParameter oneParameter);
 }
