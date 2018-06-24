@@ -16,6 +16,15 @@ public class TwoParameter {
     private Integer set;
     private Integer draft;
     private Integer page;
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Integer getPage() {
         return page;

@@ -90,6 +90,18 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
+    @Override
+    public Result index(TwoParameter twoParameter, Pageable pageable) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (twoParameter.getDesign() == null) {
+            result.setData(helpRepository.findAll(pageable));
+        } else {
+            result.setData(helpRepository.findByDesign(twoParameter.getDesign(), pageable));
+        }
+        return result;
+    }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)

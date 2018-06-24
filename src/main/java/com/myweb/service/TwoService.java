@@ -12,5 +12,7 @@ public interface TwoService {
 
     public Result user(TwoParameter twoParameter, Pageable pageable);
 
+    public Result index(TwoParameter twoParameter, Pageable pageable);
+
     public Result delete(TwoParameter twoParameter, String helpids);
 }

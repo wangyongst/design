@@ -67,8 +67,19 @@ public class Help implements Serializable {
     @Column(name = "recommend", nullable = true)
     private Integer recommend;
     @Basic
+    @Column(name = "refertime", nullable = true, length = 255)
+    private String refertime;
+    @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+
+    public String getRefertime() {
+        return refertime;
+    }
+
+    public void setRefertime(String refertime) {
+        this.refertime = refertime;
+    }
 
     public Integer getId() {
         return id;

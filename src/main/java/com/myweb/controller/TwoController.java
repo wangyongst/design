@@ -61,6 +61,30 @@ public class TwoController {
         return twoService.user(twoParameter, pageable);
     }
 
+
+    @ApiOperation(value = "首页求助推荐", notes = "首页推荐")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "推荐方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "design", value = "设计分类 （可选)", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @GetMapping("/help/index")
+    public Result index(@ModelAttribute TwoParameter twoParameter) {
+        Sort sort = null;
+        if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+            sort = new Sort(Sort.Direction.DESC, "createtime");
+        } else if (twoParameter.getType() == 1) {
+            sort = new Sort(Sort.Direction.DESC, "studied");
+        } else if (twoParameter.getType() == 2) {
+            sort = new Sort(Sort.Direction.DESC, "studied");
+        } else if (twoParameter.getType() == 3) {
+            sort = new Sort(Sort.Direction.DESC, "refertime");
+        }
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
+        return twoService.index(twoParameter, pageable);
+    }
+
     @ApiOperation(value = "删除求助", notes = "删除求助")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),

@@ -45,6 +45,17 @@ public class User implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "refer", referencedColumnName = "id")
     private User refer;
+    @Basic
+    @Column(name = "refertime", nullable = true, length = 255)
+    private String refertime;
+
+    public String getRefertime() {
+        return refertime;
+    }
+
+    public void setRefertime(String refertime) {
+        this.refertime = refertime;
+    }
 
     public User getRefer() {
         return refer;

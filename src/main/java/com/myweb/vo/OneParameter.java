@@ -17,6 +17,15 @@ public class OneParameter {
     private String password2;
     private Integer page;
     private Integer refer;
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Integer getRefer() {
         return refer;
