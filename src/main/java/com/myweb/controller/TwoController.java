@@ -96,4 +96,29 @@ public class TwoController {
     public Result delete(@ModelAttribute TwoParameter twoParameter, @RequestParam String helpids) {
         return twoService.delete(twoParameter, helpids);
     }
+
+
+    @ApiOperation(value = "找图", notes = "首页找图")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "排序方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/help/search")
+    public Result search(@ModelAttribute TwoParameter twoParameter) {
+        Sort sort = null;
+        if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+            sort = new Sort(Sort.Direction.DESC, "createtime");
+        } else if (twoParameter.getType() == 1) {
+            sort = new Sort(Sort.Direction.DESC, "studied");
+        } else if (twoParameter.getType() == 2) {
+            sort = new Sort(Sort.Direction.DESC, "clicked");
+        } else if (twoParameter.getType() == 3) {
+            sort = new Sort(Sort.Direction.DESC, "refertime");
+        }
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
+        return twoService.search(twoParameter, pageable);
+    }
 }

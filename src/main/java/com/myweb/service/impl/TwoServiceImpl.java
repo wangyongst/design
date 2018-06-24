@@ -102,6 +102,18 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
+    @Override
+    public Result search(TwoParameter twoParameter, Pageable pageable) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (twoParameter.getTag() == null) {
+            result.setData(helpRepository.findAll(pageable));
+        } else {
+            result.setData(helpRepository.findByTagContains(twoParameter.getDesign(), pageable));
+        }
+        return result;
+    }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)

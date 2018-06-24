@@ -14,5 +14,7 @@ public interface TwoService {
 
     public Result index(TwoParameter twoParameter, Pageable pageable);
 
+    public Result search(TwoParameter twoParameter, Pageable pageable);
+
     public Result delete(TwoParameter twoParameter, String helpids);
 }
