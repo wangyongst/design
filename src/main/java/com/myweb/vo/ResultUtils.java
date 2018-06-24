@@ -14,10 +14,11 @@ public class ResultUtils {
     }
 
     public static Result userListResult(Result result) {
-        if (result.getStatus() == 0) return result;
-        for (int i = 0; i < ((List<User>) result.getData()).size(); i++) {
-            if (((List<User>) result.getData()).get(i).getRefer() != null)
-                ((List<User>) result.getData()).get(i).getRefer().setRefer(null);
+        if (result.getStatus() == 1) {
+            for (int i = 0; i < ((List<User>) result.getData()).size(); i++) {
+                if (((List<User>) result.getData()).get(i).getRefer() != null)
+                    ((List<User>) result.getData()).get(i).getRefer().setRefer(null);
+            }
         }
         return result;
     }
