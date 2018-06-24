@@ -10,11 +10,6 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
-/**
- * @description: description
- * @author: tangYiLong
- * @create: 2018-05-14 21:39
- **/
 @Configuration
 public class Swagger2 {
     @Bean
