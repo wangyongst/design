@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -58,6 +60,7 @@ public class OneServiceImpl implements OneService {
         user.setPassword(oneParameter.getPassword());
         user.setEmail(oneParameter.getEmail());
         user.setNickname(oneParameter.getNickname());
+        user.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         userRepository.save(user);
         result.setStatus(1);
         result.setData(user);
@@ -200,6 +203,7 @@ public class OneServiceImpl implements OneService {
                 Follow follow = new Follow();
                 follow.setUser(user);
                 follow.setFollow(touser);
+                follow.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 followRepository.save(follow);
                 result.setStatus(1);
                 result.setData(user);

@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -60,6 +62,7 @@ public class TwoServiceImpl implements TwoService {
             help.setBackground(twoParameter.getBackground());
             help.setSet(twoParameter.getSet());
             help.setDraft(twoParameter.getDraft());
+            help.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             helpRepository.save(help);
             result.setStatus(1);
             result.setData(help);

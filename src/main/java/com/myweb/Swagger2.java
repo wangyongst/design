@@ -28,7 +28,7 @@ public class Swagger2 {
     }
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Book API （Java）")
+                .title("Design API （Java）")
                 .description("All RESTful API")
                 .contact(new Contact("WangYong","","wangyongst@qq.com"))
                 .version("1.0")
