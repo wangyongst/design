@@ -45,6 +45,15 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = new User();
+        if (oneParameter.getRefer() != null && oneParameter.getRefer() != 0) {
+            User refer = userRepository.findOne(oneParameter.getRefer());
+            if (refer == null) {
+                result.setMessage("推荐人不存在!");
+                return result;
+            } else {
+                user.setRefer(refer);
+            }
+        }
         user.setUsername(oneParameter.getUsername());
         user.setPassword(oneParameter.getPassword());
         user.setEmail(oneParameter.getEmail());

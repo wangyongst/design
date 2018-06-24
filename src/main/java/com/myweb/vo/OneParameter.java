@@ -16,6 +16,15 @@ public class OneParameter {
     private String sex;
     private String password2;
     private Integer page;
+    private Integer refer;
+
+    public Integer getRefer() {
+        return refer;
+    }
+
+    public void setRefer(Integer refer) {
+        this.refer = refer;
+    }
 
     public Integer getPage() {
         return page;

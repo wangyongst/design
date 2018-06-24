@@ -4,6 +4,7 @@ package com.myweb.controller;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
 import com.myweb.vo.OneParameter;
+import com.myweb.vo.ResultUtils;
 import com.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,13 +31,13 @@ public class OneController {
             @ApiImplicitParam(name = "username", value = "账号（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "password", value = " 密码（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "nickname", value = " 昵称（必需）", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "email", value = "邮箱 （必需）", required = true, dataType = "String")
-
+            @ApiImplicitParam(name = "email", value = "邮箱 （必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "refer", value = "推荐人id （可选）", required = true, dataType = "String")
     })
     @ResponseBody
     @PostMapping("/user/regist")
     public Result regist(@ModelAttribute OneParameter oneParameter) {
-        return oneService.regist(oneParameter);
+        return ResultUtils.userResult(oneService.regist(oneParameter));
     }
 
     @ApiOperation(value = "登录", notes = "登录")
@@ -48,7 +49,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/login")
     public Result login(@ModelAttribute OneParameter oneParameter) {
-        return oneService.login(oneParameter);
+        return ResultUtils.userResult(oneService.login(oneParameter));
     }
 
     @ApiOperation(value = "账户设置(基本资料)", notes = "账户设置(基本资料)")
@@ -63,7 +64,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/basic")
     public Result setBasic(@ModelAttribute OneParameter oneParameter) {
-        return oneService.setBasic(oneParameter);
+        return ResultUtils.userResult(oneService.setBasic(oneParameter));
     }
 
     @ApiOperation(value = "账户设置(修改头像)", notes = "账户设置(修改头像)")
@@ -74,7 +75,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/avatar")
     public Result setAvatar(@ModelAttribute OneParameter oneParameter) {
-        return oneService.setAvatar(oneParameter);
+        return ResultUtils.userResult(oneService.setAvatar(oneParameter));
     }
 
 
@@ -87,7 +88,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/password")
     public Result setPassword(@ModelAttribute OneParameter oneParameter) {
-        return oneService.setPassword(oneParameter);
+        return ResultUtils.userResult(oneService.setPassword(oneParameter));
     }
 
     @ApiOperation(value = "账户设置(修改邮箱)", notes = "账户设置(修改邮箱)")
@@ -98,7 +99,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/email")
     public Result setEmail(@ModelAttribute OneParameter oneParameter) {
-        return oneService.setEmail(oneParameter);
+        return ResultUtils.userResult(oneService.setEmail(oneParameter));
     }
 
     @ApiOperation(value = "我的关注", notes = "我的关注")
@@ -112,7 +113,7 @@ public class OneController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
-        return oneService.followMy(oneParameter,pageable);
+        return ResultUtils.userListResult(oneService.followMy(oneParameter, pageable));
     }
 
     @ApiOperation(value = "我的粉丝", notes = "我的粉丝")
@@ -126,7 +127,7 @@ public class OneController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
-        return oneService.followMe(oneParameter,pageable);
+        return ResultUtils.userListResult(oneService.followMe(oneParameter, pageable));
     }
 
     @ApiOperation(value = "关注", notes = "关注")
@@ -137,7 +138,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/follow")
     public Result follow(@ModelAttribute OneParameter oneParameter) {
-        return oneService.follow(oneParameter);
+        return ResultUtils.userResult(oneService.follow(oneParameter));
     }
 
     @ApiOperation(value = "取消关注", notes = "取消关注")
@@ -148,6 +149,6 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/unfollow")
     public Result unfollow(@ModelAttribute OneParameter oneParameter) {
-        return oneService.unfollow(oneParameter);
+        return ResultUtils.userResult(oneService.unfollow(oneParameter));
     }
 }
