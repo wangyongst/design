@@ -76,7 +76,7 @@ public class TwoController {
         } else if (twoParameter.getType() == 1) {
             sort = new Sort(Sort.Direction.DESC, "studied");
         } else if (twoParameter.getType() == 2) {
-            sort = new Sort(Sort.Direction.DESC, "studied");
+            sort = new Sort(Sort.Direction.DESC, "clicked");
         } else if (twoParameter.getType() == 3) {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
