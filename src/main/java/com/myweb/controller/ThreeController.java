@@ -68,7 +68,7 @@ public class ThreeController {
     @ResponseBody
     @GetMapping("/message/user")
     public Result user(@ModelAttribute ThreeParameter threeParameter) {
-        return ResultUtils.userListResult(threeService.user(threeParameter));
+        return ResultUtils.result(threeService.user(threeParameter));
     }
 
     @ApiOperation(value = "我的消息（查看消息）", notes = "我的消息")
@@ -83,7 +83,7 @@ public class ThreeController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
         Pageable pageable = new PageRequest(threeParameter.getPage(), 10, sort);
-        return ResultUtils.messageListResult(threeService.message(threeParameter,pageable));
+        return ResultUtils.result(threeService.message(threeParameter,pageable));
     }
 
     @ApiOperation(value = "我的消息（已读消息）", notes = "调用此接口后，与此发送用户的所有相关消息都变为已读")
@@ -94,6 +94,6 @@ public class ThreeController {
     @ResponseBody
     @PostMapping("/message/read")
     public Result read(@ModelAttribute ThreeParameter threeParameter) {
-        return ResultUtils.messageListResult(threeService.read(threeParameter));
+        return ResultUtils.result(threeService.read(threeParameter));
     }
 }

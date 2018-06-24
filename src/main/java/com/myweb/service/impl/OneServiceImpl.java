@@ -206,7 +206,6 @@ public class OneServiceImpl implements OneService {
                 follow.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 followRepository.save(follow);
                 result.setStatus(1);
-                result.setData(user);
             }
         }
         return result;

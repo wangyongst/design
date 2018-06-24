@@ -50,7 +50,7 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             Help help = new Help();
-            help.setUserid(twoParameter.getUserid());
+            help.setUser(user);
             help.setAudience(twoParameter.getAudience());
             help.setBackground(twoParameter.getBackground());
             help.setTitle(twoParameter.getTitle());
@@ -84,10 +84,10 @@ public class TwoServiceImpl implements TwoService {
         } else {
             if (twoParameter.getDraft() == null || twoParameter.getDraft() == 0) {
                 result.setStatus(1);
-                result.setData(helpRepository.findByUserid(twoParameter.getUserid(), pageable));
+                result.setData(helpRepository.findByUser(user, pageable));
             } else {
                 result.setStatus(1);
-                result.setData(helpRepository.findByUseridAndDraft(twoParameter.getUserid(), twoParameter.getDraft(), pageable));
+                result.setData(helpRepository.findByUserAndDraft(user, twoParameter.getDraft(), pageable));
             }
         }
         return result;

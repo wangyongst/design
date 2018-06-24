@@ -15,9 +15,9 @@ public class Help implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Basic
-    @Column(name = "userid", nullable = false)
-    private Integer userid;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    private User user;
     @Basic
     @Column(name = "audience", nullable = true)
     private Integer audience;
@@ -89,12 +89,12 @@ public class Help implements Serializable {
         this.id = id;
     }
 
-    public Integer getUserid() {
-        return userid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getAudience() {

@@ -37,7 +37,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/regist")
     public Result regist(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.regist(oneParameter));
+        return ResultUtils.result(oneService.regist(oneParameter));
     }
 
     @ApiOperation(value = "登录", notes = "登录")
@@ -49,7 +49,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/login")
     public Result login(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.login(oneParameter));
+        return ResultUtils.result(oneService.login(oneParameter));
     }
 
     @ApiOperation(value = "账户设置(基本资料)", notes = "账户设置(基本资料)")
@@ -64,7 +64,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/basic")
     public Result setBasic(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.setBasic(oneParameter));
+        return ResultUtils.result(oneService.setBasic(oneParameter));
     }
 
     @ApiOperation(value = "账户设置(修改头像)", notes = "账户设置(修改头像)")
@@ -75,7 +75,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/avatar")
     public Result setAvatar(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.setAvatar(oneParameter));
+        return ResultUtils.result(oneService.setAvatar(oneParameter));
     }
 
 
@@ -88,7 +88,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/password")
     public Result setPassword(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.setPassword(oneParameter));
+        return ResultUtils.result(oneService.setPassword(oneParameter));
     }
 
     @ApiOperation(value = "账户设置(修改邮箱)", notes = "账户设置(修改邮箱)")
@@ -99,7 +99,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/set/email")
     public Result setEmail(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.setEmail(oneParameter));
+        return ResultUtils.result(oneService.setEmail(oneParameter));
     }
 
     @ApiOperation(value = "我的关注", notes = "我的关注")
@@ -113,7 +113,7 @@ public class OneController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
-        return ResultUtils.userListResult(oneService.followMy(oneParameter, pageable));
+        return ResultUtils.result(oneService.followMy(oneParameter, pageable));
     }
 
     @ApiOperation(value = "我的粉丝", notes = "我的粉丝")
@@ -127,7 +127,7 @@ public class OneController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
-        return ResultUtils.userListResult(oneService.followMe(oneParameter, pageable));
+        return ResultUtils.result(oneService.followMe(oneParameter, pageable));
     }
 
     @ApiOperation(value = "关注", notes = "关注")
@@ -138,7 +138,7 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/follow")
     public Result follow(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.follow(oneParameter));
+        return oneService.follow(oneParameter);
     }
 
     @ApiOperation(value = "取消关注", notes = "取消关注")
@@ -149,6 +149,6 @@ public class OneController {
     @ResponseBody
     @PostMapping("/user/unfollow")
     public Result unfollow(@ModelAttribute OneParameter oneParameter) {
-        return ResultUtils.userResult(oneService.unfollow(oneParameter));
+        return oneService.unfollow(oneParameter);
     }
 }

@@ -4,6 +4,7 @@ package com.myweb.controller;
 import com.myweb.service.OneService;
 import com.myweb.service.TwoService;
 import com.myweb.vo.OneParameter;
+import com.myweb.vo.ResultUtils;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import io.swagger.annotations.Api;
@@ -43,7 +44,7 @@ public class TwoController {
     @ResponseBody
     @PostMapping("/help/seek")
     public Result seek(@ModelAttribute TwoParameter twoParameter) {
-        return twoService.seek(twoParameter);
+        return ResultUtils.result(twoService.seek(twoParameter));
     }
 
     @ApiOperation(value = "已发求助", notes = "已发求助")
@@ -58,7 +59,7 @@ public class TwoController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
-        return twoService.user(twoParameter, pageable);
+        return ResultUtils.result(twoService.user(twoParameter, pageable));
     }
 
 
@@ -83,7 +84,7 @@ public class TwoController {
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
-        return twoService.index(twoParameter, pageable);
+        return ResultUtils.result(twoService.index(twoParameter, pageable));
     }
 
     @ApiOperation(value = "删除求助", notes = "删除求助")
@@ -119,6 +120,6 @@ public class TwoController {
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
-        return twoService.search(twoParameter, pageable);
+        return ResultUtils.result(twoService.search(twoParameter, pageable));
     }
 }
