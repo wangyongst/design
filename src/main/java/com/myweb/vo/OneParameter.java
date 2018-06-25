@@ -18,6 +18,15 @@ public class OneParameter {
     private Integer page;
     private Integer refer;
     private Integer type;
+    private String keyword;
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
     public Integer getType() {
         return type;

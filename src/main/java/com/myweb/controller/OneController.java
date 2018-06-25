@@ -1,7 +1,6 @@
 package com.myweb.controller;
 
 
-import com.myweb.pojo.User;
 import com.myweb.service.OneService;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.ResultUtils;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Api
 @CrossOrigin("*")
@@ -150,5 +148,43 @@ public class OneController {
     @PostMapping("/user/unfollow")
     public Result unfollow(@ModelAttribute OneParameter oneParameter) {
         return oneService.unfollow(oneParameter);
+    }
+
+    @ApiOperation(value = "找人", notes = "首页找人")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "排序方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "keyword", value = "标签关键字 （可选),搜索范围：账号，昵称，性别，职业", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/user/search")
+    public Result search(@ModelAttribute OneParameter oneParameter) {
+        Sort sort = null;
+        if (oneParameter.getType() == null || oneParameter.getType() == 0) {
+            sort = new Sort(Sort.Direction.DESC, "createtime");
+        } else if (oneParameter.getType() == 1) {
+            sort = new Sort(Sort.Direction.DESC, "studied");
+        } else if (oneParameter.getType() == 2) {
+            sort = new Sort(Sort.Direction.DESC, "clicked");
+        } else if (oneParameter.getType() == 3) {
+            sort = new Sort(Sort.Direction.DESC, "refertime");
+        }
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        return ResultUtils.result(oneService.search(oneParameter, pageable));
+    }
+
+    @ApiOperation(value = "已邀请的好友", notes = "已邀请的好友")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/user/refer")
+    public Result refer(@ModelAttribute OneParameter oneParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        return ResultUtils.result(oneService.refer(oneParameter, pageable));
     }
 }

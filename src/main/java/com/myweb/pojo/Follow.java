@@ -20,7 +20,7 @@ public class Follow implements Serializable {
     private User user;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "touserid", referencedColumnName = "id")
-    private User follow;
+    private User touser;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
@@ -41,12 +41,12 @@ public class Follow implements Serializable {
         this.user = user;
     }
 
-    public User getFollow() {
-        return follow;
+    public User getTouser() {
+        return touser;
     }
 
-    public void setFollow(User follow) {
-        this.follow = follow;
+    public void setTouser(User touser) {
+        this.touser = touser;
     }
 
     public String getCreatetime() {

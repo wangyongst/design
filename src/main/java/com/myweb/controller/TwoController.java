@@ -103,7 +103,7 @@ public class TwoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "排序方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页28条分页", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/search")
@@ -119,7 +119,7 @@ public class TwoController {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
-        Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), 28, sort);
         return ResultUtils.result(twoService.search(twoParameter, pageable));
     }
 }

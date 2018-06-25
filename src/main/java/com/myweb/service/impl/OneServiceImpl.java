@@ -1,6 +1,7 @@
 package com.myweb.service.impl;
 
-import com.myweb.dao.jpa.hibernate.*;
+import com.myweb.dao.jpa.hibernate.FollowRepository;
+import com.myweb.dao.jpa.hibernate.UserRepository;
 import com.myweb.pojo.Follow;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
@@ -202,7 +203,7 @@ public class OneServiceImpl implements OneService {
             } else {
                 Follow follow = new Follow();
                 follow.setUser(user);
-                follow.setFollow(touser);
+                follow.setTouser(touser);
                 follow.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 followRepository.save(follow);
                 result.setStatus(1);
@@ -227,7 +228,7 @@ public class OneServiceImpl implements OneService {
             if (touser == null) {
                 result.setMessage("要取消关注的用户不存在!");
             } else {
-                List<Follow> follows = followRepository.findByUserAndFollow(user, touser);
+                List<Follow> follows = followRepository.findByUserAndTouser(user, touser);
                 follows.forEach(e -> {
                     followRepository.delete(e);
                 });
@@ -266,7 +267,38 @@ public class OneServiceImpl implements OneService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
-            result.setData(followRepository.findByFollow(user, pageable));
+            result.setData(followRepository.findByTouser(user, pageable));
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result search(OneParameter oneParameter, Pageable pageable) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (oneParameter.getKeyword() == null) {
+            result.setData(userRepository.findAll(pageable));
+        } else {
+            result.setData(userRepository.findAllByUsernameOrNicknameOrSexOrJobs(oneParameter.getKeyword(),pageable));
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result refer(OneParameter oneParameter, Pageable pageable) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            result.setStatus(1);
+            result.setData(userRepository.findByRefer(user, pageable));
         }
         return result;
     }

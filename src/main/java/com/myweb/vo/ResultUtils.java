@@ -17,7 +17,7 @@ public class ResultUtils {
             ((Help) result.getData()).getUser().setRefer(null);
         } else if (Follow.class.isInstance(result.getData())) {
             ((Follow) result.getData()).getUser().setRefer(null);
-            ((Follow) result.getData()).getFollow().setRefer(null);
+            ((Follow) result.getData()).getTouser().setRefer(null);
         } else if (Message.class.isInstance(result.getData())) {
             ((Message) result.getData()).getUser().setRefer(null);
             ((Message) result.getData()).getTouser().setRefer(null);
@@ -41,7 +41,7 @@ public class ResultUtils {
             } else if (((List) result.getData()).get(0) instanceof Follow) {
                 for (int i = 0; i < ((List<Follow>) result.getData()).size(); i++) {
                     ((List<Follow>) result.getData()).get(i).getUser().setRefer(null);
-                    ((List<Follow>) result.getData()).get(i).getFollow().setRefer(null);
+                    ((List<Follow>) result.getData()).get(i).getTouser().setRefer(null);
                 }
             }
         }

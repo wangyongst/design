@@ -14,9 +14,9 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Follow.class, idClass = Integer.class)
 public interface FollowRepository extends JpaRepository<Follow, Integer> {
 
-    public List<Follow> findByUserAndFollow(User user, User follow);
+    public List<Follow> findByUserAndTouser(User user, User touser);
 
-    public List<Follow> findByUser(User userid, Pageable pageable);
+    public List<Follow> findByUser(User user, Pageable pageable);
 
-    public List<Follow> findByFollow(User touserid, Pageable pageable);
+    public List<Follow> findByTouser(User touser, Pageable pageable);
 }
