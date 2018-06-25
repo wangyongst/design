@@ -187,4 +187,15 @@ public class OneController {
         Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
         return ResultUtils.result(oneService.refer(oneParameter, pageable));
     }
+
+    @ApiOperation(value = "检查是否关注过", notes = "检查是否关注过")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "要关注的用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/user/follow/is")
+    public Result followIs(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.followIs(oneParameter));
+    }
 }

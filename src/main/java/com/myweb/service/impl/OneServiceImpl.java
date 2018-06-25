@@ -302,4 +302,31 @@ public class OneServiceImpl implements OneService {
         }
         return result;
     }
+
+    @Override
+    public Result followIs(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            User touser = userRepository.findOne(oneParameter.getTouserid());
+            if (touser == null) {
+                result.setMessage("要检查关注的用户不存在!");
+            } else {
+                List<Follow> follows = followRepository.findByUserAndTouser(user, touser);
+                if(follows.size() > 0) {
+                    result.setStatus(1);
+                    result.setData(follows);
+                }else {
+                    result.setMessage("你未关注此用户");
+                }
+            }
+        }
+        return result;
+    }
 }
