@@ -1,9 +1,7 @@
 package com.myweb.controller;
 
 
-import com.myweb.service.OneService;
 import com.myweb.service.TwoService;
-import com.myweb.vo.OneParameter;
 import com.myweb.vo.ResultUtils;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
@@ -101,7 +99,7 @@ public class TwoController {
 
     @ApiOperation(value = "找图", notes = "首页找图")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "排序方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页28条分页", required = true, dataType = "Integer")
     })
@@ -121,5 +119,22 @@ public class TwoController {
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         Pageable pageable = new PageRequest(twoParameter.getPage(), 28, sort);
         return ResultUtils.result(twoService.search(twoParameter, pageable));
+    }
+
+
+    @ApiOperation(value = "个人主页", notes = "个人主页")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "查询方式 （可选，0,我发布的，1我想学的），默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页9条分页", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/help/mine")
+    public Result mine(@ModelAttribute TwoParameter twoParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), 9, sort);
+        return ResultUtils.result(twoService.mine(twoParameter, pageable));
     }
 }

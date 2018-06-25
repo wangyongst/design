@@ -15,12 +15,12 @@ public class Study implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Basic
-    @Column(name = "userid", nullable = true)
-    private Integer userid;
-    @Basic
-    @Column(name = "helpid", nullable = true)
-    private Integer helpid;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    private User user;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "helpid", referencedColumnName = "id")
+    private Help help;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
@@ -33,20 +33,20 @@ public class Study implements Serializable {
         this.id = id;
     }
 
-    public Integer getUserid() {
-        return userid;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Integer getHelpid() {
-        return helpid;
+    public Help getHelp() {
+        return help;
     }
 
-    public void setHelpid(Integer helpid) {
-        this.helpid = helpid;
+    public void setHelp(Help help) {
+        this.help = help;
     }
 
     public String getCreatetime() {

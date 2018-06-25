@@ -3,10 +3,7 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.ThreeService;
-import com.myweb.service.TwoService;
-import com.myweb.vo.OneParameter;
 import com.myweb.vo.ThreeParameter;
-import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -78,16 +75,19 @@ public class ThreeServiceImpl implements ThreeService {
         }
         Study study = new Study();
         if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
-            User user = userRepository.findOne(threeParameter.getUserid());
-            study.setUserid(user.getId());
+            study.setUser(userRepository.findOne(threeParameter.getUserid()));
         }
-        study.setHelpid(threeParameter.getHelpid());
-        study.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-        studyRepository.save(study);
-        Help help = helpRepository.findOne(study.getHelpid());
-        help.setStudied(help.getStudied() + 1);
-        helpRepository.save(help);
-        result.setStatus(1);
+        Help help = helpRepository.findOne(threeParameter.getHelpid());
+        if (help == null) {
+            result.setMessage("想要学习的求助不存在");
+        } else {
+            study.setHelp(help);
+            study.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            studyRepository.save(study);
+            help.setStudied(help.getStudied() + 1);
+            helpRepository.save(help);
+            result.setStatus(1);
+        }
         return result;
     }
 

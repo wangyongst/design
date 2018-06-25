@@ -4,9 +4,7 @@ import com.myweb.dao.jpa.hibernate.HelpRepository;
 import com.myweb.dao.jpa.hibernate.UserRepository;
 import com.myweb.pojo.Help;
 import com.myweb.pojo.User;
-import com.myweb.service.OneService;
 import com.myweb.service.TwoService;
-import com.myweb.vo.OneParameter;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 
 @Service("TwoService")
@@ -98,9 +95,9 @@ public class TwoServiceImpl implements TwoService {
         Result result = new Result();
         result.setStatus(1);
         if (twoParameter.getDesign() == null) {
-            result.setData(helpRepository.findAll(pageable));
+            result.setData(helpRepository.findByDraft(4, pageable));
         } else {
-            result.setData(helpRepository.findByDesign(twoParameter.getDesign(), pageable));
+            result.setData(helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable));
         }
         return result;
     }
@@ -110,9 +107,33 @@ public class TwoServiceImpl implements TwoService {
         Result result = new Result();
         result.setStatus(1);
         if (twoParameter.getTag() == null) {
-            result.setData(helpRepository.findAll(pageable));
+            result.setData(helpRepository.findByDraft(4, pageable));
         } else {
-            result.setData(helpRepository.findByTagContains(twoParameter.getDesign(), pageable));
+            result.setData(helpRepository.findByDraftAndTagContains(4, twoParameter.getDesign(), pageable));
+        }
+        return result;
+    }
+
+    @Override
+    public Result mine(TwoParameter twoParameter, Pageable pageable) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null) {
+            result.setMessage("当前用户不存在!");
+        } else {
+            if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
+                result.setData(helpRepository.findByUserAndDraft(user, 4, pageable));
+            } else if (twoParameter.getTag() != null && (twoParameter.getType() == null || twoParameter.getType() == 0)) {
+                result.setData(helpRepository.findByUserAndDraftAndTagContains(user, 4, twoParameter.getTag(), pageable));
+            } else if (twoParameter.getTag() != null && twoParameter.getType() != null && twoParameter.getType() != 0) {
+                //result.setData(helpRepository.findByUserAndTagContains(user, twoParameter.getTag(), pageable));
+            } else {
+                //result.setData(helpRepository.findByTagContains(twoParameter.getDesign(), pageable));
+            }
         }
         return result;
     }
