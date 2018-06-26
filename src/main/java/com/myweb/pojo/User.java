@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -42,9 +41,9 @@ public class User implements Serializable {
     @Basic
     @Column(name = "sex", nullable = true, length = 255)
     private String sex;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinColumn(name = "refer", referencedColumnName = "id")
-    private User refer;
+    @Basic
+    @Column(name = "refer", nullable = true)
+    private Integer refer;
     @Basic
     @Column(name = "refertime", nullable = true, length = 255)
     private String refertime;
@@ -57,11 +56,11 @@ public class User implements Serializable {
         this.refertime = refertime;
     }
 
-    public User getRefer() {
+    public Integer getRefer() {
         return refer;
     }
 
-    public void setRefer(User refer) {
+    public void setRefer(Integer refer) {
         this.refer = refer;
     }
 

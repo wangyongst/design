@@ -7,6 +7,15 @@
         <class>com.myweb.pojo.Study</class>
         <class>com.myweb.pojo.Click</class>
         <class>com.myweb.pojo.Message</class>
+        <class>com.myweb.pojo.AdminLog</class>
+        <class>com.myweb.pojo.AdminMenu</class>
+        <class>com.myweb.pojo.AdminPrivilege</class>
+        <class>com.myweb.pojo.AdminRole</class>
+        <class>com.myweb.pojo.AdminUser</class>
+        <class>com.myweb.pojo.Notice</class>
+        <class>com.myweb.pojo.Searching</class>
+        <class>com.myweb.pojo.Setting</class>
+        <class>com.myweb.pojo.Token</class>
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/design"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>

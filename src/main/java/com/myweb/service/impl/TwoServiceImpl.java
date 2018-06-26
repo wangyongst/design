@@ -1,8 +1,10 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.HelpRepository;
+import com.myweb.dao.jpa.hibernate.TokenRepository;
 import com.myweb.dao.jpa.hibernate.UserRepository;
 import com.myweb.pojo.Help;
+import com.myweb.pojo.Token;
 import com.myweb.pojo.User;
 import com.myweb.service.TwoService;
 import com.myweb.vo.TwoParameter;
@@ -32,6 +34,9 @@ public class TwoServiceImpl implements TwoService {
     private HelpRepository helpRepository;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
@@ -43,7 +48,7 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         User user = userRepository.findOne(twoParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             Help help = new Help();
@@ -62,7 +67,6 @@ public class TwoServiceImpl implements TwoService {
             help.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             helpRepository.save(help);
             result.setStatus(1);
-            result.setData(help);
         }
         return result;
     }
@@ -76,7 +80,7 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         User user = userRepository.findOne(twoParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             if (twoParameter.getDraft() == null || twoParameter.getDraft() == 0) {
@@ -122,7 +126,7 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         User user = userRepository.findOne(twoParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在!");
         } else {
             if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
@@ -148,7 +152,7 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         User user = userRepository.findOne(twoParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             String[] ids = helpids.split(",");
@@ -160,5 +164,11 @@ public class TwoServiceImpl implements TwoService {
             result.setStatus(1);
         }
         return result;
+    }
+
+    public boolean isNotLogin(User user) {
+        Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
+        if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
+        return true;
     }
 }

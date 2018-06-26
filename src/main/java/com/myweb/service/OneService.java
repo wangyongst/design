@@ -11,6 +11,8 @@ public interface OneService {
 
     public Result login(OneParameter oneParameter);
 
+    public Result logout(OneParameter oneParameter);
+
     public Result setBasic(OneParameter oneParameter);
 
     public Result setAvatar(OneParameter oneParameter);

@@ -1,8 +1,10 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.FollowRepository;
+import com.myweb.dao.jpa.hibernate.TokenRepository;
 import com.myweb.dao.jpa.hibernate.UserRepository;
 import com.myweb.pojo.Follow;
+import com.myweb.pojo.Token;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
 import com.myweb.vo.OneParameter;
@@ -33,6 +35,9 @@ public class OneServiceImpl implements OneService {
     private UserRepository userRepository;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
     private FollowRepository followRepository;
 
     @Override
@@ -54,7 +59,7 @@ public class OneServiceImpl implements OneService {
                 result.setMessage("推荐人不存在!");
                 return result;
             } else {
-                user.setRefer(refer);
+                user.setRefer(refer.getId());
             }
         }
         user.setUsername(oneParameter.getUsername());
@@ -64,7 +69,6 @@ public class OneServiceImpl implements OneService {
         user.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         userRepository.save(user);
         result.setStatus(1);
-        result.setData(user);
         return result;
     }
 
@@ -75,9 +79,14 @@ public class OneServiceImpl implements OneService {
             List<User> userList = userRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
             if (userList.size() == 1) {
                 result.setStatus(1);
+                Token token = new Token();
+                token.setUser(userList.get(0));
+                token.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                token.setExpiretime(new Date().getTime() + 60000 * 120);
+                tokenRepository.save(token);
                 result.setData(userList.get(0));
                 return result;
-            } else if (userList.size() == 0) {
+            } else if (userList.size() != 1) {
                 result.setMessage("用户不存在或密码错误！");
                 return result;
             }
@@ -101,14 +110,14 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result setBasic(OneParameter oneParameter) {
+    public Result logout(OneParameter oneParameter) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getNickname())) {
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             user.setUsername(oneParameter.getUsername());
@@ -125,6 +134,25 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result setBasic(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getNickname())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
+            token.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setAvatar(OneParameter oneParameter) {
         Result result = new Result();
         if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getAvatar())) {
@@ -132,7 +160,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             user.setAvatar(oneParameter.getAvatar());
@@ -152,7 +180,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else if (StringUtils.equals(user.getPassword(), oneParameter.getPassword())) {
             user.setPassword(oneParameter.getPassword2());
@@ -160,7 +188,7 @@ public class OneServiceImpl implements OneService {
             result.setStatus(1);
             result.setData(user);
         } else {
-            result.setMessage("未找到这个用户,或旧密码不正确！");
+            result.setMessage("旧密码不正确！");
         }
         return result;
     }
@@ -174,7 +202,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             user.setEmail(oneParameter.getEmail());
@@ -194,7 +222,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(oneParameter.getTouserid());
@@ -221,7 +249,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(oneParameter.getTouserid());
@@ -246,7 +274,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -263,7 +291,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -280,7 +308,7 @@ public class OneServiceImpl implements OneService {
         if (oneParameter.getKeyword() == null) {
             result.setData(userRepository.findAll(pageable));
         } else {
-            result.setData(userRepository.findAllByUsernameOrNicknameOrSexOrJobs(oneParameter.getKeyword(),pageable));
+            result.setData(userRepository.findAllByUsernameOrNicknameOrSexOrJobs(oneParameter.getKeyword(), pageable));
         }
         return result;
     }
@@ -294,11 +322,11 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
-            result.setData(userRepository.findByRefer(user, pageable));
+            result.setData(userRepository.findByReferid(user.getId(), pageable));
         }
         return result;
     }
@@ -311,7 +339,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(oneParameter.getTouserid());
@@ -319,14 +347,20 @@ public class OneServiceImpl implements OneService {
                 result.setMessage("要检查关注的用户不存在!");
             } else {
                 List<Follow> follows = followRepository.findByUserAndTouser(user, touser);
-                if(follows.size() > 0) {
+                if (follows.size() > 0) {
                     result.setStatus(1);
-                    result.setData(follows);
-                }else {
+                } else {
                     result.setMessage("你未关注此用户");
                 }
             }
         }
         return result;
+    }
+
+
+    public boolean isNotLogin(User user) {
+        Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
+        if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
+        return true;
     }
 }

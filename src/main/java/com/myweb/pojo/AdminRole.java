@@ -1,51 +1,48 @@
 package com.myweb.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "click")
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Click implements Serializable {
+@Table(name = "admin_role")
+public class AdminRole implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    private User user;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinColumn(name = "helpid", referencedColumnName = "id")
-    private Help help;
+    private AdminUser adminUser;
+    @Basic
+    @Column(name = "name", nullable = true, length = 255)
+    private String name;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public AdminUser getAdminUser() {
+        return adminUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAdminUser(AdminUser adminUser) {
+        this.adminUser = adminUser;
     }
 
-    public Help getHelp() {
-        return help;
+    public String getName() {
+        return name;
     }
 
-    public void setHelp(Help help) {
-        this.help = help;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCreatetime() {

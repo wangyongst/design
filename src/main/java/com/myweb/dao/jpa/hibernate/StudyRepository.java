@@ -1,5 +1,6 @@
 package com.myweb.dao.jpa.hibernate;
 
+import com.myweb.pojo.Help;
 import com.myweb.pojo.Study;
 import com.myweb.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Study.class, idClass = Integer.class)
 public interface StudyRepository extends JpaRepository<Study, Integer> {
 
+    public int countAllByHelp(Help help);
 }

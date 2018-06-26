@@ -6,29 +6,32 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "click")
+@Table(name = "study")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Click implements Serializable {
+public class Token implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "userid", referencedColumnName = "id")
     private User user;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinColumn(name = "helpid", referencedColumnName = "id")
-    private Help help;
+    @Basic
+    @Column(name = "expiretime", nullable = true)
+    private Long expiretime;
+    @Basic
+    @Column(name = "outtime", nullable = true, length = 255)
+    private String outtime;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -40,12 +43,20 @@ public class Click implements Serializable {
         this.user = user;
     }
 
-    public Help getHelp() {
-        return help;
+    public Long getExpiretime() {
+        return expiretime;
     }
 
-    public void setHelp(Help help) {
-        this.help = help;
+    public void setExpiretime(Long expiretime) {
+        this.expiretime = expiretime;
+    }
+
+    public String getOuttime() {
+        return outtime;
+    }
+
+    public void setOuttime(String outtime) {
+        this.outtime = outtime;
     }
 
     public String getCreatetime() {

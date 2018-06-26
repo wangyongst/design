@@ -40,6 +40,9 @@ public class ThreeServiceImpl implements ThreeService {
     private StudyRepository studyRepository;
 
     @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
     private MessageRepository messageRepository;
 
     @Override
@@ -52,16 +55,19 @@ public class ThreeServiceImpl implements ThreeService {
         }
         Click click = new Click();
         if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
-            User user = userRepository.findOne(threeParameter.getUserid());
-            click.setUserid(user.getId());
+            click.setUser(userRepository.findOne(threeParameter.getUserid()));
         }
-        click.setHelpid(threeParameter.getHelpid());
-        click.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-        clickRepository.save(click);
-        Help help = helpRepository.findOne(click.getHelpid());
-        help.setClicked(help.getClicked() + 1);
-        helpRepository.save(help);
-        result.setStatus(1);
+        Help help = helpRepository.findOne(threeParameter.getHelpid());
+        if (help == null) {
+            result.setMessage("点击的求助不存在");
+        } else {
+            click.setHelp(help);
+            click.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            clickRepository.save(click);
+            help.setClicked(help.getClicked() + 1);
+            helpRepository.save(help);
+            result.setStatus(1);
+        }
         return result;
     }
 
@@ -102,7 +108,7 @@ public class ThreeServiceImpl implements ThreeService {
         }
         Message message = new Message();
         User user = userRepository.findOne(threeParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(threeParameter.getTouserid());
@@ -116,7 +122,6 @@ public class ThreeServiceImpl implements ThreeService {
                 message.setRead(0);
                 messageRepository.save(message);
                 result.setStatus(1);
-                result.setData(user);
             }
         }
         return result;
@@ -130,7 +135,7 @@ public class ThreeServiceImpl implements ThreeService {
             return result;
         }
         User user = userRepository.findOne(threeParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -149,7 +154,7 @@ public class ThreeServiceImpl implements ThreeService {
             return result;
         }
         User user = userRepository.findOne(threeParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(threeParameter.getTouserid());
@@ -173,7 +178,7 @@ public class ThreeServiceImpl implements ThreeService {
             return result;
         }
         User user = userRepository.findOne(threeParameter.getUserid());
-        if (user == null) {
+        if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(threeParameter.getTouserid());
@@ -186,9 +191,14 @@ public class ThreeServiceImpl implements ThreeService {
                     messageRepository.save(e);
                 });
                 result.setStatus(1);
-                result.setData(messageList);
             }
         }
         return result;
+    }
+
+    public boolean isNotLogin(User user) {
+        Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
+        if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
+        return true;
     }
 }

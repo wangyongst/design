@@ -50,6 +50,16 @@ public class OneController {
         return ResultUtils.result(oneService.login(oneParameter));
     }
 
+    @ApiOperation(value = "登出", notes = "登出")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/user/logout")
+    public Result logout(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.logout(oneParameter));
+    }
+
     @ApiOperation(value = "账户设置(基本资料)", notes = "账户设置(基本资料)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),

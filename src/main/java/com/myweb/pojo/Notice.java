@@ -6,9 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "click")
+@Table(name = "notice")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Click implements Serializable {
+public class Notice implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
@@ -17,9 +17,12 @@ public class Click implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "userid", referencedColumnName = "id")
     private User user;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinColumn(name = "helpid", referencedColumnName = "id")
-    private Help help;
+    @Basic
+    @Column(name = "message", nullable = true, length = 255)
+    private String message;
+    @Basic
+    @Column(name = "read", nullable = true)
+    private Integer read;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
@@ -40,12 +43,20 @@ public class Click implements Serializable {
         this.user = user;
     }
 
-    public Help getHelp() {
-        return help;
+    public String getMessage() {
+        return message;
     }
 
-    public void setHelp(Help help) {
-        this.help = help;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Integer getRead() {
+        return read;
+    }
+
+    public void setRead(Integer read) {
+        this.read = read;
     }
 
     public String getCreatetime() {
