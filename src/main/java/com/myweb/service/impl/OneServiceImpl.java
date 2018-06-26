@@ -326,7 +326,7 @@ public class OneServiceImpl implements OneService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
-            result.setData(userRepository.findByReferid(user.getId(), pageable));
+            result.setData(userRepository.findByRefer(user.getId(), pageable));
         }
         return result;
     }

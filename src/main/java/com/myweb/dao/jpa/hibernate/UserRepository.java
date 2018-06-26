@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public List<User> findByUsername(String username);
 
-    public List<User> findByReferid(Integer refer,Pageable pageable);
+    public List<User> findByRefer(Integer refer,Pageable pageable);
 
     public List<User> findByUsernameAndPassword(String username, String password);
 
