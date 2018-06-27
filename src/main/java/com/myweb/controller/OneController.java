@@ -113,28 +113,32 @@ public class OneController {
     @ApiOperation(value = "我的关注", notes = "我的关注")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/user/follow/my")
     public Result followMy(@ModelAttribute OneParameter oneParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
         return ResultUtils.result(oneService.followMy(oneParameter, pageable));
     }
 
     @ApiOperation(value = "我的粉丝", notes = "我的粉丝")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/user/follow/me")
     public Result followMe(@ModelAttribute OneParameter oneParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
         return ResultUtils.result(oneService.followMe(oneParameter, pageable));
     }
 
@@ -164,7 +168,8 @@ public class OneController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "排序方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "keyword", value = "标签关键字 （可选),搜索范围：账号，昵称，性别，职业", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/user/search")
@@ -180,21 +185,24 @@ public class OneController {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
         return ResultUtils.result(oneService.search(oneParameter, pageable));
     }
 
     @ApiOperation(value = "已邀请的好友", notes = "已邀请的好友")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/user/refer")
     public Result refer(@ModelAttribute OneParameter oneParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
         return ResultUtils.result(oneService.refer(oneParameter, pageable));
     }
 

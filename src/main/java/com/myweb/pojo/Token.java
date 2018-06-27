@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "study")
+@Table(name = "token")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token implements Serializable {
     private static final long serialVersionUID = 1L;

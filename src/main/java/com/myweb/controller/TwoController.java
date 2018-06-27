@@ -49,7 +49,8 @@ public class TwoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "draft", value = "发布方式 （可选，0,全部，1草稿，2，隐藏，3未通过审核，4已经发表）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/user")
@@ -65,7 +66,8 @@ public class TwoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "推荐方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "design", value = "设计分类 （可选)", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页10条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/index")
@@ -101,7 +103,8 @@ public class TwoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页28条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/search")
@@ -127,7 +130,8 @@ public class TwoController {
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "type", value = "查询方式 （可选，0,我发布的，1我想学的），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0，每页9条分页", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/mine")

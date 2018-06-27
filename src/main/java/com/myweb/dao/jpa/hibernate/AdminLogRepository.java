@@ -10,5 +10,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryDefinition(domainClass = AdminLog.class, idClass = Integer.class)
 public interface AdminLogRepository extends JpaRepository<AdminLog, Integer> {
-    public Page<AdminLog> findAll(Pageable pageable);
 }
