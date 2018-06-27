@@ -24,22 +24,60 @@ public class AdminOneController {
     public AdminOneService adminOneService;
 
     @PostMapping("/user/login")
-    public Result login(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+    public Result userLogin(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.login(oneParameter, httpSession));
     }
 
     @PostMapping("/user/logout")
-    public Result logout(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+    public Result userLogout(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
     }
 
-    @GetMapping("/click/count")
-    public Result clickCount(HttpSession httpSession) {
+    @GetMapping("/user/list")
+    public Result userList(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
+        return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
+    }
+
+    @GetMapping("/user/online")
+    public Result userOnline(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
+        return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
+    }
+
+    @PostMapping("/user")
+    public Result postUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
+    }
+
+    @PostMapping("/user/delete")
+    public Result userDelete(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
+    }
+
+    @GetMapping("/count/click")
+    public Result countClick(HttpSession httpSession) {
         return ResultUtils.result(adminOneService.clickCount(httpSession));
     }
 
-    @GetMapping("/click/most")
-    public Result clickMost(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+    @GetMapping("/count/user")
+    public Result countUser(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.clickCount(httpSession));
+    }
+
+    @GetMapping("/count/study")
+    public Result countStudy(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.studyCount(httpSession));
+    }
+
+    @GetMapping("/most/click")
+    public Result mostClick(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
@@ -47,18 +85,33 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.clickMost(pageable, httpSession));
     }
 
-    @GetMapping("/study/count")
-    public Result studyCount(HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.studyCount(httpSession));
+    @GetMapping("/most/study")
+    public Result mostStudy(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (oneParameter.getPage() == null) oneParameter.setPage(0);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
+        return ResultUtils.result(adminOneService.clickMost(pageable, httpSession));
     }
 
+
     @GetMapping("/help")
-    public Result help(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
+    public Result getHelp(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.help(threeParameter, httpSession));
+    }
+
+    @PostMapping("/help")
+    public Result postHelp(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.help(threeParameter, httpSession));
     }
 
     @PostMapping("/setting")
-    public Result setting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+    public Result PostSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    }
+
+    @GetMapping("/setting")
+    public Result getSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
