@@ -33,7 +33,7 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
     }
 
-    @GetMapping("/user/list")
+    @GetMapping("/user")
     public Result userList(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
@@ -42,8 +42,8 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.logout(oneParameter, httpSession));
     }
 
-    @GetMapping("/user/online")
-    public Result userOnline(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+    @GetMapping("/user/token")
+    public Result userToken(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
@@ -73,6 +73,21 @@ public class AdminOneController {
 
     @GetMapping("/count/study")
     public Result countStudy(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.studyCount(httpSession));
+    }
+
+    @GetMapping("/count/message")
+    public Result countMessage(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.studyCount(httpSession));
+    }
+
+    @GetMapping("/count/message/user")
+    public Result countMessageUser(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.studyCount(httpSession));
+    }
+
+    @GetMapping("/message")
+    public Result getMessage(HttpSession httpSession) {
         return ResultUtils.result(adminOneService.studyCount(httpSession));
     }
 
@@ -112,6 +127,21 @@ public class AdminOneController {
 
     @GetMapping("/setting")
     public Result getSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    }
+
+    @GetMapping("/searching")
+    public Result getSearching(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    }
+
+    @GetMapping("/count/follow")
+    public Result countFollow(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    }
+
+    @GetMapping("/follow")
+    public Result getfollow(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
