@@ -41,9 +41,9 @@ public class AdminOneController {
     public Result clickMost(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
-        //return ResultUtils.result(adminOneService.clickMost(httpSession));
-        return null;
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
+        return ResultUtils.result(adminOneService.clickMost(pageable,httpSession));
     }
 
     @GetMapping("/study/count")
@@ -51,12 +51,12 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.studyCount(httpSession));
     }
 
-    @GetMapping("/study/count/help")
-    public Result studyCountHelp(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.studyCountHelp(threeParameter, httpSession));
+    @GetMapping("/help")
+    public Result help(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.help(threeParameter, httpSession));
     }
 
-    @GetMapping("/help/refer")
+    @PostMapping("/help/refer")
     public Result helpRefer(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.helpRefer(threeParameter, httpSession));
     }
@@ -65,7 +65,8 @@ public class AdminOneController {
     public Result showlog(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), 10, sort);
+        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
         return ResultUtils.result(adminOneService.showlog(pageable, httpSession));
     }
 }
