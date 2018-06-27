@@ -5,6 +5,7 @@ import com.myweb.pojo.AdminLog;
 import com.myweb.pojo.AdminUser;
 import com.myweb.pojo.Help;
 import com.myweb.service.AdminOneService;
+import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.ThreeParameter;
 import com.utils.Result;
@@ -112,6 +113,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         return result;
     }
 
+    @Override
     public Result helpRefer(ThreeParameter threeParameter, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
@@ -121,6 +123,24 @@ public class AdminOneServiceImpl implements AdminOneService {
         help.setRefertime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         helpRepository.save(help);
         createLog("设置id为" + help.getId() + "的求助为强制推荐", httpSession);
+        return result;
+    }
+
+    @Override
+    public Result helpDelete(AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (StringUtils.isBlank(adminOneParameter.getHelpids())) return result;
+        String[] helpid = adminOneParameter.getHelpids().split(",");
+        for (String s : helpid) {
+            if (StringUtils.isNotBlank(s)) {
+                Help help = helpRepository.findOne(Integer.parseInt(s));
+                if (help != null) {
+                    helpRepository.delete(help);
+                    createLog("删除id为" + help.getId() + "的求助", httpSession);
+                }
+            }
+        }
         return result;
     }
 

@@ -2,6 +2,7 @@ package com.myweb.controller;
 
 
 import com.myweb.service.AdminOneService;
+import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.ResultUtils;
 import com.myweb.vo.ThreeParameter;
@@ -43,7 +44,7 @@ public class AdminOneController {
         if (oneParameter.getPage() == null) oneParameter.setPage(0);
         if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
         Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
-        return ResultUtils.result(adminOneService.clickMost(pageable,httpSession));
+        return ResultUtils.result(adminOneService.clickMost(pageable, httpSession));
     }
 
     @GetMapping("/study/count")
@@ -54,6 +55,11 @@ public class AdminOneController {
     @GetMapping("/help")
     public Result help(@ModelAttribute ThreeParameter threeParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.help(threeParameter, httpSession));
+    }
+
+    @PostMapping("/help/delete")
+    public Result helpDelete(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.helpDelete(adminOneParameter, httpSession));
     }
 
     @PostMapping("/help/refer")
