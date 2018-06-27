@@ -145,6 +145,24 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+//        if (StringUtils.isBlank(adminOneParameter.getHelpids())) return result;
+//        String[] helpid = adminOneParameter.getHelpids().split(",");
+//        for (String s : helpid) {
+//            if (StringUtils.isNotBlank(s)) {
+//                Help help = helpRepository.findOne(Integer.parseInt(s));
+//                if (help != null) {
+//                    helpRepository.delete(help);
+//                    createLog("删除id为" + help.getId() + "的求助", httpSession);
+//                }
+//            }
+//        }
+        return result;
+    }
+
+    @Override
     public Result showlog(Pageable pageable, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);

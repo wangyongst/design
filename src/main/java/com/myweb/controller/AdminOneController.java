@@ -57,6 +57,11 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.help(threeParameter, httpSession));
     }
 
+    @PostMapping("/setting")
+    public Result setting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    }
+
     @PostMapping("/help/delete")
     public Result helpDelete(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.helpDelete(adminOneParameter, httpSession));

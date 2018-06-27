@@ -26,5 +26,7 @@ public interface AdminOneService {
 
     public Result helpDelete(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
+    public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession);
+
     public Result helpRefer(ThreeParameter threeParameter, HttpSession httpSession);
 }
