@@ -24,13 +24,6 @@ public class AdminOneController {
     @Autowired
     public AdminOneService adminOneService;
 
-    @GetMapping("/login")
-    public String test(HttpServletRequest request) {
-        //逻辑处理
-        request.setAttribute("key", "hello world");
-        return "/page-login";
-    }
-
     @PostMapping("/user/login")
     public Result userLogin(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.login(oneParameter, httpSession));

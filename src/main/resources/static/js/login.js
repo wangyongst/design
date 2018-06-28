@@ -1,25 +1,28 @@
 $(function () {
     $("#loginButton").click(function () {
-        if (!checkIsNotNull()) {
+        if($("#username").val() == null ||$("#username").val() =="" || $("#username").val()=="null"){
+            alert("用户名不能为空");
             return;
         }
-        var jobType = isChecked($("#channelAddForm"));
-        if ($("#id").val() == null || $("#id").val() == "") {
-            $("#id").val("0");
+        if($("#password").val() == null ||$("#password").val() =="" || $("#password").val()=="null"){
+            alert("密码不能为空");
+            return;
         }
-        $("#source").val("手动");
         $.ajax({
             type: "POST",
             cache: "false",
-            url: "channel/add.do",
-            data: $('#channelAddForm').serialize() + "&jobType=" + jobType,
-            dataType: "json",
-            error: function () {//请求失败时调用函数。
-                alert("出现错误");
+            url: "admin/user/login",
+            data: {
+                username:$("#username").val(),
+                password:$("#password").val()
             },
+            dataType: "json",
             success: function (result) {
-                $("#channelTable").bootstrapTable('refresh');
-                $("#channelInfo").modal('hide');
+                if(result.status == 1){
+                    window.location.href="home.html";
+                }else{
+                    alert(result.message);
+                }
             }
         });
     });
