@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @RepositoryDefinition(domainClass = Token.class, idClass = Integer.class)
 public interface TokenRepository extends JpaRepository<Token, Integer> {
     public Token findTop1ByUserOrderByCreatetimeDesc(User user);
+
+    public int countAllByExpiretimeGreaterThanAndOuttimeIsNull(Long expiretime);
 }

@@ -13,7 +13,7 @@ public class User implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "username", nullable = true, length = 255)
     private String username;
@@ -64,11 +64,11 @@ public class User implements Serializable {
         this.refer = refer;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

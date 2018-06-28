@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 
 public class TwoParameter {
+    private Integer helpid;
     private Integer userid;
     private Integer audience;
     private String title;
@@ -18,6 +19,14 @@ public class TwoParameter {
     private Integer page;
     private Integer type;
     private Integer pagesize;
+
+    public Integer getHelpid() {
+        return helpid;
+    }
+
+    public void setHelpid(Integer helpid) {
+        this.helpid = helpid;
+    }
 
     public Integer getPagesize() {
         return pagesize;
