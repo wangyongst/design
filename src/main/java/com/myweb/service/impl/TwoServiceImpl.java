@@ -1,5 +1,6 @@
 package com.myweb.service.impl;
 
+import com.myweb.dao.jpa.hibernate.AdvertRepository;
 import com.myweb.dao.jpa.hibernate.HelpRepository;
 import com.myweb.dao.jpa.hibernate.TokenRepository;
 import com.myweb.dao.jpa.hibernate.UserRepository;
@@ -38,6 +39,10 @@ public class TwoServiceImpl implements TwoService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AdvertRepository advertRepository;
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -103,6 +108,14 @@ public class TwoServiceImpl implements TwoService {
         } else {
             result.setData(helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable));
         }
+        return result;
+    }
+
+    @Override
+    public Result advert(Pageable pageable) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(advertRepository.findAllByRefer(1, pageable));
         return result;
     }
 

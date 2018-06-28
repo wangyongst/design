@@ -1,8 +1,5 @@
 package com.myweb.vo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-
 public class AdminOneParameter {
     private String helpids;
     private String name;
@@ -11,6 +8,51 @@ public class AdminOneParameter {
     private Integer type;
     private Integer operation;
     private String keyword;
+    private Integer adminuserid;
+    private String title;
+    private String image;
+    private String url;
+    private Integer refer;
+
+    public Integer getAdminuserid() {
+        return adminuserid;
+    }
+
+    public void setAdminuserid(Integer adminuserid) {
+        this.adminuserid = adminuserid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getRefer() {
+        return refer;
+    }
+
+    public void setRefer(Integer refer) {
+        this.refer = refer;
+    }
 
     public Integer getOperation() {
         return operation;

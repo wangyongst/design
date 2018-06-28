@@ -83,7 +83,7 @@ public class ThreeController {
     public Result message(@ModelAttribute ThreeParameter threeParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
-        Pageable pageable = new PageRequest(threeParameter.getPage(), 10, sort);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
         return ResultUtils.result(threeService.message(threeParameter,pageable));
     }
 

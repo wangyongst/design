@@ -57,7 +57,7 @@ public class TwoController {
     public Result user(@ModelAttribute TwoParameter twoParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
-        Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.user(twoParameter, pageable));
     }
 
@@ -83,7 +83,7 @@ public class TwoController {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
-        Pageable pageable = new PageRequest(twoParameter.getPage(), 10, sort);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.index(twoParameter, pageable));
     }
 
@@ -120,8 +120,25 @@ public class TwoController {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
-        Pageable pageable = new PageRequest(twoParameter.getPage(), 28, sort);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.search(twoParameter, pageable));
+    }
+
+
+    @ApiOperation(value = "广告", notes = "广告")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/advert")
+    public Result advert(@ModelAttribute TwoParameter twoParameter) {
+        Sort sort = null;
+        if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+            sort = new Sort(Sort.Direction.DESC, "createtime");
+        }
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
+        return ResultUtils.result(twoService.advert(pageable));
     }
 
 
@@ -138,7 +155,7 @@ public class TwoController {
     public Result mine(@ModelAttribute TwoParameter twoParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
-        Pageable pageable = new PageRequest(twoParameter.getPage(), 9, sort);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.mine(twoParameter, pageable));
     }
 }

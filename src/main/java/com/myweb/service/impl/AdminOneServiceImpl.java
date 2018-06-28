@@ -257,6 +257,7 @@ public class AdminOneServiceImpl implements AdminOneService {
             result.setStatus(1);
             if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
             if (StringUtils.isNotBlank(adminOneParameter.getContent())) setting.setContent(adminOneParameter.getContent());
+            setting.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             result.setData(settingRepository.save(setting));
         }
         return result;

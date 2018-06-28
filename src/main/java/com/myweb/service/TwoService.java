@@ -17,5 +17,7 @@ public interface TwoService {
 
     public Result mine(TwoParameter twoParameter, Pageable pageable);
 
+    public Result advert(Pageable pageable);
+
     public Result delete(TwoParameter twoParameter, String helpids);
 }
