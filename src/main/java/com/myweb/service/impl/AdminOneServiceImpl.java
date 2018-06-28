@@ -214,6 +214,9 @@ public class AdminOneServiceImpl implements AdminOneService {
         if (help == null) return result;
         if (twoParameter.getType() != null && twoParameter.getType() == 2) {
             helpRepository.delete(help);
+        } else if (twoParameter.getType() != null && twoParameter.getType() == 1 && twoParameter.getDraft() != null && twoParameter.getDraft() != 0) {
+            help.setDraft(twoParameter.getDraft());
+            helpRepository.save(help);
         }
         return result;
     }

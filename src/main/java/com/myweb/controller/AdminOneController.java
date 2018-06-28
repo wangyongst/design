@@ -114,7 +114,7 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.help(twoParameter, httpSession));
     }
 
-    //type2删除
+    //type2删除,type1审核
     @PostMapping("/help")
     public Result postHelp(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.postHelp(twoParameter, httpSession));
@@ -129,7 +129,7 @@ public class AdminOneController {
     //查询设置1log,2友链
     @GetMapping("/setting")
     public Result getSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.getSetting(adminOneParameter,httpSession));
+        return ResultUtils.result(adminOneService.getSetting(adminOneParameter, httpSession));
     }
 
     @GetMapping("/searching")
@@ -137,7 +137,7 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
-   //每个用户被关注的次数
+    //每个用户被关注的次数
     @GetMapping("/count/follow")
     public Result countFollow(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.countFollow(oneParameter, httpSession));
