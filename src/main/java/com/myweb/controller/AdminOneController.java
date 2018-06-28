@@ -132,7 +132,6 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
-
     //查询设置1log,2友链
     @GetMapping("/setting")
     public Result getSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
