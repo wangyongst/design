@@ -120,14 +120,16 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.postHelp(twoParameter, httpSession));
     }
 
+    //operation 1增 2改 type1logo,2友情链接
     @PostMapping("/setting")
     public Result PostSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
+    //查询设置1log,2友链
     @GetMapping("/setting")
     public Result getSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+        return ResultUtils.result(adminOneService.getSetting(adminOneParameter,httpSession));
     }
 
     @GetMapping("/searching")
@@ -135,11 +137,13 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
+   //每个用户被关注的次数
     @GetMapping("/count/follow")
     public Result countFollow(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.countFollow(oneParameter, httpSession));
     }
 
+    //每个用户被关注的详情
     @GetMapping("/follow")
     public Result getfollow(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
@@ -149,11 +153,13 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.follow(oneParameter, pageable, httpSession));
     }
 
+    //强制推荐
     @PostMapping("/help/refer")
     public Result helpRefer(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.helpRefer(twoParameter, httpSession));
     }
 
+    //操作日志
     @GetMapping("/showlog")
     public Result showlog(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");

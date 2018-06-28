@@ -1,10 +1,7 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.*;
-import com.myweb.pojo.AdminLog;
-import com.myweb.pojo.AdminUser;
-import com.myweb.pojo.Help;
-import com.myweb.pojo.User;
+import com.myweb.pojo.*;
 import com.myweb.service.AdminOneService;
 import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
@@ -48,6 +45,9 @@ public class AdminOneServiceImpl implements AdminOneService {
 
     @Autowired
     private StudyRepository studyRepository;
+
+    @Autowired
+    private SettingRepository settingRepository;
 
     @Autowired
     private ClickRepository clickRepository;
@@ -120,7 +120,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         return result;
     }
 
-
     @Override
     public Result userToken(Pageable pageable, HttpSession httpSession) {
         Result result = new Result();
@@ -128,7 +127,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setData(tokenRepository.findAll(pageable));
         return result;
     }
-
 
     @Override
     public Result user(OneParameter oneParameter, HttpSession httpSession) {
@@ -244,18 +242,29 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
+        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0 || adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
+        Setting setting = new Setting();
+        if (adminOneParameter.getOperation() == 1) {
+            if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
+            if (StringUtils.isNotBlank(adminOneParameter.getContent())) setting.setContent(adminOneParameter.getContent());
+            result.setData(settingRepository.save(setting));
+        } else if (adminOneParameter.getOperation() == 2 && adminOneParameter.getSettingid() != null || adminOneParameter.getSettingid() != 0) {
+            setting = settingRepository.findOne(adminOneParameter.getSettingid());
+            if (setting == null) return result;
+            result.setStatus(1);
+            if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
+            if (StringUtils.isNotBlank(adminOneParameter.getContent())) setting.setContent(adminOneParameter.getContent());
+            result.setData(settingRepository.save(setting));
+        }
+        return result;
+    }
+
+    @Override
+    public Result getSetting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0) return result;
         result.setStatus(1);
-//        if (StringUtils.isBlank(adminOneParameter.getHelpids())) return result;
-//        String[] helpid = adminOneParameter.getHelpids().split(",");
-//        for (String s : helpid) {
-//            if (StringUtils.isNotBlank(s)) {
-//                Help help = helpRepository.findOne(Integer.parseInt(s));
-//                if (help != null) {
-//                    helpRepository.delete(help);
-//                    createLog("删除id为" + help.getId() + "的求助", httpSession);
-//                }
-//            }
-//        }
+        result.setData(settingRepository.findAllByType(adminOneParameter.getType()));
         return result;
     }
 
@@ -264,20 +273,20 @@ public class AdminOneServiceImpl implements AdminOneService {
         Result result = new Result();
         if (oneParameter.getUserid() == null && oneParameter.getUserid() == 0) return result;
         User user = userRepository.findOne(oneParameter.getUserid());
-        if(user == null) return result;
+        if (user == null) return result;
         result.setStatus(1);
         result.setData(followRepository.countAllByTouser(user));
         return result;
     }
 
     @Override
-    public Result follow(OneParameter oneParameter,Pageable pageable, HttpSession httpSession) {
+    public Result follow(OneParameter oneParameter, Pageable pageable, HttpSession httpSession) {
         Result result = new Result();
         if (oneParameter.getUserid() == null && oneParameter.getUserid() == 0) return result;
         User user = userRepository.findOne(oneParameter.getUserid());
-        if(user == null) return result;
+        if (user == null) return result;
         result.setStatus(1);
-        result.setData(followRepository.findByTouser(user,pageable));
+        result.setData(followRepository.findByTouser(user, pageable));
         return result;
     }
 

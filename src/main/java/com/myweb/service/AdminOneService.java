@@ -47,5 +47,7 @@ public interface AdminOneService {
 
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
+    public Result getSetting(AdminOneParameter adminOneParameter,HttpSession httpSession);
+
     public Result helpRefer(TwoParameter twoParameter, HttpSession httpSession);
 }

@@ -1,6 +1,7 @@
 package com.myweb.service;
 
 
+import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,8 @@ public interface OneService {
     public Result followMy(OneParameter oneParameter, Pageable pageable);
 
     public Result refer(OneParameter oneParameter, Pageable pageable);
+
+    public Result getSetting(AdminOneParameter adminOneParameter);
 
     public Result followMe(OneParameter oneParameter, Pageable pageable);
 

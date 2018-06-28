@@ -15,6 +15,9 @@ public class Setting implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic
+    @Column(name = "name", nullable = true, length = 255)
+    private String name;
+    @Basic
     @Column(name = "content", nullable = true, length = 255)
     private String content;
     @Basic
@@ -23,6 +26,14 @@ public class Setting implements Serializable {
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;

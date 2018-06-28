@@ -97,4 +97,6 @@ public class ThreeController {
     public Result read(@ModelAttribute ThreeParameter threeParameter) {
         return ResultUtils.result(threeService.read(threeParameter));
     }
+
+
 }

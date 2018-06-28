@@ -5,10 +5,28 @@ import javax.persistence.Column;
 
 public class AdminOneParameter {
     private String helpids;
+    private String name;
     private Integer settingid;
     private String content;
     private Integer type;
+    private Integer operation;
     private String keyword;
+
+    public Integer getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Integer operation) {
+        this.operation = operation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Integer getSettingid() {
         return settingid;

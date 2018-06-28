@@ -2,6 +2,7 @@ package com.myweb.controller;
 
 
 import com.myweb.service.OneService;
+import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.ResultUtils;
 import com.utils.Result;
@@ -215,5 +216,15 @@ public class OneController {
     @GetMapping("/user/follow/is")
     public Result followIs(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.followIs(oneParameter));
+    }
+
+    @ApiOperation(value = "获取后台设置", notes = "获取后台设置")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "类型（必需）1代表logo设置，2代表友情链接设置", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/setting")
+    public Result setting(@ModelAttribute AdminOneParameter adminOneParameter) {
+        return ResultUtils.result(oneService.getSetting(adminOneParameter));
     }
 }

@@ -1,12 +1,14 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.FollowRepository;
+import com.myweb.dao.jpa.hibernate.SettingRepository;
 import com.myweb.dao.jpa.hibernate.TokenRepository;
 import com.myweb.dao.jpa.hibernate.UserRepository;
 import com.myweb.pojo.Follow;
 import com.myweb.pojo.Token;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
+import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +35,9 @@ public class OneServiceImpl implements OneService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SettingRepository settingRepository;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -301,6 +306,17 @@ public class OneServiceImpl implements OneService {
         return result;
     }
 
+    @Override
+    public Result getSetting(AdminOneParameter adminOneParameter) {
+        Result result = new Result();
+        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(settingRepository.findAllByType(adminOneParameter.getType()));
+        return result;
+    }
 
     @Override
     public Result search(OneParameter oneParameter, Pageable pageable) {
