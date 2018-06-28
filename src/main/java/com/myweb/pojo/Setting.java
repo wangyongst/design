@@ -13,7 +13,7 @@ public class Setting implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "content", nullable = true, length = 255)
     private String content;
@@ -24,11 +24,11 @@ public class Setting implements Serializable {
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

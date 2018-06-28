@@ -16,9 +16,18 @@ public class OneParameter {
     private String sex;
     private String password2;
     private Integer page;
+    private Integer pagesize;
     private Integer refer;
     private Integer type;
     private String keyword;
+
+    public Integer getPagesize() {
+        return pagesize;
+    }
+
+    public void setPagesize(Integer pagesize) {
+        this.pagesize = pagesize;
+    }
 
     public String getKeyword() {
         return keyword;

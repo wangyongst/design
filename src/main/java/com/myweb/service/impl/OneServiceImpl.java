@@ -73,6 +73,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result login(OneParameter oneParameter) {
         Result result = new Result();
         if (StringUtils.isNotBlank(oneParameter.getUsername()) || StringUtils.isNotBlank(oneParameter.getPassword())) {

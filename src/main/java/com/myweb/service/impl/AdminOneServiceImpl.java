@@ -5,6 +5,7 @@ import com.myweb.pojo.AdminLog;
 import com.myweb.pojo.AdminUser;
 import com.myweb.pojo.Help;
 import com.myweb.service.AdminOneService;
+import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.ThreeParameter;
 import com.utils.Result;
@@ -26,7 +27,6 @@ import java.util.List;
 
 @Service("AdminOneService")
 @SuppressWarnings("All")
-@Transactional(readOnly = true)
 public class AdminOneServiceImpl implements AdminOneService {
 
     private static final Logger logger = LogManager.getLogger(AdminOneServiceImpl.class);
@@ -87,17 +87,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result studyCountHelp(ThreeParameter threeParameter, HttpSession httpSession) {
-        Result result = new Result();
-        result.setStatus(1);
-        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) return result;
-        Help help = helpRepository.findOne(threeParameter.getHelpid());
-        if (help == null) return result;
-        result.setData(studyRepository.countAllByHelp(help));
-        return result;
-    }
-
-    @Override
     public Result clickCount(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
@@ -106,18 +95,25 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result clickCountHelp(ThreeParameter threeParameter, HttpSession httpSession) {
+    public Result help(ThreeParameter threeParameter, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
         if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) return result;
         Help help = helpRepository.findOne(threeParameter.getHelpid());
         if (help == null) return result;
-        result.setData(clickRepository.countAllByHelp(help));
+        result.setData(help);
         return result;
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result clickMost(Pageable pageable, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(helpRepository.findAllByOrderByClickedDesc(pageable));
+        return result;
+    }
+
+    @Override
     public Result helpRefer(ThreeParameter threeParameter, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
@@ -131,6 +127,42 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result helpDelete(AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (StringUtils.isBlank(adminOneParameter.getHelpids())) return result;
+        String[] helpid = adminOneParameter.getHelpids().split(",");
+        for (String s : helpid) {
+            if (StringUtils.isNotBlank(s)) {
+                Help help = helpRepository.findOne(Integer.parseInt(s));
+                if (help != null) {
+                    helpRepository.delete(help);
+                    createLog("删除id为" + help.getId() + "的求助", httpSession);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+//        if (StringUtils.isBlank(adminOneParameter.getHelpids())) return result;
+//        String[] helpid = adminOneParameter.getHelpids().split(",");
+//        for (String s : helpid) {
+//            if (StringUtils.isNotBlank(s)) {
+//                Help help = helpRepository.findOne(Integer.parseInt(s));
+//                if (help != null) {
+//                    helpRepository.delete(help);
+//                    createLog("删除id为" + help.getId() + "的求助", httpSession);
+//                }
+//            }
+//        }
+        return result;
+    }
+
+    @Override
     public Result showlog(Pageable pageable, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
@@ -139,7 +171,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         return result;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public void createLog(String message, HttpSession httpSession) {
         AdminLog adminLog = new AdminLog();
         adminLog.setAdminUser(((AdminUser) httpSession.getAttribute("user")));
