@@ -120,11 +120,18 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.postHelp(twoParameter, httpSession));
     }
 
+    //operation 1增 2改，3删除 type1上线,2下线
+    @PostMapping("/advert")
+    public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    }
+
     //operation 1增 2改 type1logo,2友情链接
     @PostMapping("/setting")
     public Result PostSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
+
 
     //查询设置1log,2友链
     @GetMapping("/setting")
