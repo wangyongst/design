@@ -13,6 +13,15 @@ public class AdminOneParameter {
     private String image;
     private String url;
     private Integer refer;
+    private Integer touserid;
+
+    public Integer getTouserid() {
+        return touserid;
+    }
+
+    public void setTouserid(Integer touserid) {
+        this.touserid = touserid;
+    }
 
     public Integer getAdminuserid() {
         return adminuserid;

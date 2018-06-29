@@ -8,9 +8,11 @@ import com.myweb.pojo.Follow;
 import com.myweb.pojo.Token;
 import com.myweb.pojo.User;
 import com.myweb.service.OneService;
+import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -374,6 +380,23 @@ public class OneServiceImpl implements OneService {
         return result;
     }
 
+
+    @Override
+    public Result uploadImage(MultipartFile multipartFile) {
+        Result result = new Result();
+        if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        //处理图片
+        try {
+            FileInputStream fileInputStream = (FileInputStream) multipartFile.getInputStream();
+            return QiniuUtil.upload(fileInputStream, RandomStringUtils.randomAlphanumeric(8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public boolean isNotLogin(User user) {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);

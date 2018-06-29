@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api
 @CrossOrigin("*")
@@ -206,6 +207,19 @@ public class OneController {
         Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
         return ResultUtils.result(oneService.refer(oneParameter, pageable));
     }
+
+
+    @ApiOperation(value = "上传图片", notes = "上传图片")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "image", value = "图片（必需）", required = true, dataType = "File")
+
+    })
+    @ResponseBody
+    @PostMapping("/upload/image")
+    public Result uploadImage(@RequestParam("image") MultipartFile multipartFile) {
+        return ResultUtils.result(oneService.uploadImage(multipartFile));
+    }
+
 
     @ApiOperation(value = "检查是否关注过", notes = "检查是否关注过")
     @ApiImplicitParams({

@@ -5,6 +5,9 @@ import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpSession;
 
 public interface OneService {
 
@@ -37,4 +40,6 @@ public interface OneService {
     public Result followIs(OneParameter oneParameter);
 
     public Result search(OneParameter oneParameter, Pageable pageable);
+
+    public Result uploadImage(MultipartFile multipartFile);
 }

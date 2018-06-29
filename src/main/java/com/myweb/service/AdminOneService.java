@@ -7,6 +7,7 @@ import com.myweb.vo.ThreeParameter;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 
@@ -47,7 +48,11 @@ public interface AdminOneService {
 
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
+    public Result advert(AdminOneParameter adminOneParameter, HttpSession httpSession);
+
     public Result getSetting(AdminOneParameter adminOneParameter,HttpSession httpSession);
 
     public Result helpRefer(TwoParameter twoParameter, HttpSession httpSession);
+
+
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 
@@ -122,8 +123,8 @@ public class AdminOneController {
 
     //operation 1增 2改，3删除 type1上线,2下线
     @PostMapping("/advert")
-    public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter,HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.advert(adminOneParameter,httpSession));
     }
 
     //operation 1增 2改 type1logo,2友情链接
