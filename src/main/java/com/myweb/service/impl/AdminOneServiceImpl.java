@@ -86,6 +86,14 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result userMe(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(httpSession.getAttribute("user"));
+        return result;
+    }
+
+    @Override
     public Result logout(HttpSession httpSession) {
         Result result = new Result();
         createLog("登出", httpSession);
@@ -115,7 +123,6 @@ public class AdminOneServiceImpl implements AdminOneService {
             createLog("查看用户列表", httpSession);
             result.setData(userRepository.findAll(Example.of(user, matcher), pageable));
         } else {
-            createLog("查询ID为" + user.getId() + "的用户", httpSession);
             result.setData(userRepository.findOne(user.getId()));
         }
         return result;
@@ -271,11 +278,13 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0 || adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
+        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0 || adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0)
+            return result;
         Setting setting = new Setting();
         if (adminOneParameter.getOperation() == 1) {
             if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
-            if (StringUtils.isNotBlank(adminOneParameter.getContent())) setting.setContent(adminOneParameter.getContent());
+            if (StringUtils.isNotBlank(adminOneParameter.getContent()))
+                setting.setContent(adminOneParameter.getContent());
             createLog("增加网站设置", httpSession);
             result.setStatus(1);
             result.setData(settingRepository.save(setting));
@@ -285,7 +294,8 @@ public class AdminOneServiceImpl implements AdminOneService {
             result.setStatus(1);
             createLog("更改网站设置", httpSession);
             if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
-            if (StringUtils.isNotBlank(adminOneParameter.getContent())) setting.setContent(adminOneParameter.getContent());
+            if (StringUtils.isNotBlank(adminOneParameter.getContent()))
+                setting.setContent(adminOneParameter.getContent());
             setting.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             result.setData(settingRepository.save(setting));
         }

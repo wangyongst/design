@@ -2,6 +2,7 @@ package com.myweb.pojo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "admin_user")
@@ -20,6 +21,17 @@ public class AdminUser implements Serializable {
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "roleid", referencedColumnName = "id")
+    private AdminRole adminRole;
+
+    public AdminRole getAdminRole() {
+        return adminRole;
+    }
+
+    public void setAdminRole(AdminRole adminRole) {
+        this.adminRole = adminRole;
+    }
 
     public int getId() {
         return id;

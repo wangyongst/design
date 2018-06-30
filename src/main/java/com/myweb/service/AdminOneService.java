@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 public interface AdminOneService {
     public Result login(OneParameter oneParameter, HttpSession httpSession);
 
+    public Result userMe(HttpSession httpSession);
+
     public Result logout(HttpSession httpSession);
 
     public Result userList(OneParameter oneParameter, Pageable pageable, HttpSession httpSession);

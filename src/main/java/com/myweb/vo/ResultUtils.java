@@ -1,6 +1,9 @@
 package com.myweb.vo;
 
+import com.myweb.pojo.AdminUser;
 import com.utils.Result;
+
+import java.util.List;
 
 public class ResultUtils {
 

@@ -18,8 +18,30 @@ public class AdminMenu implements Serializable {
     @Column(name = "url", nullable = true, length = 255)
     private String url;
     @Basic
+    @Column(name = "type", nullable = true)
+    private Integer type;
+    @Basic
+    @Column(name = "parent", nullable = true)
+    private Integer parent;
+    @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getParent() {
+        return parent;
+    }
+
+    public void setParent(Integer parent) {
+        this.parent = parent;
+    }
 
     public int getId() {
         return id;

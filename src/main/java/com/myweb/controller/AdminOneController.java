@@ -23,6 +23,12 @@ public class AdminOneController {
     @Autowired
     public AdminOneService adminOneService;
 
+    //我
+    @GetMapping("/user/me")
+    public Result getUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userMe(httpSession));
+    }
+
     //登录
     @PostMapping("/user/login")
     public Result login(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
@@ -59,8 +65,6 @@ public class AdminOneController {
     @GetMapping("/count/token")
     public Result countToken(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.countToken(httpSession));
-
-
     }
 
     //type2删除，其它修改
