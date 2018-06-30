@@ -12,8 +12,8 @@ $(function () {
                     if (val.adminMenu.type == 0) {
                         mapParent[val.adminMenu.id] = "<li class='active'> <a class=\"has-arrow  \" href=\"#\" aria-expanded=\"true\"><i class=\"fa fa-tachometer\"></i><span class=\"hide-menu\">" + val.adminMenu.name + "</span></a><ul aria-expanded=\"true\" class=\"collapse in\">";
                     } else if (val.adminMenu.type == 1) {
-                        if (mapChild[val.adminMenu.parent] == undefined) mapChild[val.adminMenu.parent] = "<li><a href=\"javascript:void(0);\" onclick=\"goto(\"" + val.adminMenu.url + "\")\">" + val.adminMenu.name + " </a></li>";
-                        else mapChild[val.adminMenu.parent] = mapChild[val.adminMenu.parent] + "<li><a href=\"javascript:void(0);\" onclick=\"goto(" + val.adminMenu.url + ")\">" + val.adminMenu.name + " </a></li>";
+                        if (mapChild[val.adminMenu.parent] == undefined) mapChild[val.adminMenu.parent] = "<li><a href=\"javascript:void(0);\" onclick=\"goto('" + val.adminMenu.url + "')\">" + val.adminMenu.name + " </a></li>";
+                        else mapChild[val.adminMenu.parent] = mapChild[val.adminMenu.parent] + "<li><a href=\"javascript:void(0);\" onclick=\"goto('" + val.adminMenu.url + "')\">" + val.adminMenu.name + " </a></li>";
                     }
                 });
                 var html = "";
@@ -28,6 +28,7 @@ $(function () {
 
 
 function goto(url) {
+    alert(url);
     $("#right").attr("src", url);
 }
 
