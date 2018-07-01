@@ -43,8 +43,8 @@ public class Help implements Serializable {
     @Column(name = "background", nullable = true)
     private Integer background;
     @Basic
-    @Column(name = "set", nullable = true)
-    private Integer set;
+    @Column(name = "setting", nullable = true)
+    private Integer setting;
     @Basic
     @Column(name = "draft", nullable = true)
     private Integer draft;
@@ -52,8 +52,8 @@ public class Help implements Serializable {
     @Column(name = "studied", nullable = true)
     private Integer studied;
     @Basic
-    @Column(name = "read", nullable = true)
-    private Integer read;
+    @Column(name = "readed", nullable = true)
+    private Integer readed;
     @Basic
     @Column(name = "forwarded", nullable = true)
     private Integer forwarded;
@@ -161,14 +161,6 @@ public class Help implements Serializable {
         this.background = background;
     }
 
-    public Integer getSet() {
-        return set;
-    }
-
-    public void setSet(Integer set) {
-        this.set = set;
-    }
-
     public Integer getDraft() {
         return draft;
     }
@@ -185,12 +177,20 @@ public class Help implements Serializable {
         this.studied = studied;
     }
 
-    public Integer getRead() {
-        return read;
+    public Integer getSetting() {
+        return setting;
     }
 
-    public void setRead(Integer read) {
-        this.read = read;
+    public void setSetting(Integer setting) {
+        this.setting = setting;
+    }
+
+    public Integer getReaded() {
+        return readed;
+    }
+
+    public void setReaded(Integer readed) {
+        this.readed = readed;
     }
 
     public Integer getForwarded() {

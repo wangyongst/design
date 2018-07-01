@@ -14,7 +14,7 @@ public class TwoParameter {
     private String tag;
     private String design;
     private Integer background;
-    private Integer set;
+    private Integer setting;
     private Integer draft;
     private Integer page;
     private Integer type;
@@ -124,12 +124,12 @@ public class TwoParameter {
         this.background = background;
     }
 
-    public Integer getSet() {
-        return set;
+    public Integer getSetting() {
+        return setting;
     }
 
-    public void setSet(Integer set) {
-        this.set = set;
+    public void setSetting(Integer setting) {
+        this.setting = setting;
     }
 
     public Integer getDraft() {

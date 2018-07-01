@@ -67,7 +67,7 @@ public class TwoServiceImpl implements TwoService {
             help.setTag(twoParameter.getTag());
             help.setDesign(twoParameter.getDesign());
             help.setBackground(twoParameter.getBackground());
-            help.setSet(twoParameter.getSet());
+            help.setSetting(twoParameter.getSetting());
             help.setDraft(twoParameter.getDraft());
             help.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             helpRepository.save(help);

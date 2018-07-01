@@ -34,8 +34,8 @@ public class TwoController {
             @ApiImplicitParam(name = "video", value = " 导入视频（可选）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "tag", value = "标签（必需，多个标签请以@符隔开传递）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "design", value = "设计分类 （必需）", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "background", value = " 背景颜色（可选）", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "set", value = " 设置（可选，1定时发表）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "background", value = " 背景颜色（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "setting", value = " 设置（可选，1定时发表）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "draft", value = "发布方式 （必需，1草稿，2立即发布）", required = true, dataType = "Integer")
 
     })
