@@ -10,4 +10,8 @@ public class ResultUtils {
     public static Result result(Result result) {
         return result;
     }
+
+    public static Object data(Result result){
+        return result.getData();
+    }
 }

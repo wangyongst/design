@@ -32,21 +32,16 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">账号管理</h4>
-                    <h6 class="card-subtitle">后台账号管理</h6>
-                    <button type="button" class="btn btn-primary col-1" id="create">新增账号</button>
-                    <button type="button" class="btn btn-primary col-1" id="update">修改账号</button>
-                    <button type="button" class="btn btn-primary col-1" id="delete">删除账号</button>
-                    <div class="table-responsive m-t-40">
-                        <table data-toggle="table" data-url="admin/user/admin/list" data-show-refresh="true"
+                    <h4 class="card-title">操作日志</h4>
+                    <h6 class="card-subtitle">后台操作日志</h6>
+                                     <div class="table-responsive m-t-40">
+                        <table data-toggle="table" data-url="admin/showlog" data-show-refresh="true"
                                data-search="true" data-pagination="true">
                             <thead>
                             <tr>
-                                <th data-field="state" data-checkbox="true">全选</th>
                                 <th data-field="id">ID</th>
-                                <th data-field="username">用户名</th>
-                                <th data-field="password"> 密码</th>
-                                <th data-field="adminRole.name">角色</th>
+                                <th data-field="adminUser.username">用户名</th>
+                                <th data-field="message">日志</th>
                                 <th data-field="createtime">创建时间</th>
                             </tr>
                             </thead>
@@ -59,39 +54,12 @@
         </div>
     </div>
     <!-- End PAge Content -->
-
-
-    <div class="modal fade" id="adminUserModal" tabindex="-1" role="dialog" aria-labelledby="adminUserModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="adminUserModalLabel">New message</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="control-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
-
-
-
+<!-- End Container fluid  -->
+<!-- footer -->
+<!-- End footer -->
+<!-- End Page wrapper  -->
+</div>
 <!-- End Wrapper -->
 <!-- All Jquery -->
 <script src="js/lib/jquery/jquery.min.js"></script>
@@ -106,8 +74,6 @@
 <script src="js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
 <!--Custom JavaScript -->
 <script src="js/custom.min.js"></script>
-
-<script src="js/admin-user.js"></script>
 
 
 <link href="css/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">

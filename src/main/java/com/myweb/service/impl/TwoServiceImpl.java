@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 @Service("TwoService")
@@ -56,6 +57,11 @@ public class TwoServiceImpl implements TwoService {
         if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
+            if(helpRepository.findByUser(user).size() > 0 && userRepository.findByRefer(user.getId()).size() < 1){
+                result.setStatus(2);
+                result.setMessage("未邀请过好友注册，不能发布");
+                return result;
+            }
             Help help = new Help();
             help.setUser(user);
             help.setAudience(twoParameter.getAudience());

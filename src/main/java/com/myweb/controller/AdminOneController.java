@@ -2,10 +2,7 @@ package com.myweb.controller;
 
 
 import com.myweb.service.AdminOneService;
-import com.myweb.vo.AdminOneParameter;
-import com.myweb.vo.OneParameter;
-import com.myweb.vo.ResultUtils;
-import com.myweb.vo.TwoParameter;
+import com.myweb.vo.*;
 import com.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,9 +27,63 @@ public class AdminOneController {
     }
 
     //后端账号
+    @GetMapping("/user/admin/list")
+    public Object userAdminList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userAdminList(httpSession));
+    }
+
+    //后端账号
     @GetMapping("/user/admin")
-    public Object userAdmin(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        return adminOneService.userAdmin(httpSession).getData();
+    public Result userAdmin(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userAdmin(fourParameter,httpSession));
+    }
+
+    //后端角色
+    @GetMapping("/user/role/list")
+    public Object userRole(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userRoleList(httpSession));
+    }
+
+    //后端角色
+    @GetMapping("/user/role")
+    public Result userRole(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userRole(fourParameter,httpSession));
+    }
+
+    //后端权限
+    @GetMapping("/user/privilege/list")
+    public Object userPrivilege(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userPrivilegeList(httpSession));
+    }
+
+    //后端菜单
+    @GetMapping("/user/menu/list")
+    public Object userMenu(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userMenuList(httpSession));
+    }
+
+    //后端权限
+    @GetMapping("/user/privilege")
+    public Result userPrivilege(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userPrivilege(fourParameter,httpSession));
+    }
+
+    //后端权限type1增，2改，3删
+    @PostMapping("/user/privilege")
+    public Object postUserPrivilege(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.postUserPrivilege(fourParameter,httpSession));
+    }
+
+    //后端账号type1增，2改，3删
+    @PostMapping("/user/admin")
+    public Object postUserAdmin(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.postUserAdmin(fourParameter,httpSession));
+    }
+
+    //后端角色type1增，2改，3删
+    @PostMapping("/user/role")
+    public Object postUserRole(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.postUserRole(fourParameter,httpSession));
     }
 
     //登录
@@ -178,11 +229,7 @@ public class AdminOneController {
 
     //操作日志
     @GetMapping("/showlog")
-    public Result showlog(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
-        if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
-        return ResultUtils.result(adminOneService.showlog(pageable, httpSession));
+    public Object showlog(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.showlog(httpSession));
     }
 }

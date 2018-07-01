@@ -1,10 +1,7 @@
 package com.myweb.service;
 
 import com.myweb.pojo.User;
-import com.myweb.vo.AdminOneParameter;
-import com.myweb.vo.OneParameter;
-import com.myweb.vo.ThreeParameter;
-import com.myweb.vo.TwoParameter;
+import com.myweb.vo.*;
 import com.utils.Result;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,13 +13,31 @@ public interface AdminOneService {
 
     public Result userMe(HttpSession httpSession);
 
-    public Result userAdmin(HttpSession httpSession);
+    public Result userAdminList(HttpSession httpSession);
+
+    public Result userAdmin(FourParameter fourParameter, HttpSession httpSession);
+
+    public Result postUserAdmin(FourParameter fourParameter, HttpSession httpSession);
+
+    public Result userRoleList(HttpSession httpSession);
+
+    public Result userRole(FourParameter fourParameter, HttpSession httpSession);
+
+    public Result postUserRole(FourParameter fourParameter, HttpSession httpSession);
+
+    public Result userPrivilegeList(HttpSession httpSession);
+
+    public Result userPrivilege(FourParameter fourParameter, HttpSession httpSession);
+
+    public Result postUserPrivilege(FourParameter fourParameter, HttpSession httpSession);
+
+    public Result userMenuList(HttpSession httpSession);
 
     public Result logout(HttpSession httpSession);
 
     public Result userList(OneParameter oneParameter, Pageable pageable, HttpSession httpSession);
 
-    public Result showlog(Pageable pageable, HttpSession httpSession);
+    public Result showlog(HttpSession httpSession);
 
     public Result userToken(Pageable pageable, HttpSession httpSession);
 
@@ -38,7 +53,7 @@ public interface AdminOneService {
 
     public Result countFollow(OneParameter oneParameter, HttpSession httpSession);
 
-    public Result follow(OneParameter oneParameter,Pageable pageable, HttpSession httpSession);
+    public Result follow(OneParameter oneParameter, Pageable pageable, HttpSession httpSession);
 
     public Result countToken(HttpSession httpSession);
 
@@ -54,7 +69,7 @@ public interface AdminOneService {
 
     public Result advert(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
-    public Result getSetting(AdminOneParameter adminOneParameter,HttpSession httpSession);
+    public Result getSetting(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
     public Result helpRefer(TwoParameter twoParameter, HttpSession httpSession);
 

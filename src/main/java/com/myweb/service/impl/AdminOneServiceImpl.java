@@ -5,6 +5,7 @@ import com.myweb.pojo.*;
 import com.myweb.service.AdminOneService;
 import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
+import com.myweb.vo.FourParameter;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
@@ -40,6 +41,15 @@ public class AdminOneServiceImpl implements AdminOneService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AdminMenuRepository adminMenuRepository;
+
+    @Autowired
+    private AdminPrivilegeRepository adminPrivilegeRepository;
+
+    @Autowired
+    private AdminRoleRepository adminRoleRepository;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -94,10 +104,140 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result userAdmin(HttpSession httpSession) {
+    public Result userAdminList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
         result.setData(adminUserRepository.findAll());
+        return result;
+    }
+
+    @Override
+    public Result userAdmin(FourParameter fourParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminUserRepository.findOne(fourParameter.getUserid()));
+        return result;
+    }
+
+    @Override
+    public Result postUserAdmin(FourParameter fourParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (fourParameter.getType() == 1) {
+            AdminUser adminUser = new AdminUser();
+            adminUser.setUsername(fourParameter.getUsername());
+            adminUser.setPassword(fourParameter.getPassword());
+            adminUser.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            adminUser.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+            adminUserRepository.save(adminUser);
+            createLog("新建后台用户:" + adminUser.getUsername(), httpSession);
+            result.setStatus(1);
+        } else if (fourParameter.getType() == 2) {
+            AdminUser adminUser = adminUserRepository.findOne(fourParameter.getUserid());
+            adminUser.setUsername(fourParameter.getUsername());
+            adminUser.setPassword(fourParameter.getPassword());
+            adminUser.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+            adminUserRepository.save(adminUser);
+            createLog("修改后台用户:" + adminUser.getUsername(), httpSession);
+            result.setStatus(1);
+        } else if (fourParameter.getType() == 3) {
+            AdminUser adminUser = adminUserRepository.findOne(fourParameter.getUserid());
+            adminUserRepository.delete(adminUser);
+            createLog("删除后台用户:" + adminUser.getUsername(), httpSession);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result postUserRole(FourParameter fourParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (fourParameter.getType() == 1) {
+            AdminRole adminRole = new AdminRole();
+            adminRole.setName(fourParameter.getName());
+            adminRole.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            adminRoleRepository.save(adminRole);
+            createLog("新建后台角色:" + adminRole.getName(), httpSession);
+            result.setStatus(1);
+        } else if (fourParameter.getType() == 2) {
+            AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
+            adminRole.setName(fourParameter.getName());
+            adminRoleRepository.save(adminRole);
+            createLog("修改后台角色:" + adminRole.getName(), httpSession);
+            result.setStatus(1);
+        } else if (fourParameter.getType() == 3) {
+            AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
+            adminRoleRepository.delete(adminRole);
+            createLog("删除后台角色:" + adminRole.getName(), httpSession);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result postUserPrivilege(FourParameter fourParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (fourParameter.getType() == 1) {
+            AdminPrivilege adminPrivilege = new AdminPrivilege();
+            adminPrivilege.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+            adminPrivilege.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            adminPrivilegeRepository.save(adminPrivilege);
+            createLog("新增后台权限，角色:" + adminPrivilege.getAdminRole().getName(), httpSession);
+            result.setStatus(1);
+        } else if (fourParameter.getType() == 2) {
+            AdminPrivilege adminPrivilege = adminPrivilegeRepository.findOne(fourParameter.getPrivilegeid());
+            adminPrivilege.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+            adminPrivilegeRepository.save(adminPrivilege);
+            createLog("修改后台权限，角色:" + adminPrivilege.getAdminRole().getName(), httpSession);
+            result.setStatus(1);
+        } else if (fourParameter.getType() == 3) {
+            AdminPrivilege adminPrivilege = adminPrivilegeRepository.findOne(fourParameter.getPrivilegeid());
+            adminPrivilegeRepository.delete(adminPrivilege);
+            createLog("删除后台权限，角色:" + adminPrivilege.getAdminRole().getName(), httpSession);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    public Result userRoleList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminRoleRepository.findAll());
+        return result;
+    }
+
+    @Override
+    public Result userPrivilegeList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminPrivilegeRepository.findAll());
+        return result;
+    }
+
+
+    @Override
+    public Result userPrivilege(FourParameter fourParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminPrivilegeRepository.findOne(fourParameter.getPrivilegeid()));
+        return result;
+    }
+
+    @Override
+    public Result userRole(FourParameter fourParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminRoleRepository.findOne(fourParameter.getRoleid()));
+        return result;
+    }
+
+    @Override
+    public Result userMenuList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminMenuRepository.findAll());
         return result;
     }
 
@@ -128,7 +268,6 @@ public class AdminOneServiceImpl implements AdminOneService {
                 .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.contains())
                 .withIgnorePaths("id").withIgnoreNullValues();
         if (user.getId() == null || user.getId() == 0) {
-            createLog("查看用户列表", httpSession);
             result.setData(userRepository.findAll(Example.of(user, matcher), pageable));
         } else {
             result.setData(userRepository.findOne(user.getId()));
@@ -139,7 +278,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result countToken(HttpSession httpSession) {
         Result result = new Result();
-        createLog("统计在线用户", httpSession);
         result.setStatus(1);
         result.setData(tokenRepository.countAllByExpiretimeGreaterThanAndOuttimeIsNull(new Date().getTime()));
         return result;
@@ -149,7 +287,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result userToken(Pageable pageable, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        createLog("查询用户登录列表", httpSession);
         result.setData(tokenRepository.findAll(pageable));
         return result;
     }
@@ -176,7 +313,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result studyCount(HttpSession httpSession) {
         Result result = new Result();
-        createLog("查询全网想学量", httpSession);
         result.setStatus(1);
         result.setData(studyRepository.count());
         return result;
@@ -185,7 +321,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result clickCount(HttpSession httpSession) {
         Result result = new Result();
-        createLog("查询全网点击量", httpSession);
         result.setStatus(1);
         result.setData(clickRepository.count());
         return result;
@@ -194,7 +329,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result countUser(HttpSession httpSession) {
         Result result = new Result();
-        createLog("查询全网用户注册数", httpSession);
         result.setStatus(1);
         result.setData(userRepository.count());
         return result;
@@ -203,7 +337,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result countMessage(HttpSession httpSession) {
         Result result = new Result();
-        createLog("查询全网私信数", httpSession);
         result.setStatus(1);
         result.setData(messageRepository.count());
         return result;
@@ -216,17 +349,14 @@ public class AdminOneServiceImpl implements AdminOneService {
         if (oneParameter.getUserid() == null && oneParameter.getUserid() == 0) return result;
         User user = userRepository.findOne(oneParameter.getUserid());
         if (oneParameter.getType() == 1) {
-            createLog("查询ID为" + user.getId() + "的用户发送的私信总数", httpSession);
             result.setStatus(1);
             result.setData(messageRepository.countAllByUser(user));
         } else if (oneParameter.getType() == 2) {
-            createLog("查询ID为" + user.getId() + "的用户收到的私信总数", httpSession);
             result.setStatus(1);
             result.setData(messageRepository.countAllByTouser(user));
         } else if (oneParameter.getType() == 3 && oneParameter.getTouserid() != null && oneParameter.getTouserid() != 0) {
             User touser = userRepository.findOne(oneParameter.getTouserid());
             result.setStatus(1);
-            createLog("查询ID为" + user.getId() + "的用户发送给ID为" + touser.getId() + "的私信总数", httpSession);
             result.setData(messageRepository.countAllByUserAndTouser(user, touser));
         }
         return result;
@@ -237,7 +367,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         Result result = new Result();
         result.setStatus(1);
         if (twoParameter.getHelpid() == null || twoParameter.getHelpid() == 0) return result;
-        createLog("查询ID为" + twoParameter.getHelpid() + "的求助", httpSession);
         Help help = helpRepository.findOne(twoParameter.getHelpid());
         result.setData(help);
         return result;
@@ -265,7 +394,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result clickMost(Pageable pageable, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        createLog("查询点击量最高的求助详情", httpSession);
         result.setData(helpRepository.findAll(pageable));
         return result;
     }
@@ -314,7 +442,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result getSetting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
         if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0) return result;
-        createLog("查询网站设置", httpSession);
         result.setStatus(1);
         result.setData(settingRepository.findAllByType(adminOneParameter.getType()));
         return result;
@@ -371,11 +498,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result showlog(Pageable pageable, HttpSession httpSession) {
+    public Result showlog(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(adminLogRepository.findAll(pageable));
-        createLog("查看操作日志", httpSession);
+        result.setData(adminLogRepository.findAll());
         return result;
     }
 
