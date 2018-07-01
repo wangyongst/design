@@ -34,6 +34,9 @@ public class Help implements Serializable {
     @Column(name = "video", nullable = true, length = 255)
     private String video;
     @Basic
+    @Column(name = "indexpic", nullable = true, length = 1024)
+    private String indexpic;
+    @Basic
     @Column(name = "tag", nullable = true, length = 255)
     private String tag;
     @Basic
@@ -72,6 +75,14 @@ public class Help implements Serializable {
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+
+    public String getIndexpic() {
+        return indexpic;
+    }
+
+    public void setIndexpic(String indexpic) {
+        this.indexpic = indexpic;
+    }
 
     public String getRefertime() {
         return refertime;

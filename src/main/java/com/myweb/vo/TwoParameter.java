@@ -19,6 +19,15 @@ public class TwoParameter {
     private Integer page;
     private Integer type;
     private Integer pagesize;
+    private String indexpic;
+
+    public String getIndexpic() {
+        return indexpic;
+    }
+
+    public void setIndexpic(String indexpic) {
+        this.indexpic = indexpic;
+    }
 
     public Integer getHelpid() {
         return helpid;

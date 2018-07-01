@@ -94,6 +94,14 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result userAdmin(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminUserRepository.findAll());
+        return result;
+    }
+
+    @Override
     public Result logout(HttpSession httpSession) {
         Result result = new Result();
         createLog("登出", httpSession);

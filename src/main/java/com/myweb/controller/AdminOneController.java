@@ -25,8 +25,14 @@ public class AdminOneController {
 
     //我
     @GetMapping("/user/me")
-    public Result getUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+    public Result userme(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.userMe(httpSession));
+    }
+
+    //后端账号
+    @GetMapping("/user/admin")
+    public Object userAdmin(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return adminOneService.userAdmin(httpSession).getData();
     }
 
     //登录
