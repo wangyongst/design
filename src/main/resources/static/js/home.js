@@ -28,7 +28,6 @@ $(function () {
 
 
 function goto(url) {
-    alert(url);
     $("#right").attr("src", url);
 }
 
