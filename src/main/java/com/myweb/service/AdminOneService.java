@@ -25,8 +25,6 @@ public interface AdminOneService {
 
     public Result postUserRole(FourParameter fourParameter, HttpSession httpSession);
 
-    public Result userPrivilegeList(HttpSession httpSession);
-
     public Result userPrivilege(FourParameter fourParameter, HttpSession httpSession);
 
     public Result postUserPrivilege(FourParameter fourParameter, HttpSession httpSession);

@@ -32,11 +32,11 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">账号管理</h4>
-                    <h6 class="card-subtitle">后台账号管理</h6>
-                    <button type="button" class="btn btn-primary col-1" id="create">新增账号</button>
-                    <button type="button" class="btn btn-primary col-1" id="update">修改账号</button>
-                    <button type="button" class="btn btn-primary col-1" id="delete">删除账号</button>
+                    <h4 class="card-title">网站设置</h4>
+                    <h6 class="card-subtitle">网站设置</h6>
+                    <button type="button" class="btn btn-primary col-1" id="create">新增设置</button>
+                    <button type="button" class="btn btn-primary col-1" id="update">修改设置</button>
+                    <button type="button" class="btn btn-primary col-1" id="delete">删除设置</button>
                     <div class="table-responsive m-t-40">
                         <table data-toggle="table" data-url="admin/user/admin/list" data-show-refresh="true" id="adminUserTable"
                                data-search="true" data-pagination="true">
@@ -44,9 +44,9 @@
                             <tr>
                                 <th data-field="state" data-checkbox="true">全选</th>
                                 <th data-field="id">ID</th>
-                                <th data-field="username">用户名</th>
-                                <th data-field="password"> 密码</th>
-                                <th data-field="adminRole.name">角色名称</th>
+                                <th data-field="name">名称</th>
+                                <th data-field="content"> 内容</th>
+                                <th data-field="type">分类</th>
                                 <th data-field="createtime">创建时间</th>
                             </tr>
                             </thead>

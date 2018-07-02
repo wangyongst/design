@@ -9,6 +9,15 @@ public class FourParameter {
     private String password;
     private String name;
     private Integer type;
+    private String menuids;
+
+    public String getMenuids() {
+        return menuids;
+    }
+
+    public void setMenuids(String menuids) {
+        this.menuids = menuids;
+    }
 
     public Integer getPrivilegeid() {
         return privilegeid;

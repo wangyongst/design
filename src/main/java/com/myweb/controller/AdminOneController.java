@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 
@@ -35,7 +34,13 @@ public class AdminOneController {
     //后端账号
     @GetMapping("/user/admin")
     public Result userAdmin(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.userAdmin(fourParameter,httpSession));
+        return ResultUtils.result(adminOneService.userAdmin(fourParameter, httpSession));
+    }
+
+    //后端角色
+    @GetMapping("/user/role/list/result")
+    public Result userRoleResut(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userRoleList(httpSession));
     }
 
     //后端角色
@@ -47,43 +52,37 @@ public class AdminOneController {
     //后端角色
     @GetMapping("/user/role")
     public Result userRole(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.userRole(fourParameter,httpSession));
-    }
-
-    //后端权限
-    @GetMapping("/user/privilege/list")
-    public Object userPrivilege(HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.userPrivilegeList(httpSession));
+        return ResultUtils.result(adminOneService.userRole(fourParameter, httpSession));
     }
 
     //后端菜单
-    @GetMapping("/user/menu/list")
-    public Object userMenu(HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.userMenuList(httpSession));
+    @GetMapping("/menu/list")
+    public Result userMenu(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userMenuList(httpSession));
     }
 
     //后端权限
     @GetMapping("/user/privilege")
     public Result userPrivilege(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.userPrivilege(fourParameter,httpSession));
+        return ResultUtils.result(adminOneService.userPrivilege(fourParameter, httpSession));
     }
 
-    //后端权限type1增，2改，3删
+    //后端权限
     @PostMapping("/user/privilege")
-    public Object postUserPrivilege(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.postUserPrivilege(fourParameter,httpSession));
+    public Result postUserPrivilege(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.postUserPrivilege(fourParameter, httpSession));
     }
 
-    //后端账号type1增，2改，3删
+    //后端账号type1增改，2删
     @PostMapping("/user/admin")
-    public Object postUserAdmin(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.postUserAdmin(fourParameter,httpSession));
+    public Result postUserAdmin(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.postUserAdmin(fourParameter, httpSession));
     }
 
-    //后端角色type1增，2改，3删
+    //后端角色type1增改，2删
     @PostMapping("/user/role")
-    public Object postUserRole(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.postUserRole(fourParameter,httpSession));
+    public Result postUserRole(@ModelAttribute FourParameter fourParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.postUserRole(fourParameter, httpSession));
     }
 
     //登录
@@ -184,8 +183,8 @@ public class AdminOneController {
 
     //operation 1增 2改，3删除 type1上线,2下线
     @PostMapping("/advert")
-    public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter,HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.advert(adminOneParameter,httpSession));
+    public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.advert(adminOneParameter, httpSession));
     }
 
     //operation 1增 2改 type1logo,2友情链接

@@ -3,13 +3,11 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.AdminOneService;
-import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.FourParameter;
 import com.myweb.vo.OneParameter;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,11 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -123,23 +120,25 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result postUserAdmin(FourParameter fourParameter, HttpSession httpSession) {
         Result result = new Result();
         if (fourParameter.getType() == 1) {
-            AdminUser adminUser = new AdminUser();
-            adminUser.setUsername(fourParameter.getUsername());
-            adminUser.setPassword(fourParameter.getPassword());
-            adminUser.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            adminUser.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
-            adminUserRepository.save(adminUser);
-            createLog("新建后台用户:" + adminUser.getUsername(), httpSession);
-            result.setStatus(1);
+            if (fourParameter.getUserid() == null || fourParameter.getUserid() == 0) {
+                AdminUser adminUser = new AdminUser();
+                adminUser.setUsername(fourParameter.getUsername());
+                adminUser.setPassword(fourParameter.getPassword());
+                adminUser.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                adminUser.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+                adminUserRepository.save(adminUser);
+                createLog("新建后台用户:" + adminUser.getUsername(), httpSession);
+                result.setStatus(1);
+            } else {
+                AdminUser adminUser = adminUserRepository.findOne(fourParameter.getUserid());
+                adminUser.setUsername(fourParameter.getUsername());
+                adminUser.setPassword(fourParameter.getPassword());
+                adminUser.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+                adminUserRepository.save(adminUser);
+                createLog("修改后台用户:" + adminUser.getUsername(), httpSession);
+                result.setStatus(1);
+            }
         } else if (fourParameter.getType() == 2) {
-            AdminUser adminUser = adminUserRepository.findOne(fourParameter.getUserid());
-            adminUser.setUsername(fourParameter.getUsername());
-            adminUser.setPassword(fourParameter.getPassword());
-            adminUser.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
-            adminUserRepository.save(adminUser);
-            createLog("修改后台用户:" + adminUser.getUsername(), httpSession);
-            result.setStatus(1);
-        } else if (fourParameter.getType() == 3) {
             AdminUser adminUser = adminUserRepository.findOne(fourParameter.getUserid());
             adminUserRepository.delete(adminUser);
             createLog("删除后台用户:" + adminUser.getUsername(), httpSession);
@@ -153,19 +152,21 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result postUserRole(FourParameter fourParameter, HttpSession httpSession) {
         Result result = new Result();
         if (fourParameter.getType() == 1) {
-            AdminRole adminRole = new AdminRole();
-            adminRole.setName(fourParameter.getName());
-            adminRole.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            adminRoleRepository.save(adminRole);
-            createLog("新建后台角色:" + adminRole.getName(), httpSession);
-            result.setStatus(1);
+            if (fourParameter.getRoleid() == null || fourParameter.getRoleid() == 0) {
+                AdminRole adminRole = new AdminRole();
+                adminRole.setName(fourParameter.getName());
+                adminRole.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                adminRoleRepository.save(adminRole);
+                createLog("新建后台角色:" + adminRole.getName(), httpSession);
+                result.setStatus(1);
+            } else {
+                AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
+                adminRole.setName(fourParameter.getName());
+                adminRoleRepository.save(adminRole);
+                createLog("修改后台角色:" + adminRole.getName(), httpSession);
+                result.setStatus(1);
+            }
         } else if (fourParameter.getType() == 2) {
-            AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
-            adminRole.setName(fourParameter.getName());
-            adminRoleRepository.save(adminRole);
-            createLog("修改后台角色:" + adminRole.getName(), httpSession);
-            result.setStatus(1);
-        } else if (fourParameter.getType() == 3) {
             AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
             adminRoleRepository.delete(adminRole);
             createLog("删除后台角色:" + adminRole.getName(), httpSession);
@@ -178,25 +179,18 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result postUserPrivilege(FourParameter fourParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (fourParameter.getType() == 1) {
+        String[] ids = fourParameter.getMenuids().split(",");
+        AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
+        adminRole.getAdminPrivileges().forEach(e -> {
+            adminPrivilegeRepository.delete(e);
+        });
+        for (String id : ids) {
             AdminPrivilege adminPrivilege = new AdminPrivilege();
-            adminPrivilege.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
+            adminPrivilege.setAdminMenu(adminMenuRepository.findOne(Integer.parseInt(id)));
             adminPrivilege.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             adminPrivilegeRepository.save(adminPrivilege);
-            createLog("新增后台权限，角色:" + adminPrivilege.getAdminRole().getName(), httpSession);
-            result.setStatus(1);
-        } else if (fourParameter.getType() == 2) {
-            AdminPrivilege adminPrivilege = adminPrivilegeRepository.findOne(fourParameter.getPrivilegeid());
-            adminPrivilege.setAdminRole(adminRoleRepository.findOne(fourParameter.getRoleid()));
-            adminPrivilegeRepository.save(adminPrivilege);
-            createLog("修改后台权限，角色:" + adminPrivilege.getAdminRole().getName(), httpSession);
-            result.setStatus(1);
-        } else if (fourParameter.getType() == 3) {
-            AdminPrivilege adminPrivilege = adminPrivilegeRepository.findOne(fourParameter.getPrivilegeid());
-            adminPrivilegeRepository.delete(adminPrivilege);
-            createLog("删除后台权限，角色:" + adminPrivilege.getAdminRole().getName(), httpSession);
-            result.setStatus(1);
         }
+        createLog("修改后台权限，角色:" + adminRole.getName(), httpSession);
         return result;
     }
 
@@ -209,19 +203,11 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result userPrivilegeList(HttpSession httpSession) {
-        Result result = new Result();
-        result.setStatus(1);
-        result.setData(adminPrivilegeRepository.findAll());
-        return result;
-    }
-
-
-    @Override
     public Result userPrivilege(FourParameter fourParameter, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(adminPrivilegeRepository.findOne(fourParameter.getPrivilegeid()));
+        AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
+        result.setData(adminPrivilegeRepository.findAllByAdminRole(adminRole));
         return result;
     }
 
@@ -501,7 +487,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result showlog(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(adminLogRepository.findAll());
+        result.setData(adminLogRepository.findAll(new Sort(Sort.Direction.DESC, "createtime")));
         return result;
     }
 
