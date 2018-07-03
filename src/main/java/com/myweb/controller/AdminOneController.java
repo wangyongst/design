@@ -99,12 +99,8 @@ public class AdminOneController {
 
     //用户列表,搜索用户
     @GetMapping("/user/list")
-    public Result userList(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
-        if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
-        return ResultUtils.result(adminOneService.userList(oneParameter, pageable, httpSession));
+    public Object userList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userList(httpSession));
     }
 
     //登录时间列表
@@ -123,7 +119,7 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.countToken(httpSession));
     }
 
-    //type2删除，其它修改
+    //删除修改
     @PostMapping("/user")
     public Result postUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.user(oneParameter, httpSession));
@@ -209,7 +205,7 @@ public class AdminOneController {
     //查询设置
     @GetMapping("/setting/list")
     public Object settingList(HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.settingList( httpSession));
+        return ResultUtils.data(adminOneService.settingList(httpSession));
     }
 
     @GetMapping("/searching")

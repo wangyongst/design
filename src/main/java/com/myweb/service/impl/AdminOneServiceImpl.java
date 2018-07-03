@@ -12,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -238,27 +236,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result userList(OneParameter oneParameter, Pageable pageable, HttpSession httpSession) {
+    public Result userList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        User user = new User();
-        if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) user.setId(oneParameter.getUserid());
-        if (StringUtils.isNotBlank(oneParameter.getUsername())) user.setUsername(oneParameter.getUsername());
-        if (StringUtils.isNotBlank(oneParameter.getNickname())) user.setNickname(oneParameter.getNickname());
-        if (StringUtils.isNotBlank(oneParameter.getEmail())) user.setEmail(oneParameter.getEmail());
-        if (StringUtils.isNotBlank(oneParameter.getMobile())) user.setMobile(oneParameter.getMobile());
-        if (StringUtils.isNotBlank(oneParameter.getJobs())) user.setJobs(oneParameter.getJobs());
-        if (StringUtils.isNotBlank(oneParameter.getSex())) user.setSex(oneParameter.getSex());
-        if (oneParameter.getRefer() != null && oneParameter.getRefer() != 0) user.setRefer(oneParameter.getRefer());
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withMatcher("nickname", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withIgnorePaths("id").withIgnoreNullValues();
-        if (user.getId() == null || user.getId() == 0) {
-            result.setData(userRepository.findAll(Example.of(user, matcher), pageable));
-        } else {
-            result.setData(userRepository.findOne(user.getId()));
-        }
+        result.setData(userRepository.findAll());
         return result;
     }
 
@@ -360,10 +341,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result helpList( HttpSession httpSession) {
+    public Result helpList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData( helpRepository.findAll());
+        result.setData(helpRepository.findAll());
         return result;
     }
 

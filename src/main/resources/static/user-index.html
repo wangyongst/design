@@ -32,8 +32,8 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">图片想学统计</h4>
-                    <h6 class="card-subtitle">图片想学统计</h6>
+                    <h4 class="card-title">用户概况</h4>
+                    <h6 class="card-subtitle">用户概况</h6>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card p-30">
@@ -42,8 +42,8 @@
                                         <span><i class="fa fa-shopping-cart f-s-40 color-success"></i></span>
                                     </div>
                                     <div class="media-body media-text-right">
-                                        <h2 id="countStudy"></h2>
-                                        <p class="m-b-0">全网想学次数统计</p>
+                                        <h2 id="countToken"></h2>
+                                        <p class="m-b-0">在线人数</p>
                                     </div>
                                 </div>
                             </div>
@@ -55,27 +55,28 @@
                                         <span><i class="fa fa-shopping-cart f-s-40 color-success"></i></span>
                                     </div>
                                     <div class="media-body media-text-right">
-                                        <h2 id="countClick"></h2>
-                                        <p class="m-b-0">全网点击量统计</p>
+                                        <h2 id="countUser"></h2>
+                                        <p class="m-b-0">注册人数</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive m-t-40">
-                        <table data-toggle="table" data-url="admin/help/list" data-show-refresh="true" id="myTable"
-                               data-search="true" data-pagination="true" data-sort-class="studied" data-sort-order="desc">
+                        <table data-toggle="table" data-url="admin/user/list" data-show-refresh="true" id="myTable"
+                               data-search="true" data-pagination="true" data-sort-class="createtime" data-sort-order="desc">
                             <thead>
                             <tr>
-                                <!--<th data-field="state" data-checkbox="true">全选</th>-->
+                                <th data-field="state" data-checkbox="true"></th>
                                 <th data-field="id">ID</th>
-                                <th data-field="user.username">发布者</th>
-                                <th data-field="title">标题名称</th>
-                                <th data-field="description"> 问题描述</th>
-                                <th data-field="tag">标签</th>
-                                <th data-field="design">设计分类</th>
-                                <th data-field="studied" data-sortable="true">想学次数</th>
-                                <th data-field="clicked" data-sortable="true">点击量</th>
+                                <th data-field="username">用户名</th>
+                                <th data-field="password">密码</th>
+                                <th data-field="nickname">昵称</th>
+                                <th data-field="email">邮箱</th>
+                                <th data-field="mobile">手机号</th>
+                                <th data-field="jobs">职业</th>
+                                <th data-field="sex">性别</th>
+                                <th data-field="refer">推荐人</th>
                                 <th data-field="createtime">创建时间</th>
                             </tr>
                             </thead>
@@ -94,7 +95,7 @@
 
 <script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
 
-<script src="js/content-study.js"></script>
+<script src="js/user-index.js"></script>
 
 
 <link href="css/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">

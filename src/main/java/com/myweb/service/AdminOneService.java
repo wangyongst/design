@@ -33,7 +33,7 @@ public interface AdminOneService {
 
     public Result logout(HttpSession httpSession);
 
-    public Result userList(OneParameter oneParameter, Pageable pageable, HttpSession httpSession);
+    public Result userList(HttpSession httpSession);
 
     public Result showlog(HttpSession httpSession);
 
