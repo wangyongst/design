@@ -175,6 +175,13 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.help(twoParameter, httpSession));
     }
 
+    //求助详情
+    @GetMapping("/help/list")
+    public Object helpList(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.helpList(httpSession));
+    }
+
+
     //type2删除,type1审核
     @PostMapping("/help")
     public Result postHelp(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
@@ -187,16 +194,22 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.advert(adminOneParameter, httpSession));
     }
 
-    //operation 1增 2改 type1logo,2友情链接
+    //operation 1增改,2删
     @PostMapping("/setting")
     public Result PostSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
     }
 
-    //查询设置1log,2友链
+    //查询设置
     @GetMapping("/setting")
     public Result getSetting(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.getSetting(adminOneParameter, httpSession));
+    }
+
+    //查询设置
+    @GetMapping("/setting/list")
+    public Object settingList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.settingList( httpSession));
     }
 
     @GetMapping("/searching")

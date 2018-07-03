@@ -61,6 +61,8 @@ public interface AdminOneService {
 
     public Result help(TwoParameter twoParameter, HttpSession httpSession);
 
+    public Result helpList(HttpSession httpSession);
+
     public Result postHelp(TwoParameter twoParameter, HttpSession httpSession);
 
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession);
@@ -68,6 +70,8 @@ public interface AdminOneService {
     public Result advert(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
     public Result getSetting(AdminOneParameter adminOneParameter, HttpSession httpSession);
+
+    public Result settingList( HttpSession httpSession);
 
     public Result helpRefer(TwoParameter twoParameter, HttpSession httpSession);
 

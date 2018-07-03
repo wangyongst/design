@@ -38,15 +38,15 @@
                     <button type="button" class="btn btn-primary col-1" id="update">修改设置</button>
                     <button type="button" class="btn btn-primary col-1" id="delete">删除设置</button>
                     <div class="table-responsive m-t-40">
-                        <table data-toggle="table" data-url="admin/user/admin/list" data-show-refresh="true" id="adminUserTable"
+                        <table data-toggle="table" data-url="admin/setting/list" data-show-refresh="true" id="myTable"
                                data-search="true" data-pagination="true">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true">全选</th>
                                 <th data-field="id">ID</th>
                                 <th data-field="name">名称</th>
-                                <th data-field="content"> 内容</th>
-                                <th data-field="type">分类</th>
+                                <th data-field="content">内容（URL)</th>
+                                <th data-field="type">类型</th>
                                 <th data-field="createtime">创建时间</th>
                             </tr>
                             </thead>
@@ -61,26 +61,29 @@
     <!-- End PAge Content -->
 
 
-    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="adminUserModal" class="modal fade">
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">新增(修改）账号信息</h4>
+                    <h4 class="modal-title">新增(修改）网站设置</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="adminUserForm">
-                        <input id="userid" name="userid" hidden>
+                    <form id="myForm">
+                        <input id="settingid" name="settingid" hidden>
                         <div class="form-group">
-                            <label for="username" class="control-label">用户名:</label>
-                            <input type="text" class="form-control" id="username" name="username">
+                            <label for="name" class="control-label">名称:</label>
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="password" class="control-label">密码:</label>
-                            <input class="form-control" id="password" name="password"></input>
+                            <label for="content" class="control-label">内容（URL):</label>
+                            <input type="text" class="form-control" id="content" name="content">
                         </div>
                         <div class="form-group">
-                            <label for="roleid" class="control-label">角色名称:</label>
-                            <select class="form-control" id="roleid" name="roleid"></select>
+                            <label for="type" class="control-label">类型:</label>
+                            <select class="form-control" id="type" name="type">
+                                <option value="1">logo</option>
+                                <option value="2">友情链接</option>
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -91,14 +94,13 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script src="js/lib/jquery/jquery.min.js"></script>
 
 <script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
 
-<script src="js/admin-user.js"></script>
+<script src="js/admin-setting.js"></script>
 
 
 <link href="css/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">

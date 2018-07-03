@@ -186,6 +186,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         });
         for (String id : ids) {
             AdminPrivilege adminPrivilege = new AdminPrivilege();
+            adminPrivilege.setAdminRole(adminRole);
             adminPrivilege.setAdminMenu(adminMenuRepository.findOne(Integer.parseInt(id)));
             adminPrivilege.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             adminPrivilegeRepository.save(adminPrivilege);
@@ -359,6 +360,14 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result helpList( HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData( helpRepository.findAll());
+        return result;
+    }
+
+    @Override
     public Result postHelp(TwoParameter twoParameter, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
@@ -400,26 +409,29 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0 || adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0)
-            return result;
-        Setting setting = new Setting();
         if (adminOneParameter.getOperation() == 1) {
-            if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
-            if (StringUtils.isNotBlank(adminOneParameter.getContent()))
+            if (adminOneParameter.getSettingid() == null || adminOneParameter.getSettingid() == 0) {
+                Setting setting = new Setting();
+                setting.setName(adminOneParameter.getName());
                 setting.setContent(adminOneParameter.getContent());
-            createLog("增加网站设置", httpSession);
-            result.setStatus(1);
-            result.setData(settingRepository.save(setting));
-        } else if (adminOneParameter.getOperation() == 2 && adminOneParameter.getSettingid() != null || adminOneParameter.getSettingid() != 0) {
-            setting = settingRepository.findOne(adminOneParameter.getSettingid());
-            if (setting == null) return result;
-            result.setStatus(1);
-            createLog("更改网站设置", httpSession);
-            if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
-            if (StringUtils.isNotBlank(adminOneParameter.getContent()))
+                setting.setType(adminOneParameter.getType());
+                setting.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                createLog("增加网站设置", httpSession);
+                result.setStatus(1);
+                result.setData(settingRepository.save(setting));
+            } else {
+                Setting setting = settingRepository.findOne(adminOneParameter.getSettingid());
+                result.setStatus(1);
+                createLog("更改网站设置", httpSession);
+                setting.setName(adminOneParameter.getName());
                 setting.setContent(adminOneParameter.getContent());
-            setting.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            result.setData(settingRepository.save(setting));
+                setting.setType(adminOneParameter.getType());
+                result.setData(settingRepository.save(setting));
+                result.setStatus(1);
+            }
+        } else if (adminOneParameter.getOperation() == 2) {
+            settingRepository.delete(adminOneParameter.getSettingid());
+            result.setStatus(1);
         }
         return result;
     }
@@ -427,9 +439,18 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result getSetting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0) return result;
+        if (adminOneParameter.getSettingid() == null || adminOneParameter.getSettingid() == 0) return result;
         result.setStatus(1);
-        result.setData(settingRepository.findAllByType(adminOneParameter.getType()));
+        result.setData(settingRepository.findOne(adminOneParameter.getSettingid()));
+        return result;
+    }
+
+
+    @Override
+    public Result settingList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(settingRepository.findAll());
         return result;
     }
 
