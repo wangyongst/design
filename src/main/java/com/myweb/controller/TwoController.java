@@ -58,6 +58,7 @@ public class TwoController {
     public Result user(@ModelAttribute TwoParameter twoParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.user(twoParameter, pageable));
     }
@@ -84,6 +85,7 @@ public class TwoController {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.index(twoParameter, pageable));
     }
@@ -121,6 +123,7 @@ public class TwoController {
             sort = new Sort(Sort.Direction.DESC, "refertime");
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.search(twoParameter, pageable));
     }
@@ -138,6 +141,7 @@ public class TwoController {
             sort = new Sort(Sort.Direction.DESC, "createtime");
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.advert(pageable));
     }
@@ -156,6 +160,7 @@ public class TwoController {
     public Result mine(@ModelAttribute TwoParameter twoParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.mine(twoParameter, pageable));
     }
