@@ -336,8 +336,8 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result help(TwoParameter twoParameter, HttpSession httpSession) {
         Result result = new Result();
-        result.setStatus(1);
         if (twoParameter.getHelpid() == null || twoParameter.getHelpid() == 0) return result;
+        result.setStatus(1);
         Help help = helpRepository.findOne(twoParameter.getHelpid());
         result.setData(help);
         return result;
