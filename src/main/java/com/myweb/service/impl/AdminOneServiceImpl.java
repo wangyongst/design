@@ -35,6 +35,9 @@ public class AdminOneServiceImpl implements AdminOneService {
     private AdminLogRepository adminLogRepository;
 
     @Autowired
+    private User2Repository user2Repository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -239,7 +242,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result userList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(userRepository.findAll());
+        result.setData(user2Repository.findAll());
         return result;
     }
 

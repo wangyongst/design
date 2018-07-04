@@ -86,6 +86,7 @@ public class TwoController {
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
+        if (twoParameter.getDesign().equals("") || twoParameter.getDesign().equals("全部")) twoParameter.setDesign(null);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.index(twoParameter, pageable));
     }

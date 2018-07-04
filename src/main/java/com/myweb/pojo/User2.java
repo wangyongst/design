@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "user")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements Serializable {
+public class User2 implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id")
@@ -18,7 +18,6 @@ public class User implements Serializable {
     @Basic
     @Column(name = "username", nullable = true, length = 255)
     private String username;
-    @JsonIgnore
     @Basic
     @Column(name = "password", nullable = true, length = 255)
     private String password;
@@ -43,9 +42,9 @@ public class User implements Serializable {
     @Basic
     @Column(name = "sex", nullable = true, length = 255)
     private String sex;
-    @Basic
-    @Column(name = "refer", nullable = true)
-    private Integer refer;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "refer", referencedColumnName = "id")
+    private User refer;
     @Basic
     @Column(name = "refertime", nullable = true, length = 255)
     private String refertime;
@@ -58,11 +57,11 @@ public class User implements Serializable {
         this.refertime = refertime;
     }
 
-    public Integer getRefer() {
+    public User getRefer() {
         return refer;
     }
 
-    public void setRefer(Integer refer) {
+    public void setRefer(User refer) {
         this.refer = refer;
     }
 
