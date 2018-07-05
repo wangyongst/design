@@ -132,14 +132,9 @@ public class OneServiceImpl implements OneService {
         if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            user.setUsername(oneParameter.getUsername());
-            user.setNickname(oneParameter.getNickname());
-            user.setMobile(oneParameter.getMobile());
-            user.setJobs(oneParameter.getJobs());
-            user.setSex(oneParameter.getSex());
-            userRepository.save(user);
+            Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
+            token.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             result.setStatus(1);
-            result.setData(user);
         }
         return result;
     }
@@ -156,9 +151,14 @@ public class OneServiceImpl implements OneService {
         if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
-            token.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            user.setUsername(oneParameter.getUsername());
+            user.setNickname(oneParameter.getNickname());
+            user.setMobile(oneParameter.getMobile());
+            user.setJobs(oneParameter.getJobs());
+            user.setSex(oneParameter.getSex());
+            userRepository.save(user);
             result.setStatus(1);
+            result.setData(user);
         }
         return result;
     }
