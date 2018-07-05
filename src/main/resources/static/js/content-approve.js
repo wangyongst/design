@@ -1,4 +1,26 @@
 $(function () {
+    $.ajax({
+        type: "GET",
+        cache: "false",
+        url: "/admin/count/study",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 1) {
+                $("#countStudy").text(result.data);
+            }
+        }
+    });
+    $.ajax({
+        type: "GET",
+        cache: "false",
+        url: "/admin/count/click",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 1) {
+                $("#countClick").text(result.data);
+            }
+        }
+    });
 
     $("#look").click(function () {
         var selected = select();
@@ -29,10 +51,11 @@ $(function () {
         $('#myModal').modal('toggle');
     });
 
-    $("#delete").click(function () {
+
+    $("#lookyes").click(function () {
         var selected = select();
         if (selected == "") {
-            alert("请先选择你要删除的记录");
+            alert("请先选择你要审核的记录");
             return;
         }
         var ids = selected.split(",");
@@ -47,12 +70,13 @@ $(function () {
             url: "/admin/help",
             data: {
                 helpid: ids[1],
-                type: 2
+                type:1,
+                draft:4
             },
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
-                    alert("删除记录成功");
+                    alert("审核成功");
                     $("#myTable").bootstrapTable('refresh');
                 }
             }
@@ -60,10 +84,10 @@ $(function () {
     });
 
 
-    $("#refer").click(function () {
+    $("#lookno").click(function () {
         var selected = select();
         if (selected == "") {
-            alert("请先选择你要推荐的记录");
+            alert("请先选择你要审核的记录");
             return;
         }
         var ids = selected.split(",");
@@ -75,14 +99,16 @@ $(function () {
         $.ajax({
             type: "Post",
             cache: "false",
-            url: "/admin/help/refer",
+            url: "/admin/help",
             data: {
-                helpid: ids[1]
+                helpid: ids[1],
+                type:1,
+                draft:3
             },
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
-                    alert("推荐成功");
+                    alert("审核成功");
                     $("#myTable").bootstrapTable('refresh');
                 }
             }

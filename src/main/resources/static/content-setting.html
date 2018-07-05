@@ -32,34 +32,27 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">图片管理</h4>
-                    <h6 class="card-subtitle">图片管理</h6>
-                    <button type="button" class="btn btn-primary col-1" id="look">查看图片</button>
-                    <button type="button" class="btn btn-primary col-1" id="delete">删除</button>
-                    <button type="button" class="btn btn-primary col-1" id="refer">强制推荐</button>
+                    <h4 class="card-title">分类设置</h4>
+                    <h6 class="card-subtitle">分类设置</h6>
+                    <button type="button" class="btn btn-primary col-1" id="create">新增设置</button>
+                    <button type="button" class="btn btn-primary col-1" id="update">修改设置</button>
+                    <button type="button" class="btn btn-primary col-1" id="delete">删除设置</button>
                     <div class="table-responsive m-t-40">
-                        <table data-toggle="table" data-url="admin/help/list" data-show-refresh="true" id="myTable"
-                               data-search="true" data-pagination="true" data-sort-class="studied" data-sort-order="desc">
+                        <table data-toggle="table" data-url="admin/setting/list" data-show-refresh="true" id="myTable"
+                               data-search="true" data-pagination="true">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true">全选</th>
                                 <th data-field="id">ID</th>
-                                <th data-field="user.username">发布者</th>
-                                <th data-field="title">标题名称</th>
-                                <th data-field="description"> 问题描述</th>
-                                <th data-field="tag">标签</th>
-                                <th data-field="design">设计分类</th>
-                                <th data-field="video">视频</th>
-                                <th data-field="readed" data-sortable="true">阅读量</th>
-                                <th data-field="forwarded" data-sortable="true">转发量</th>
-                                <th data-field="fans" data-sortable="true">粉丝</th>
-                                <th data-field="recommend" data-sortable="true">评论数</th>
-                                <th data-field="draft" data-sortable="true">当前状态</th>
-                                <th data-field="refertime" data-sortable="true">强制推荐时间</th>
+                                <th data-field="name">名称</th>
+                                <th data-field="content">内容（URL)</th>
+                                <th data-field="type">类型</th>
                                 <th data-field="createtime">创建时间</th>
                             </tr>
                             </thead>
+
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -67,29 +60,47 @@
     </div>
     <!-- End PAge Content -->
 
+
     <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 1000px;left: -500px">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">查看图片</h4>
+                    <h4 class="modal-title">新增(修改）网站设置</h4>
                 </div>
                 <div class="modal-body">
-                    <img width="100%" id="lookImg">
+                    <form id="myForm">
+                        <input id="settingid" name="settingid" hidden>
+                        <div class="form-group">
+                            <label for="name" class="control-label">名称:</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="content" class="control-label">内容（URL):</label>
+                            <input type="text" class="form-control" id="content" name="content">
+                        </div>
+                        <div class="form-group">
+                            <label for="type" class="control-label">类型:</label>
+                            <select class="form-control" id="type" name="type">
+                                <option value="1">logo</option>
+                                <option value="2">友情链接</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="close">关闭</button>
+                    <button type="button" class="btn btn-primary" id="submit">确定</button>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 <script src="js/lib/jquery/jquery.min.js"></script>
 
 <script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
 
-<script src="js/content-picture.js"></script>
+<script src="js/admin-setting.js"></script>
 
 
 <link href="css/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">

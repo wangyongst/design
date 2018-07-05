@@ -57,7 +57,7 @@ public interface AdminOneService {
 
     public Result clickCount(HttpSession httpSession);
 
-    public Result clickMost(Pageable pageable, HttpSession httpSession);
+    public Result helpDraft(HttpSession httpSession);
 
     public Result help(TwoParameter twoParameter, HttpSession httpSession);
 

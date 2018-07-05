@@ -25,7 +25,7 @@ $(function () {
     $("#look").click(function () {
         var selected = select();
         if (selected == "") {
-            alert("请先选择你要修改的记录");
+            alert("请先选择你要查看的记录");
             return;
         }
         var ids = selected.split(",");

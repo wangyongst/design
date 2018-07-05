@@ -354,13 +354,15 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result postHelp(TwoParameter twoParameter, HttpSession httpSession) {
         Result result = new Result();
-        result.setStatus(1);
         if (twoParameter.getHelpid() == null || twoParameter.getHelpid() == 0) return result;
         Help help = helpRepository.findOne(twoParameter.getHelpid());
         if (help == null) return result;
+        result.setStatus(1);
         if (twoParameter.getType() != null && twoParameter.getType() == 2) {
             createLog("删除ID为" + twoParameter.getHelpid() + "的求助", httpSession);
             helpRepository.delete(help);
+            studyRepository.deleteAllByHelp(help);
+            clickRepository.deleteAllByHelp(help);
         } else if (twoParameter.getType() != null && twoParameter.getType() == 1 && twoParameter.getDraft() != null && twoParameter.getDraft() != 0) {
             createLog("审核ID为" + twoParameter.getHelpid() + "的求助", httpSession);
             help.setDraft(twoParameter.getDraft());
@@ -370,10 +372,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result clickMost(Pageable pageable, HttpSession httpSession) {
+    public Result helpDraft(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(helpRepository.findAll(pageable));
+        result.setData(helpRepository.findByDraft(2));
         return result;
     }
 

@@ -15,4 +15,6 @@ import java.util.List;
 public interface StudyRepository extends JpaRepository<Study, Integer> {
 
     public int countAllByHelp(Help help);
+
+    public int deleteAllByHelp(Help help);
 }

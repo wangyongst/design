@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryDefinition(domainClass = Click.class, idClass = Integer.class)
 public interface ClickRepository extends JpaRepository<Click, Integer> {
+
     public int countAllByHelp(Help help);
+
+    public int deleteAllByHelp(Help help);
 }

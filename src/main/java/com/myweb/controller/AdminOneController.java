@@ -155,28 +155,23 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.countMessageUser(oneParameter, httpSession));
     }
 
-    //浏览最多统计
-    @GetMapping("/most/click")
-    public Result mostClick(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        Sort sort = new Sort(Sort.Direction.DESC, "clicked");
-        if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
-        return ResultUtils.result(adminOneService.clickMost(pageable, httpSession));
-    }
-
     //求助详情
     @GetMapping("/help")
     public Result getHelp(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.help(twoParameter, httpSession));
     }
 
-    //求助详情
+    //求助列表
     @GetMapping("/help/list")
     public Object helpList(HttpSession httpSession) {
         return ResultUtils.result(adminOneService.helpList(httpSession));
     }
 
+    //求助列表
+    @GetMapping("/help/list/draft")
+    public Object helpDraft(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.helpDraft(httpSession));
+    }
 
     //type2删除,type1审核
     @PostMapping("/help")
