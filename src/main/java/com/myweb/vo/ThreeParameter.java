@@ -7,6 +7,15 @@ public class ThreeParameter {
     private String message;
     private Integer page;
     private Integer pagesize;
+    private Integer type;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Integer getPagesize() {
         return pagesize;

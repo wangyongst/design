@@ -61,9 +61,11 @@ public class ThreeServiceImpl implements ThreeService {
         if (help == null) {
             result.setMessage("点击的求助不存在");
         } else {
-            click.setHelp(help);
-            click.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            clickRepository.save(click);
+            if(click.getUser() != null) {
+                click.setHelp(help);
+                click.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                clickRepository.save(click);
+            }
             help.setClicked(help.getClicked() + 1);
             helpRepository.save(help);
             result.setStatus(1);
@@ -87,12 +89,21 @@ public class ThreeServiceImpl implements ThreeService {
         if (help == null) {
             result.setMessage("想要学习的求助不存在");
         } else {
-            study.setHelp(help);
-            study.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            studyRepository.save(study);
-            help.setStudied(help.getStudied() + 1);
-            helpRepository.save(help);
-            result.setStatus(1);
+            if(threeParameter.getType() == null || threeParameter.getType() == 0) {
+                study.setHelp(help);
+                study.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                studyRepository.save(study);
+                help.setStudied(help.getStudied() + 1);
+                helpRepository.save(help);
+                result.setStatus(1);
+            }else{
+                studyRepository.deleteAllByHelpAndUser(help,study.getUser());
+                if(help.getStudied() > 1) {
+                    help.setStudied(help.getStudied() - 1);
+                    helpRepository.save(help);
+                }
+                result.setStatus(1);
+            }
         }
         return result;
     }

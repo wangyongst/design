@@ -234,7 +234,7 @@ public class OneController {
 
     @ApiOperation(value = "获取后台设置", notes = "获取后台设置")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "类型（必需）1代表logo设置，2代表友情链接设置，3广告联盟", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "type", value = "类型（必需）1代表logo设置，2代表友情链接设置", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/setting")
