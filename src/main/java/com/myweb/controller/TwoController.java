@@ -49,7 +49,7 @@ public class TwoController {
     @ApiOperation(value = "已发求助", notes = "已发求助")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "draft", value = "发布方式 （可选，0,全部，1草稿，2，隐藏，3未通过审核，4已经发表）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "draft", value = "发布方式 （可选，0,全部，1草稿，2，未审核，3未通过审核，4已经发表,5隐蒧的）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
@@ -69,7 +69,7 @@ public class TwoController {
             @ApiImplicitParam(name = "type", value = "推荐方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "design", value = "设计分类 （可选)", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "pagesize", value = "  （可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/index")
@@ -164,5 +164,30 @@ public class TwoController {
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.mine(twoParameter, pageable));
+    }
+
+
+    @ApiOperation(value = "个人信息", notes = "个人信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/info/mine")
+    public Result info(@ModelAttribute TwoParameter twoParameter) {
+        return ResultUtils.result(twoService.info(twoParameter));
+    }
+
+
+    @ApiOperation(value = "隐蒧/取消隐藏", notes = "隐蒧/取消隐藏")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "（必需，1,隐藏，2取消隐藏）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "helpid", value = "求助id （必需)", required = true, dataType = "String")
+
+    })
+    @ResponseBody
+    @PostMapping("/help/hidden")
+    public Result helpHidden(@ModelAttribute TwoParameter twoParameter) {
+        return ResultUtils.result(twoService.hidden(twoParameter));
     }
 }

@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 
 @Service("TwoService")
@@ -57,7 +56,7 @@ public class TwoServiceImpl implements TwoService {
         if (user == null || isNotLogin(user)) {
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            if(helpRepository.findByUser(user).size() > 0 && userRepository.findByRefer(user.getId()).size() < 1){
+            if (helpRepository.findByUser(user).size() > 0 && userRepository.findByRefer(user.getId()).size() < 1) {
                 result.setStatus(2);
                 result.setMessage("未邀请过好友注册，不能发布");
                 return result;
@@ -163,6 +162,22 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
+    @Override
+    public Result info(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setMessage("当前用户不存在!");
+        } else {
+            result.setStatus(1);
+            result.setData(user);
+        }
+        return result;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -186,6 +201,36 @@ public class TwoServiceImpl implements TwoService {
         }
         return result;
     }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result hidden(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0 || twoParameter.getHelpid() == null || twoParameter.getHelpid() == 0 || twoParameter.getType() == null || twoParameter.getType() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Help help = helpRepository.findOne(twoParameter.getHelpid());
+            if (help == null) {
+                result.setMessage("选择的求助不存在!");
+            } else if (twoParameter.getType() == 1) {
+                help.setDraft(5);
+                helpRepository.save(help);
+                result.setStatus(1);
+            } else if (twoParameter.getType() == 2) {
+                help.setDraft(4);
+                helpRepository.save(help);
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
 
     public boolean isNotLogin(User user) {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
