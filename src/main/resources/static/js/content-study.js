@@ -10,17 +10,6 @@ $(function () {
             }
         }
     });
-    $.ajax({
-        type: "GET",
-        cache: "false",
-        url: "/admin/count/click",
-        dataType: "json",
-        success: function (result) {
-            if (result.status == 1) {
-                $("#countClick").text(result.data);
-            }
-        }
-    });
 
     $("#look").click(function () {
         var selected = select();
