@@ -13,8 +13,6 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Study.class, idClass = Integer.class)
 public interface StudyRepository extends JpaRepository<Study, Integer> {
 
-    public int countAllByHelp(Help help);
-
     public int deleteAllByHelp(Help help);
 
     public int deleteAllByHelpAndUser(Help help, User user);

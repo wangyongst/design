@@ -282,7 +282,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result studyCount(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(studyRepository.count());
+        result.setData(helpRepository.sumStudied());
         return result;
     }
 
