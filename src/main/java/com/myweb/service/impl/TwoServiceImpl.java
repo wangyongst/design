@@ -78,6 +78,7 @@ public class TwoServiceImpl implements TwoService {
             help.setIndexpic(twoParameter.getIndexpic());
             help.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             help.setStudied(0);
+            help.setReaded(0);
             help.setClicked(0);
             help.setFans(0);
             help.setForwarded(0);
