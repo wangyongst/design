@@ -34,9 +34,6 @@ public class ThreeServiceImpl implements ThreeService {
     private UserRepository userRepository;
 
     @Autowired
-    private ClickRepository clickRepository;
-
-    @Autowired
     private StudyRepository studyRepository;
 
     @Autowired
@@ -53,19 +50,10 @@ public class ThreeServiceImpl implements ThreeService {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        Click click = new Click();
-        if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
-            click.setUser(userRepository.findOne(threeParameter.getUserid()));
-        }
         Help help = helpRepository.findOne(threeParameter.getHelpid());
         if (help == null) {
             result.setMessage("点击的求助不存在");
         } else {
-            if(click.getUser() != null) {
-                click.setHelp(help);
-                click.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                clickRepository.save(click);
-            }
             help.setClicked(help.getClicked() + 1);
             helpRepository.save(help);
             result.setStatus(1);
@@ -89,16 +77,16 @@ public class ThreeServiceImpl implements ThreeService {
         if (help == null) {
             result.setMessage("想要学习的求助不存在");
         } else {
-            if(threeParameter.getType() == null || threeParameter.getType() == 0) {
+            if (threeParameter.getType() == null || threeParameter.getType() == 0) {
                 study.setHelp(help);
                 study.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 studyRepository.save(study);
                 help.setStudied(help.getStudied() + 1);
                 helpRepository.save(help);
                 result.setStatus(1);
-            }else{
-                studyRepository.deleteAllByHelpAndUser(help,study.getUser());
-                if(help.getStudied() > 1) {
+            } else {
+                studyRepository.deleteAllByHelpAndUser(help, study.getUser());
+                if (help.getStudied() > 1) {
                     help.setStudied(help.getStudied() - 1);
                     helpRepository.save(help);
                 }

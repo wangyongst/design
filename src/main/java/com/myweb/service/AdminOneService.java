@@ -55,8 +55,6 @@ public interface AdminOneService {
 
     public Result countToken(HttpSession httpSession);
 
-    public Result clickCount(HttpSession httpSession);
-
     public Result helpDraft(HttpSession httpSession);
 
     public Result help(TwoParameter twoParameter, HttpSession httpSession);

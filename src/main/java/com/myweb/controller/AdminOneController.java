@@ -125,12 +125,6 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.user(oneParameter, httpSession));
     }
 
-    //全网点击量
-    @GetMapping("/count/click")
-    public Result countClick(HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.clickCount(httpSession));
-    }
-
     //注册人数
     @GetMapping("/count/user")
     public Result countUser(HttpSession httpSession) {

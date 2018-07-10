@@ -62,9 +62,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     private SettingRepository settingRepository;
 
     @Autowired
-    private ClickRepository clickRepository;
-
-    @Autowired
     private HelpRepository helpRepository;
 
     @Autowired
@@ -289,13 +286,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         return result;
     }
 
-    @Override
-    public Result clickCount(HttpSession httpSession) {
-        Result result = new Result();
-        result.setStatus(1);
-        result.setData(clickRepository.count());
-        return result;
-    }
 
     @Override
     public Result countUser(HttpSession httpSession) {
@@ -362,7 +352,6 @@ public class AdminOneServiceImpl implements AdminOneService {
             createLog("删除ID为" + twoParameter.getHelpid() + "的求助", httpSession);
             helpRepository.delete(help);
             studyRepository.deleteAllByHelp(help);
-            clickRepository.deleteAllByHelp(help);
         } else if (twoParameter.getType() != null && twoParameter.getType() == 1 && twoParameter.getDraft() != null && twoParameter.getDraft() != 0) {
             createLog("审核ID为" + twoParameter.getHelpid() + "的求助", httpSession);
             help.setDraft(twoParameter.getDraft());

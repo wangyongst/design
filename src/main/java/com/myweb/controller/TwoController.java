@@ -108,7 +108,7 @@ public class TwoController {
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "pagesize", value = "每  页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help/search")
