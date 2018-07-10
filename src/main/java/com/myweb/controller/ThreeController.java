@@ -29,7 +29,6 @@ public class ThreeController {
 
     @ApiOperation(value = "点击", notes = "点击")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
