@@ -35,6 +35,8 @@ public interface OneService {
 
     public Result unfollow(OneParameter oneParameter);
 
+    public Result studiedIs(OneParameter oneParameter);
+
     public Result followIs(OneParameter oneParameter);
 
     public Result search(OneParameter oneParameter, Pageable pageable);

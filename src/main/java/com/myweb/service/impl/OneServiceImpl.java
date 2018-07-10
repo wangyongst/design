@@ -1,12 +1,7 @@
 package com.myweb.service.impl;
 
-import com.myweb.dao.jpa.hibernate.FollowRepository;
-import com.myweb.dao.jpa.hibernate.SettingRepository;
-import com.myweb.dao.jpa.hibernate.TokenRepository;
-import com.myweb.dao.jpa.hibernate.UserRepository;
-import com.myweb.pojo.Follow;
-import com.myweb.pojo.Token;
-import com.myweb.pojo.User;
+import com.myweb.dao.jpa.hibernate.*;
+import com.myweb.pojo.*;
 import com.myweb.service.OneService;
 import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
@@ -24,7 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -46,7 +40,13 @@ public class OneServiceImpl implements OneService {
     private SettingRepository settingRepository;
 
     @Autowired
+    private HelpRepository helpRepository;
+
+    @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private StudyRepository studyRepository;
 
     @Autowired
     private FollowRepository followRepository;
@@ -380,6 +380,31 @@ public class OneServiceImpl implements OneService {
         return result;
     }
 
+    @Override
+    public Result studiedIs(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || oneParameter.getHelpid() == null || oneParameter.getHelpid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Help help = helpRepository.findOne(oneParameter.getHelpid());
+            if (help == null) {
+                result.setMessage("要检查的求助不存在!");
+            } else {
+                List<Study> studies = studyRepository.findAllByUserAndHelp(user, help);
+                if (studies.size() > 0) {
+                    result.setStatus(1);
+                } else {
+                    result.setMessage("你未想学此求助");
+                }
+            }
+        }
+        return result;
+    }
 
     @Override
     public Result uploadImage(MultipartFile multipartFile) {

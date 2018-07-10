@@ -232,6 +232,20 @@ public class OneController {
         return ResultUtils.result(oneService.followIs(oneParameter));
     }
 
+
+
+    @ApiOperation(value = "检查是否想学", notes = "检查是否想学")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "求助id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/user/studied/is")
+    public Result studiedIs(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.studiedIs(oneParameter));
+    }
+
+
     @ApiOperation(value = "获取后台设置", notes = "获取后台设置")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "类型（必需）1代表logo设置，2代表友情链接设置", required = true, dataType = "Integer")

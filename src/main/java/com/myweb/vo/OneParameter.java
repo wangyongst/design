@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 public class OneParameter {
+    private Integer helpid;
     private Integer userid;
     private Integer touserid;
     private String username;
@@ -20,6 +21,14 @@ public class OneParameter {
     private Integer refer;
     private Integer type;
     private String keyword;
+
+    public Integer getHelpid() {
+        return helpid;
+    }
+
+    public void setHelpid(Integer helpid) {
+        this.helpid = helpid;
+    }
 
     public Integer getPagesize() {
         return pagesize;
