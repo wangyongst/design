@@ -108,7 +108,4 @@ public class ThreeController {
     public Result mostUser(@ModelAttribute ThreeParameter threeParameter) {
         return ResultUtils.result(threeService.read(threeParameter));
     }
-
-
-
 }
