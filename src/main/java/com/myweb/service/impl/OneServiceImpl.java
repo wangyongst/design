@@ -130,6 +130,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
@@ -149,6 +150,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             user.setUsername(oneParameter.getUsername());
@@ -173,6 +175,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             user.setAvatar(oneParameter.getAvatar());
@@ -193,6 +196,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else if (StringUtils.equals(user.getPassword(), oneParameter.getPassword())) {
             user.setPassword(oneParameter.getPassword2());
@@ -215,6 +219,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             user.setEmail(oneParameter.getEmail());
@@ -235,6 +240,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(oneParameter.getTouserid());
@@ -262,6 +268,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(oneParameter.getTouserid());
@@ -287,6 +294,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -304,6 +312,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -346,6 +355,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -363,6 +373,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(oneParameter.getTouserid());
@@ -389,6 +400,7 @@ public class OneServiceImpl implements OneService {
         }
         User user = userRepository.findOne(oneParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             Help help = helpRepository.findOne(oneParameter.getHelpid());

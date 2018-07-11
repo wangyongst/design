@@ -108,6 +108,7 @@ public class ThreeServiceImpl implements ThreeService {
         Message message = new Message();
         User user = userRepository.findOne(threeParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(threeParameter.getTouserid());
@@ -135,6 +136,7 @@ public class ThreeServiceImpl implements ThreeService {
         }
         User user = userRepository.findOne(threeParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
@@ -154,6 +156,7 @@ public class ThreeServiceImpl implements ThreeService {
         }
         User user = userRepository.findOne(threeParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(threeParameter.getTouserid());
@@ -178,6 +181,7 @@ public class ThreeServiceImpl implements ThreeService {
         }
         User user = userRepository.findOne(threeParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             User touser = userRepository.findOne(threeParameter.getTouserid());

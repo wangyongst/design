@@ -154,7 +154,8 @@ public class TwoServiceImpl implements TwoService {
         }
         User user = userRepository.findOne(twoParameter.getUserid());
         if (user == null || isNotLogin(user)) {
-            result.setMessage("当前用户不存在!");
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
         } else {
             if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
                 result.setData(helpRepository.findByUserAndDraft(user, 4, pageable));
@@ -178,7 +179,8 @@ public class TwoServiceImpl implements TwoService {
         }
         User user = userRepository.findOne(twoParameter.getUserid());
         if (user == null || isNotLogin(user)) {
-            result.setMessage("当前用户不存在!");
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
             result.setData(user);
@@ -196,6 +198,7 @@ public class TwoServiceImpl implements TwoService {
         }
         User user = userRepository.findOne(twoParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             String[] ids = helpids.split(",");
@@ -220,6 +223,7 @@ public class TwoServiceImpl implements TwoService {
         }
         User user = userRepository.findOne(twoParameter.getUserid());
         if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
             Help help = helpRepository.findOne(twoParameter.getHelpid());

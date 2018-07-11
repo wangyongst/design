@@ -98,5 +98,17 @@ public class ThreeController {
         return ResultUtils.result(threeService.read(threeParameter));
     }
 
+    @ApiOperation(value = "我的消息（已读消息）", notes = "调用此接口后，与此发送用户的所有相关消息都变为已读")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "发送用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/user/most")
+    public Result mostUser(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.read(threeParameter));
+    }
+
+
 
 }
