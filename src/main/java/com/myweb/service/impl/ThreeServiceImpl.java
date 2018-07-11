@@ -148,6 +148,16 @@ public class ThreeServiceImpl implements ThreeService {
     }
 
     @Override
+    public Result userMost() {
+        Result result = new Result();
+        result.setStatus(1);
+//        List<User> userList = messageRepository.findUserByUserOrTouser(user);
+//        userList.addAll(messageRepository.findTouserByUserOrTouser(user));
+//        result.setData(userList);
+        return result;
+    }
+
+    @Override
     public Result message(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
         if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getTouserid() == null || threeParameter.getTouserid() == 0) {
