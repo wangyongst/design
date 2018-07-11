@@ -1,12 +1,7 @@
 package com.myweb.service.impl;
 
-import com.myweb.dao.jpa.hibernate.AdvertRepository;
-import com.myweb.dao.jpa.hibernate.HelpRepository;
-import com.myweb.dao.jpa.hibernate.TokenRepository;
-import com.myweb.dao.jpa.hibernate.UserRepository;
-import com.myweb.pojo.Help;
-import com.myweb.pojo.Token;
-import com.myweb.pojo.User;
+import com.myweb.dao.jpa.hibernate.*;
+import com.myweb.pojo.*;
 import com.myweb.service.TwoService;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
@@ -14,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -22,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 
@@ -43,6 +40,9 @@ public class TwoServiceImpl implements TwoService {
 
     @Autowired
     private AdvertRepository advertRepository;
+
+    @Autowired
+    private StudyRepository studyRepository;
 
 
     @Override
@@ -117,10 +117,42 @@ public class TwoServiceImpl implements TwoService {
     public Result index(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        if (twoParameter.getDesign() == null) {
-            result.setData(helpRepository.findByDraft(4, pageable));
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            if (twoParameter.getDesign() == null) {
+                result.setData(helpRepository.findByDraft(4, pageable));
+            } else {
+                result.setData(helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable));
+            }
         } else {
-            result.setData(helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable));
+            User user = userRepository.findOne(twoParameter.getUserid());
+            if (user == null || isNotLogin(user)) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            }
+            if (twoParameter.getDesign() == null) {
+                Page<Help2> helps = helpRepository.findByDraft(4, pageable);
+                helps.forEach(e -> {
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                    if (studies.size() > 0) {
+                        e.setIsStudied(1);
+                    } else {
+                        e.setIsStudied(0);
+                    }
+                });
+                result.setData(helps);
+            } else {
+                Page<Help2> helps = helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable);
+                helps.forEach(e -> {
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                    if (studies.size() > 0) {
+                        e.setIsStudied(1);
+                    } else {
+                        e.setIsStudied(0);
+                    }
+                });
+                result.setData(helps);
+            }
         }
         return result;
     }
@@ -137,10 +169,42 @@ public class TwoServiceImpl implements TwoService {
     public Result search(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        if (twoParameter.getTag() == null) {
-            result.setData(helpRepository.findByDraft(4, pageable));
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            if (twoParameter.getDesign() == null) {
+                result.setData(helpRepository.findByDraft(4, pageable));
+            } else {
+                result.setData(helpRepository.findByDraftAndTagContains(4, twoParameter.getDesign(), pageable));
+            }
         } else {
-            result.setData(helpRepository.findByDraftAndTagContains(4, twoParameter.getDesign(), pageable));
+            User user = userRepository.findOne(twoParameter.getUserid());
+            if (user == null || isNotLogin(user)) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            }
+            if (twoParameter.getDesign() == null) {
+                Page<Help2> helps = helpRepository.findByDraft(4, pageable);
+                helps.forEach(e -> {
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                    if (studies.size() > 0) {
+                        e.setIsStudied(1);
+                    } else {
+                        e.setIsStudied(0);
+                    }
+                });
+                result.setData(helps);
+            } else {
+                Page<Help2> helps = helpRepository.findByDraftAndTagContains(4, twoParameter.getDesign(), pageable);
+                helps.forEach(e -> {
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                    if (studies.size() > 0) {
+                        e.setIsStudied(1);
+                    } else {
+                        e.setIsStudied(0);
+                    }
+                });
+                result.setData(helps);
+            }
         }
         return result;
     }
