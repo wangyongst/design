@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -86,7 +87,7 @@ public class TwoController {
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
-        if (twoParameter.getDesign().equals("") || twoParameter.getDesign().equals("全部")) twoParameter.setDesign(null);
+        if (StringUtils.isBlank(twoParameter.getDesign()) || twoParameter.getDesign().equals("全部")) twoParameter.setDesign(null);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.index(twoParameter, pageable));
     }
