@@ -1,7 +1,10 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.*;
-import com.myweb.pojo.*;
+import com.myweb.pojo.Help;
+import com.myweb.pojo.Study;
+import com.myweb.pojo.Token;
+import com.myweb.pojo.User;
 import com.myweb.service.TwoService;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
@@ -107,7 +110,7 @@ public class TwoServiceImpl implements TwoService {
                 result.setData(helpRepository.findByUser(user, pageable));
             } else {
                 result.setStatus(1);
-                result.setData(helpRepository.findByUserAndDraft(user, twoParameter.getDraft(), pageable));
+                result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, twoParameter.getDraft(), 3, pageable));
             }
         }
         return result;
@@ -121,7 +124,7 @@ public class TwoServiceImpl implements TwoService {
             if (twoParameter.getDesign() == null) {
                 result.setData(helpRepository.findByDraft(4, pageable));
             } else {
-                result.setData(helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable));
+                result.setData(helpRepository.findByDesignAndAudienceNotAndDraft(twoParameter.getDesign(), 3, 4, pageable));
             }
         } else {
             User user = userRepository.findOne(twoParameter.getUserid());
@@ -131,7 +134,7 @@ public class TwoServiceImpl implements TwoService {
                 return result;
             }
             if (twoParameter.getDesign() == null) {
-                Page<Help2> helps = helpRepository.findByDraft(4, pageable);
+                Page<Help> helps = helpRepository.findByDraft(4, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -142,7 +145,7 @@ public class TwoServiceImpl implements TwoService {
                 });
                 result.setData(helps);
             } else {
-                Page<Help2> helps = helpRepository.findByDesignAndDraft(twoParameter.getDesign(), 4, pageable);
+                Page<Help> helps = helpRepository.findByDesignAndAudienceNotAndDraft(twoParameter.getDesign(), 3, 4, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -173,7 +176,7 @@ public class TwoServiceImpl implements TwoService {
             if (twoParameter.getDesign() == null) {
                 result.setData(helpRepository.findByDraft(4, pageable));
             } else {
-                result.setData(helpRepository.findByDraftAndTagContains(4, twoParameter.getDesign(), pageable));
+                result.setData(helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getDesign(), pageable));
             }
         } else {
             User user = userRepository.findOne(twoParameter.getUserid());
@@ -183,7 +186,7 @@ public class TwoServiceImpl implements TwoService {
                 return result;
             }
             if (twoParameter.getDesign() == null) {
-                Page<Help2> helps = helpRepository.findByDraft(4, pageable);
+                Page<Help> helps = helpRepository.findByDraft(4, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -194,7 +197,7 @@ public class TwoServiceImpl implements TwoService {
                 });
                 result.setData(helps);
             } else {
-                Page<Help2> helps = helpRepository.findByDraftAndTagContains(4, twoParameter.getDesign(), pageable);
+                Page<Help> helps = helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getDesign(), pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -222,9 +225,9 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
-                result.setData(helpRepository.findByUserAndDraft(user, 4, pageable));
+                result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
             } else if (twoParameter.getTag() != null && (twoParameter.getType() == null || twoParameter.getType() == 0)) {
-                result.setData(helpRepository.findByUserAndDraftAndTagContains(user, 4, twoParameter.getTag(), pageable));
+                result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
             } else if (twoParameter.getTag() != null && twoParameter.getType() != null && twoParameter.getType() != 0) {
                 //result.setData(helpRepository.findByUserAndTagContains(user, twoParameter.getTag(), pageable));
             } else {

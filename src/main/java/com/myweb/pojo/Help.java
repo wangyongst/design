@@ -76,6 +76,16 @@ public class Help implements Serializable {
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
 
+    private Integer isStudied;
+
+    public Integer getIsStudied() {
+        return isStudied;
+    }
+
+    public void setIsStudied(Integer isStudied) {
+        this.isStudied = isStudied;
+    }
+
     public String getIndexpic() {
         return indexpic;
     }
