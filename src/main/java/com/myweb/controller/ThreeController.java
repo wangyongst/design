@@ -98,5 +98,10 @@ public class ThreeController {
         return ResultUtils.result(threeService.read(threeParameter));
     }
 
-
+    @ApiOperation(value = "求助最多的设计师", notes = "求助最多的设计师")
+    @ResponseBody
+    @GetMapping("/user/most")
+    public Result mostUser() {
+        return ResultUtils.result(threeService.userMost());
+    }
 }

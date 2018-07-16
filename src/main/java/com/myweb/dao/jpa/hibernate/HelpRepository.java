@@ -1,6 +1,7 @@
 package com.myweb.dao.jpa.hibernate;
 
 import com.myweb.pojo.Help;
+import com.myweb.pojo.Help2;
 import com.myweb.pojo.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,15 +20,15 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
 
     public List<Help> findByUser(User user);
 
-    public Page<Help> findByDraft(int draft, Pageable pageable);
+    public Page<Help2> findByDraft(int draft, Pageable pageable);
 
     public List<Help> findByDraft(int draft);
 
     public Page<Help> findByUserAndDraftAndTagContains(User user, int draft, String tag, Pageable pageable);
 
-    public Page<Help> findByDesignAndDraft(String design, int draft, Pageable pageable);
+    public Page<Help2> findByDesignAndDraft(String design, int draft, Pageable pageable);
 
-    public Page<Help> findByDraftAndTagContains(int draft, String tag, Pageable pageable);
+    public Page<Help2> findByDraftAndTagContains(int draft, String tag, Pageable pageable);
 
     public Page<Help> findByUserAndDraft(User user, int draft, Pageable pageable);
 
