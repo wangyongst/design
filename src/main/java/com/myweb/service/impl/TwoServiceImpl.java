@@ -1,10 +1,7 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.*;
-import com.myweb.pojo.Help;
-import com.myweb.pojo.Study;
-import com.myweb.pojo.Token;
-import com.myweb.pojo.User;
+import com.myweb.pojo.*;
 import com.myweb.service.TwoService;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
@@ -47,6 +44,9 @@ public class TwoServiceImpl implements TwoService {
     @Autowired
     private StudyRepository studyRepository;
 
+
+    @Autowired
+    private SearchingRepository searchingRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -175,10 +175,10 @@ public class TwoServiceImpl implements TwoService {
         Result result = new Result();
         result.setStatus(1);
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
-            if (twoParameter.getDesign() == null) {
+            if (twoParameter.getTag() == null) {
                 result.setData(helpRepository.findByDraft(4, pageable));
             } else {
-                result.setData(helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getDesign(), pageable));
+                result.setData(helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getTag(), pageable));
             }
         } else {
             User user = userRepository.findOne(twoParameter.getUserid());
@@ -187,7 +187,7 @@ public class TwoServiceImpl implements TwoService {
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (twoParameter.getDesign() == null) {
+            if (twoParameter.getTag() == null) {
                 Page<Help> helps = helpRepository.findByDraft(4, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
@@ -199,7 +199,7 @@ public class TwoServiceImpl implements TwoService {
                 });
                 result.setData(helps);
             } else {
-                Page<Help> helps = helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getDesign(), pageable);
+                Page<Help> helps = helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getTag(), pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -209,6 +209,12 @@ public class TwoServiceImpl implements TwoService {
                     }
                 });
                 result.setData(helps);
+                Searching searching = new Searching();
+                searching.setKeyword(twoParameter.getTag());
+                searching.setType(1);
+                searching.setUser(user);
+                searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                searchingRepository.save(searching);
             }
         }
         return result;
@@ -234,6 +240,25 @@ public class TwoServiceImpl implements TwoService {
                 result.setData(studyRepository.findAllByUser(user, pageable));
             }
             result.setStatus(1);
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result searchingUser(TwoParameter twoParameter, Pageable pageable) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null) {
+            result.setStatus(0);
+            result.setMessage("当前用户不存在0!");
+        } else {
+            result.setStatus(1);
+            result.setData(searchingRepository.findDistinctByUserAndType(user, 1, pageable));
         }
         return result;
     }

@@ -65,6 +65,24 @@ public class TwoController {
     }
 
 
+    @ApiOperation(value = "搜索历史记录", notes = "搜索历史记录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")            ,
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/searching/user")
+    public Result searchingUser(@ModelAttribute TwoParameter twoParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
+        return ResultUtils.result(twoService.searchingUser(twoParameter, pageable));
+    }
+
+
+
     @ApiOperation(value = "首页求助推荐", notes = "首页推荐")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
@@ -107,7 +125,7 @@ public class TwoController {
 
     @ApiOperation(value = "找图", notes = "首页找图")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每  页条数（可选），如果不传默认10条", required = true, dataType = "Integer")

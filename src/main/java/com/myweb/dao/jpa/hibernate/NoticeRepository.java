@@ -13,6 +13,5 @@ import java.util.List;
 @Repository
 @RepositoryDefinition(domainClass = Notice.class, idClass = Integer.class)
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
-
     public void removeAllByUser(User user);
 }
