@@ -41,7 +41,16 @@ public class OneServiceImpl implements OneService {
     private SettingRepository settingRepository;
 
     @Autowired
+    private SearchingRepository searchingRepository;
+
+    @Autowired
     private HelpRepository helpRepository;
+
+    @Autowired
+    private NoticeRepository noticeRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Autowired
     private TokenRepository tokenRepository;
@@ -136,6 +145,33 @@ public class OneServiceImpl implements OneService {
         } else {
             Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
             token.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result destroy(OneParameter oneParameter) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            helpRepository.removeAllByUser(user);
+            studyRepository.removeAllByUser(user);
+            followRepository.removeAllByUserOrTouser(user, user);
+            messageRepository.removeAllByUserOrTouser(user, user);
+            noticeRepository.removeAllByUser(user);
+            searchingRepository.removeAllByUser(user);
+            tokenRepository.removeAllByUser(user);
+            userRepository.delete(user);
             result.setStatus(1);
         }
         return result;

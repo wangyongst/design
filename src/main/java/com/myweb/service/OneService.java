@@ -33,6 +33,8 @@ public interface OneService {
 
     public Result follow(OneParameter oneParameter);
 
+    public Result destroy(OneParameter oneParameter);
+
     public Result unfollow(OneParameter oneParameter);
 
     public Result studiedIs(OneParameter oneParameter);

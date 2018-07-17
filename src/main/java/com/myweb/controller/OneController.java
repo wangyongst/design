@@ -57,6 +57,17 @@ public class OneController {
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
+    @PostMapping("/user/destroy")
+    public Result destroy(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.destroy(oneParameter));
+    }
+
+
+    @ApiOperation(value = "注销", notes = "注销")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
     @PostMapping("/user/logout")
     public Result logout(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.logout(oneParameter));

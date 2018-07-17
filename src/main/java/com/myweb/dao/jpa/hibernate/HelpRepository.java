@@ -15,6 +15,8 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Help.class, idClass = Integer.class)
 public interface HelpRepository extends JpaRepository<Help, Integer> {
 
+    public void removeAllByUser(User user);
+
     public Page<Help> findByUser(User user, Pageable pageable);
 
     public Page<Help> findByUserAndAudienceNot(User user, int audience, Pageable pageable);
