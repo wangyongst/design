@@ -230,8 +230,10 @@ public class TwoServiceImpl implements TwoService {
                 result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
             } else if (twoParameter.getTag() != null && (twoParameter.getType() == null || twoParameter.getType() == 0)) {
                 result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
-            } else if (twoParameter.getTag() != null && twoParameter.getType() != null && twoParameter.getType() != 0) {
+            } else if (twoParameter.getTag() == null && twoParameter.getType() != null && twoParameter.getType() != 0) {
                 result.setData(studyRepository.findAllByUser(user, pageable));
+            }else{
+                ///
             }
             result.setStatus(1);
         }
