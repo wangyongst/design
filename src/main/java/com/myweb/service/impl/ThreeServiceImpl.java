@@ -119,7 +119,7 @@ public class ThreeServiceImpl implements ThreeService {
                 message.setTouser(touser);
                 message.setMessage(threeParameter.getMessage());
                 message.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                message.setRead(0);
+                message.setIsread(0);
                 messageRepository.save(message);
                 result.setStatus(1);
             }
@@ -200,7 +200,7 @@ public class ThreeServiceImpl implements ThreeService {
             } else {
                 List<Message> messageList = messageRepository.findByUserOrTouser(user, touser);
                 messageList.forEach(e -> {
-                    e.setRead(1);
+                    e.setIsread(1);
                     messageRepository.save(e);
                 });
                 result.setStatus(1);

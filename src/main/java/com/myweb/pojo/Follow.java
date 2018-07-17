@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "follow")
@@ -24,6 +23,16 @@ public class Follow implements Serializable {
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+    @Transient
+    private Integer isFollow;
+
+    public Integer getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(Integer isFollow) {
+        this.isFollow = isFollow;
+    }
 
     public Integer getId() {
         return id;

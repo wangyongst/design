@@ -143,6 +143,7 @@ public class TwoServiceImpl implements TwoService {
                         e.setIsStudied(0);
                     }
                 });
+                result.setStatus(1);
                 result.setData(helps);
             } else {
                 Page<Help> helps = helpRepository.findByDesignAndAudienceNotAndDraft(twoParameter.getDesign(), 3, 4, pageable);
@@ -154,6 +155,7 @@ public class TwoServiceImpl implements TwoService {
                         e.setIsStudied(0);
                     }
                 });
+                result.setStatus(1);
                 result.setData(helps);
             }
         }

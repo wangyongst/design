@@ -25,8 +25,8 @@ public class Message implements Serializable {
     @Column(name = "message", nullable = true, length = 255)
     private String message;
     @Basic
-    @Column(name = "read", nullable = true)
-    private Integer read;
+    @Column(name = "isread", nullable = true)
+    private Integer isread;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
@@ -63,12 +63,12 @@ public class Message implements Serializable {
         this.message = message;
     }
 
-    public Integer getRead() {
-        return read;
+    public Integer getIsread() {
+        return isread;
     }
 
-    public void setRead(Integer read) {
-        this.read = read;
+    public void setIsread(Integer isread) {
+        this.isread = isread;
     }
 
     public String getCreatetime() {

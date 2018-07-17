@@ -298,17 +298,8 @@ public class OneServiceImpl implements OneService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            List<Follow2> follow2s = followRepository.findByUser(user, pageable);
-            follow2s.forEach(e -> {
-                List<Follow> follows = followRepository.findByUserAndTouser(user, e.getTouser());
-                if (follows.size() > 0) {
-                    e.setIsFollowed(1);
-                } else {
-                    e.setIsFollowed(0);
-                }
-            });
             result.setStatus(1);
-            result.setData(follow2s);
+            result.setData(followRepository.findByUser(user, pageable));
         }
         return result;
     }
@@ -325,17 +316,17 @@ public class OneServiceImpl implements OneService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            List<Follow2> follow2s = followRepository.findByTouser(user, pageable);
-            follow2s.forEach(e -> {
-                List<Follow> follows = followRepository.findByUserAndTouser(e.getUser(), user);
-                if (follows.size() > 0) {
-                    e.setIsFollowed(1);
+            Page<Follow> follows = followRepository.findByTouser(user, pageable);
+            follows.forEach(e -> {
+                List<Follow> follows2 = followRepository.findByUserAndTouser(user, e.getUser());
+                if (follows2.size() > 0) {
+                    e.setIsFollow(1);
                 } else {
-                    e.setIsFollowed(0);
+                    e.setIsFollow(0);
                 }
             });
             result.setStatus(1);
-            result.setData(follow2s);
+            result.setData(follows);
         }
         return result;
     }
