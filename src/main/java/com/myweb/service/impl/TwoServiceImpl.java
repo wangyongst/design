@@ -222,19 +222,18 @@ public class TwoServiceImpl implements TwoService {
             return result;
         }
         User user = userRepository.findOne(twoParameter.getUserid());
-        if (user == null || isNotLogin(user)) {
-            result.setStatus(9);
-            result.setMessage("当前用户不存在或未登录!");
+        if (user == null) {
+            result.setStatus(0);
+            result.setMessage("当前用户不存在0!");
         } else {
             if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
                 result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
             } else if (twoParameter.getTag() != null && (twoParameter.getType() == null || twoParameter.getType() == 0)) {
                 result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
             } else if (twoParameter.getTag() != null && twoParameter.getType() != null && twoParameter.getType() != 0) {
-                //result.setData(helpRepository.findByUserAndTagContains(user, twoParameter.getTag(), pageable));
-            } else {
-                //result.setData(helpRepository.findByTagContains(twoParameter.getDesign(), pageable));
+                result.setData(studyRepository.findAllByUser(user, pageable));
             }
+            result.setStatus(1);
         }
         return result;
     }
