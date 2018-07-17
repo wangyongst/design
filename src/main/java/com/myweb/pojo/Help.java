@@ -75,7 +75,7 @@ public class Help implements Serializable {
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
-
+    @Transient
     private Integer isStudied;
 
     public Integer getIsStudied() {
