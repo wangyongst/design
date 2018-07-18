@@ -2,11 +2,8 @@ package com.myweb.controller;
 
 
 import com.myweb.service.ThreeService;
-import com.myweb.service.TwoService;
-import com.myweb.vo.OneParameter;
 import com.myweb.vo.ResultUtils;
 import com.myweb.vo.ThreeParameter;
-import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -84,7 +81,7 @@ public class ThreeController {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
-        return ResultUtils.result(threeService.message(threeParameter,pageable));
+        return ResultUtils.result(threeService.message(threeParameter, pageable));
     }
 
     @ApiOperation(value = "我的消息（已读消息）", notes = "调用此接口后，与此发送用户的所有相关消息都变为已读")
@@ -102,6 +99,6 @@ public class ThreeController {
     @ResponseBody
     @GetMapping("/user/most")
     public Result mostUser() {
-        return ResultUtils.result(threeService.userMost());
+        return ResultUtils.result(null);
     }
 }
