@@ -65,19 +65,22 @@ public class ThreeServiceImpl implements ThreeService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result study(ThreeParameter threeParameter) {
         Result result = new Result();
-        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) {
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        Study study = new Study();
-        if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
-            study.setUser(userRepository.findOne(threeParameter.getUserid()));
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
         }
         Help help = helpRepository.findOne(threeParameter.getHelpid());
         if (help == null) {
             result.setMessage("想要学习的求助不存在");
         } else {
             if (threeParameter.getType() == null || threeParameter.getType() == 0) {
+                Study study = new Study();
+                study.setUser(user);
                 study.setHelp(help);
                 study.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 studyRepository.save(study);
@@ -85,7 +88,7 @@ public class ThreeServiceImpl implements ThreeService {
                 helpRepository.save(help);
                 result.setStatus(1);
             } else {
-                studyRepository.deleteAllByHelpAndUser(help, study.getUser());
+                studyRepository.deleteAllByHelpAndUser(help, user);
                 if (help.getStudied() > 1) {
                     help.setStudied(help.getStudied() - 1);
                     helpRepository.save(help);
