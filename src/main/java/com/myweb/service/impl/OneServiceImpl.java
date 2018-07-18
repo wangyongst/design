@@ -408,7 +408,7 @@ public class OneServiceImpl implements OneService {
         }
         result.setStatus(1);
         if (oneParameter.getKeyword() == null) {
-            Page<User> users = userRepository.findAllByIdNot(1,pageable);
+            Page<User> users = userRepository.findAllByIdNot(1, pageable);
             users.forEach(e -> {
                 List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
                 if (follows2.size() > 0) {
@@ -434,7 +434,6 @@ public class OneServiceImpl implements OneService {
         }
         return result;
     }
-
 
     @Override
     public Result refer(OneParameter oneParameter, Pageable pageable) {
