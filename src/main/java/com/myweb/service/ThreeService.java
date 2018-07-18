@@ -18,5 +18,7 @@ public interface ThreeService {
 
     public Result message(ThreeParameter threeParameter,Pageable pageable);
 
+    public Result noticeNew(ThreeParameter threeParameter,Pageable pageable);
+
     public Result read(ThreeParameter threeParameter);
 }

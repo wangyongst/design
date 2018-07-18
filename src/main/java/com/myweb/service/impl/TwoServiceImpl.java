@@ -44,9 +44,18 @@ public class TwoServiceImpl implements TwoService {
     @Autowired
     private StudyRepository studyRepository;
 
+    @Autowired
+    private NoticeRepository noticeRepository;
 
     @Autowired
     private SearchingRepository searchingRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
+
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -89,6 +98,10 @@ public class TwoServiceImpl implements TwoService {
             helpRepository.save(help);
             result.setStatus(1);
             result.setData(help);
+            List<Follow> follows2 = followRepository.findAllByTouser(user);
+            follows2.forEach(e -> {
+                createNotice(e.getUser(), user, help, "发布", 4);
+            });
         }
         return result;
     }
@@ -238,7 +251,7 @@ public class TwoServiceImpl implements TwoService {
                 result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
             } else if (twoParameter.getTag() == null && twoParameter.getType() != null && twoParameter.getType() != 0) {
                 result.setData(studyRepository.findAllByUser(user, pageable));
-            }else{
+            } else {
                 ///
             }
             result.setStatus(1);
@@ -342,5 +355,36 @@ public class TwoServiceImpl implements TwoService {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
         if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
         return true;
+    }
+
+    public void createNotice(User user, User fromuser, Help help, String message, Integer type) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(fromuser);
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+    }
+
+    public void createSysNotice(User user, Help help, String message, Integer type) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(userRepository.findOne(1));
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+        Message me = new Message();
+        me.setIsread(0);
+        me.setMessage(message);
+        me.setTouser(user);
+        me.setUser(userRepository.findOne(1));
+        me.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        messageRepository.save(me);
     }
 }

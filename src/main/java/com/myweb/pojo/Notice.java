@@ -17,15 +17,48 @@ public class Notice implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "userid", referencedColumnName = "id")
     private User user;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "fromuser", referencedColumnName = "id")
+    private User fromuser;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "helpid", referencedColumnName = "id")
+    private Help help;
     @Basic
     @Column(name = "message", nullable = true, length = 255)
     private String message;
     @Basic
-    @Column(name = "read", nullable = true)
-    private Integer read;
+    @Column(name = "isread", nullable = true)
+    private Integer isread;
+    @Basic
+    @Column(name = "type", nullable = true)
+    private Integer type;
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+
+    public Help getHelp() {
+        return help;
+    }
+
+    public void setHelp(Help help) {
+        this.help = help;
+    }
+
+    public User getFromuser() {
+        return fromuser;
+    }
+
+    public void setFromuser(User fromuser) {
+        this.fromuser = fromuser;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;
@@ -51,12 +84,12 @@ public class Notice implements Serializable {
         this.message = message;
     }
 
-    public Integer getRead() {
-        return read;
+    public Integer getIsread() {
+        return isread;
     }
 
-    public void setRead(Integer read) {
-        this.read = read;
+    public void setIsread(Integer isread) {
+        this.isread = isread;
     }
 
     public String getCreatetime() {

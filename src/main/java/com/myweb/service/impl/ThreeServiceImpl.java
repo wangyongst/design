@@ -42,6 +42,9 @@ public class ThreeServiceImpl implements ThreeService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    private NoticeRepository noticeRepository;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result click(ThreeParameter threeParameter) {
@@ -65,7 +68,7 @@ public class ThreeServiceImpl implements ThreeService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result study(ThreeParameter threeParameter) {
         Result result = new Result();
-        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null && threeParameter.getUserid() == 0) {
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
@@ -73,6 +76,7 @@ public class ThreeServiceImpl implements ThreeService {
         if (user == null || isNotLogin(user)) {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
+            return result;
         }
         Help help = helpRepository.findOne(threeParameter.getHelpid());
         if (help == null) {
@@ -87,6 +91,7 @@ public class ThreeServiceImpl implements ThreeService {
                 help.setStudied(help.getStudied() + 1);
                 helpRepository.save(help);
                 result.setStatus(1);
+                createNotice(help.getUser(), user, help, "想学", 1);
             } else {
                 studyRepository.deleteAllByHelpAndUser(help, user);
                 if (help.getStudied() > 1) {
@@ -173,6 +178,24 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+    @Override
+    public Result noticeNew(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            result.setStatus(1);
+            result.setData(noticeRepository.findAllByIsreadNot(1, pageable));
+        }
+        return result;
+    }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -206,5 +229,36 @@ public class ThreeServiceImpl implements ThreeService {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
         if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
         return true;
+    }
+
+    public void createNotice(User user, User fromuser, Help help, String message, Integer type) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(fromuser);
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+    }
+
+    public void createSysNotice(User user, Help help, String message, Integer type) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(userRepository.findOne(1));
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+        Message me = new Message();
+        me.setIsread(0);
+        me.setMessage(message);
+        me.setTouser(user);
+        me.setUser(userRepository.findOne(1));
+        me.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        messageRepository.save(me);
     }
 }

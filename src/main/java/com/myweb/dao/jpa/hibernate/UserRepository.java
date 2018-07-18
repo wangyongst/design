@@ -14,6 +14,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public List<User> findByUsername(String username);
 
+    public List<User> findByEmail(String email);
+
+    public Page<User> findAllByIdNot(Integer id, Pageable pageable);
+
     public Page<User> findByRefer(Integer refer, Pageable pageable);
 
     public List<User> findByRefer(Integer refer);

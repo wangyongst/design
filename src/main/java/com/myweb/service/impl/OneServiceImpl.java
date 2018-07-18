@@ -61,6 +61,7 @@ public class OneServiceImpl implements OneService {
     @Autowired
     private FollowRepository followRepository;
 
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result regist(OneParameter oneParameter) {
@@ -73,6 +74,10 @@ public class OneServiceImpl implements OneService {
             result.setMessage("用户名已经被占用!");
             return result;
         }
+        if (userRepository.findByEmail(oneParameter.getEmail()).size() > 0) {
+            result.setMessage("邮箱已经已经被注册!");
+            return result;
+        }
         User user = new User();
         if (oneParameter.getRefer() != null && oneParameter.getRefer() != 0) {
             User refer = userRepository.findOne(oneParameter.getRefer());
@@ -81,6 +86,8 @@ public class OneServiceImpl implements OneService {
                 return result;
             } else {
                 user.setRefer(refer.getId());
+                createNotice(user, refer, null, "邀请", 3);
+                createSysNotice(refer, null, "恭喜你，成功邀请好友注册，获得平台永久发布功能。", 5);
             }
         }
         user.setUsername(oneParameter.getUsername());
@@ -89,6 +96,8 @@ public class OneServiceImpl implements OneService {
         user.setNickname(oneParameter.getNickname());
         user.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         userRepository.save(user);
+        createSysNotice(user, null, "邀请 1 个好友成功注册，你就可以获得平台免费永久发布想学，立即邀请", 5);
+        createSysNotice(user, null, "恭喜你，成功注册热点设计，你已获得 1 次免费使用发布功能，邀请一个好友注册成功，获得平台永久发布效果功能", 5);
         result.setStatus(1);
         return result;
     }
@@ -243,6 +252,7 @@ public class OneServiceImpl implements OneService {
         } else {
             result.setMessage("旧密码不正确！");
         }
+        createSysNotice(user, null, "您的登录密码重置成功！\n为了保障您的账户安全，请保管好并定期更改登录及支付密码。", 5);
         return result;
     }
 
@@ -252,6 +262,10 @@ public class OneServiceImpl implements OneService {
         Result result = new Result();
         if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getEmail())) {
             result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        if (userRepository.findByEmail(oneParameter.getEmail()).size() > 0) {
+            result.setMessage("邮箱已经已经被注册!");
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
@@ -290,6 +304,7 @@ public class OneServiceImpl implements OneService {
                 follow.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 followRepository.save(follow);
                 result.setStatus(1);
+                createNotice(touser, user, null, "关注", 2);
             }
         }
         return result;
@@ -393,7 +408,7 @@ public class OneServiceImpl implements OneService {
         }
         result.setStatus(1);
         if (oneParameter.getKeyword() == null) {
-            Page<User> users = userRepository.findAll(pageable);
+            Page<User> users = userRepository.findAllByIdNot(1,pageable);
             users.forEach(e -> {
                 List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
                 if (follows2.size() > 0) {
@@ -514,5 +529,36 @@ public class OneServiceImpl implements OneService {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
         if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
         return true;
+    }
+
+    public void createNotice(User user, User fromuser, Help help, String message, Integer type) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(fromuser);
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+    }
+
+    public void createSysNotice(User user, Help help, String message, Integer type) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(userRepository.findOne(1));
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+        Message me = new Message();
+        me.setIsread(0);
+        me.setMessage(message);
+        me.setTouser(user);
+        me.setUser(userRepository.findOne(1));
+        me.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        messageRepository.save(me);
     }
 }

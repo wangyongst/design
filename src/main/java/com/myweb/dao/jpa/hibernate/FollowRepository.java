@@ -16,11 +16,13 @@ public interface FollowRepository extends JpaRepository<Follow, Integer> {
 
     public List<Follow> findByUserAndTouser(User user, User touser);
 
+    public List<Follow> findAllByTouser(User touser);
+
     public Page<Follow> findByUser(User user, Pageable pageable);
 
     public Page<Follow> findByTouser(User touser, Pageable pageable);
 
     public int countAllByTouser(User touser);
 
-    public void removeAllByUserOrTouser(User user,User touser);
+    public void removeAllByUserOrTouser(User user, User touser);
 }
