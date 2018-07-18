@@ -150,6 +150,7 @@ public class ThreeServiceImpl implements ThreeService {
             result.setStatus(1);
             List<User> userList = messageRepository.findUserByUserOrTouser(user);
             userList.addAll(messageRepository.findTouserByUserOrTouser(user));
+            userList.remove(user);
             result.setData(userList);
         }
         return result;
