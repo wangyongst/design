@@ -17,6 +17,8 @@ public interface TwoService {
 
     public Result mine(TwoParameter twoParameter, Pageable pageable);
 
+    public Result searchingUser(TwoParameter twoParameter, Pageable pageable);
+
     public Result info(TwoParameter twoParameter);
 
     public Result hidden(TwoParameter twoParameter);
