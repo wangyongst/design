@@ -36,7 +36,7 @@ public class ThreeController {
 
     @ApiOperation(value = "想学", notes = "想学")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "type", value = "（可选）0想学，1取消想学，默认为0", required = true, dataType = "Integer")
     })

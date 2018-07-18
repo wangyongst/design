@@ -65,7 +65,7 @@ public class ThreeServiceImpl implements ThreeService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result study(ThreeParameter threeParameter) {
         Result result = new Result();
-        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null && threeParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }

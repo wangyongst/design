@@ -179,6 +179,7 @@ public class OneController {
 
     @ApiOperation(value = "找人", notes = "首页找人")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "type", value = "排序方式 （可选，0,最新，1想学最多，2，点击最多，3特别推荐），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "keyword", value = "标签关键字 （可选),搜索范围：账号，昵称，性别，职业", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),

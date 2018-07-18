@@ -49,6 +49,16 @@ public class User implements Serializable {
     @Basic
     @Column(name = "refertime", nullable = true, length = 255)
     private String refertime;
+    @Transient
+    private Integer isFollow;
+
+    public Integer getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(Integer isFollow) {
+        this.isFollow = isFollow;
+    }
 
     public String getRefertime() {
         return refertime;
