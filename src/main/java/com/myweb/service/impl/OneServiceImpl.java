@@ -93,6 +93,7 @@ public class OneServiceImpl implements OneService {
         user.setUsername(oneParameter.getUsername());
         user.setPassword(oneParameter.getPassword());
         user.setEmail(oneParameter.getEmail());
+        user.setAvatar("http://pas99p7vd.bkt.clouddn.com/eM1jGVzQ");
         user.setNickname(oneParameter.getNickname());
         user.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         userRepository.save(user);
