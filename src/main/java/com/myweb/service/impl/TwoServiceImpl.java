@@ -361,7 +361,7 @@ public class TwoServiceImpl implements TwoService {
                 helpRepository.save(help);
                 result.setStatus(1);
             } else if (twoParameter.getType() == 2) {
-                help.setDraft(4);
+                help.setDraft(2);
                 help.setAudience(1);
                 helpRepository.save(help);
                 result.setStatus(1);
