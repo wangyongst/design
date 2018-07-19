@@ -40,5 +40,8 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
     @Query("select sum(help.studied) from Help help")
     public Long sumStudied();
 
+    @Query("select help.user from Help help group by help.user order by count(help) desc")
+    public Page<User> findUserByMost(Pageable pageable);
+
     public Integer countAllByUser(User user);
 }

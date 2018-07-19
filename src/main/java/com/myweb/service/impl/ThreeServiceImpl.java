@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -44,6 +45,9 @@ public class ThreeServiceImpl implements ThreeService {
 
     @Autowired
     private NoticeRepository noticeRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
@@ -156,13 +160,32 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
-
     @Override
-    public Result userMost() {
+    public Result userMost(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
+        Page<User> users = helpRepository.findUserByMost(pageable);
+        users.forEach(e -> {
+            e.setPublished(helpRepository.countAllByUser(e));
+            e.setFollowed(followRepository.countAllByUser(e));
+            e.setFans(followRepository.countAllByTouser(e));
+            if (threeParameter.getUserid() != null || threeParameter.getUserid() != 0) {
+                User u = userRepository.findOne(threeParameter.getUserid());
+                if (u == null || isNotLogin(u)) {
+                    result.setStatus(9);
+                    result.setMessage("当前用户不存在或未登录!");
+                } else {
+                    List<Follow> follows2 = followRepository.findByUserAndTouser(u, e);
+                    if (follows2.size() > 0) {
+                        e.setIsFollow(1);
+                    } else {
+                        e.setIsFollow(0);
+                    }
+                }
+            }
+        });
+        if (result.getStatus() == 9) return result;
         result.setStatus(1);
-        //User user = userRepository.findOne(threeParameter.getUserid());
-
+        result.setData(users);
         return result;
     }
 
@@ -206,7 +229,6 @@ public class ThreeServiceImpl implements ThreeService {
         }
         return result;
     }
-
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
