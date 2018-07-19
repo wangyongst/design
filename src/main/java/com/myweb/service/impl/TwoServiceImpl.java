@@ -47,6 +47,10 @@ public class TwoServiceImpl implements TwoService {
     @Autowired
     private NoticeRepository noticeRepository;
 
+
+    @Autowired
+    private ReportRepository reportRepository;
+
     @Autowired
     private SearchingRepository searchingRepository;
 
@@ -364,6 +368,60 @@ public class TwoServiceImpl implements TwoService {
                 help.setDraft(2);
                 help.setAudience(1);
                 helpRepository.save(help);
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result report(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0 || twoParameter.getType() == null || twoParameter.getType() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在!");
+        } else {
+            if (twoParameter.getType() == 1) {
+                if (twoParameter.getHelpid() == null || twoParameter.getHelpid() == 0) {
+                    result.setMessage("必须的参数不能为空!");
+                    return result;
+                }
+                Help help = helpRepository.findOne(twoParameter.getHelpid());
+                if (help == null) {
+                    result.setMessage("选择的求助不存在!");
+                    return result;
+                }
+                Report report = new Report();
+                report.setHelp(help);
+                report.setUser(user);
+                report.setIsdone(0);
+                report.setTitle(twoParameter.getTitle());
+                report.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                reportRepository.save(report);
+                result.setStatus(1);
+            } else if (twoParameter.getType() == 2) {
+                if (twoParameter.getTouserid() == null || twoParameter.getTouserid() == 0) {
+                    result.setMessage("必须的参数不能为空!");
+                    return result;
+                }
+                User touser = userRepository.findOne(twoParameter.getTouserid());
+                if (touser == null) {
+                    result.setMessage("选择的求助不存在!");
+                    return result;
+                }
+                Report report = new Report();
+                report.setTouser(touser);
+                report.setUser(user);
+                report.setIsdone(0);
+                report.setTitle(twoParameter.getTitle());
+                report.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                reportRepository.save(report);
                 result.setStatus(1);
             }
         }

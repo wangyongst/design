@@ -21,6 +21,8 @@ public interface TwoService {
 
     public Result info(TwoParameter twoParameter);
 
+    public Result report(TwoParameter twoParameter);
+
     public Result hidden(TwoParameter twoParameter);
 
     public Result advert(Pageable pageable);

@@ -82,6 +82,21 @@ public class TwoController {
     }
 
 
+    @ApiOperation(value = "举报", notes = "举报")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")            ,
+            @ApiImplicitParam(name = "helpid", value = "举报求助id（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "举报用户id（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型，1举报求助，2举报用户", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "title", value = "举报信息", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @GetMapping("/report")
+    public Result report(@ModelAttribute TwoParameter twoParameter) {
+        return ResultUtils.result(twoService.report(twoParameter));
+    }
+
+
 
     @ApiOperation(value = "首页求助推荐", notes = "首页推荐")
     @ApiImplicitParams({
