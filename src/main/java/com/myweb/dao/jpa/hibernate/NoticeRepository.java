@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     public void removeAllByUser(User user);
 
-    public Page<Notice> findAllByIsreadNot(int isread, Pageable pageable);
+    public Page<Notice> findAllByUserAndIsreadNot(User user, int isread, Pageable pageable);
 }

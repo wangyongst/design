@@ -21,6 +21,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public List<Message> findByUserOrTouser(User user, User touser, Pageable pageable);
 
+    public List<Message> findByUserAndTouser(User user, User touser, Pageable pageable);
+
     public List<Message> findByUserOrTouser(User user, User touser);
 
     public int countAllByUser(User user);
