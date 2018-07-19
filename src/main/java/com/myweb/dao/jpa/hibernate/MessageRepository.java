@@ -25,6 +25,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public List<Message> findByUserOrTouser(User user, User touser);
 
+    public void deleteAllByUserAndTouser(User user, User touser);
+
     public int countAllByUser(User user);
 
     public int countAllByTouser(User touser);

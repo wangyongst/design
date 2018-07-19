@@ -257,6 +257,50 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result userDelete(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getTouserid() == null || threeParameter.getTouserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            User touser = userRepository.findOne(threeParameter.getTouserid());
+            if (touser == null) {
+                result.setMessage("消息用户不存在!");
+            } else {
+                messageRepository.deleteAllByUserAndTouser(user, touser);
+                messageRepository.deleteAllByUserAndTouser(touser, user);
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result messageDelete(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getMessageid() == null || threeParameter.getMessageid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            messageRepository.delete(threeParameter.getMessageid());
+            result.setStatus(1);
+        }
+        return result;
+    }
+
     public boolean isNotLogin(User user) {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
         if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;

@@ -1,6 +1,7 @@
 package com.myweb.vo;
 
 public class ThreeParameter {
+    private Integer messageid;
     private Integer userid;
     private Integer helpid;
     private Integer touserid;
@@ -8,6 +9,14 @@ public class ThreeParameter {
     private Integer page;
     private Integer pagesize;
     private Integer type;
+
+    public Integer getMessageid() {
+        return messageid;
+    }
+
+    public void setMessageid(Integer messageid) {
+        this.messageid = messageid;
+    }
 
     public Integer getType() {
         return type;

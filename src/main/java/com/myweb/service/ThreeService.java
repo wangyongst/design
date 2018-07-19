@@ -14,6 +14,10 @@ public interface ThreeService {
 
     public Result send(ThreeParameter threeParameter);
 
+    public Result userDelete(ThreeParameter threeParameter);
+
+    public Result messageDelete(ThreeParameter threeParameter);
+
     public Result user(ThreeParameter threeParameter);
 
     public Result userMost(ThreeParameter threeParameter,Pageable pageable);

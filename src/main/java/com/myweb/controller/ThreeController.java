@@ -84,6 +84,28 @@ public class ThreeController {
         return ResultUtils.result(threeService.message(threeParameter, pageable));
     }
 
+    @ApiOperation(value = "我的消息（删除消息）", notes = "删除单条消息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "messageid", value = "消息id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/message/message/delete")
+    public Result messageDelete(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.messageDelete(threeParameter));
+    }
+
+    @ApiOperation(value = "我的消息（删除用户消息）", notes = "删除与此用户的所有消息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "消息用户id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/message/user/delete")
+    public Result userDelete(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.userDelete(threeParameter));
+    }
+
     @ApiOperation(value = "我的消息（已读消息）", notes = "调用此接口后，与此发送用户的所有相关消息都变为已读")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
