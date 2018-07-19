@@ -91,7 +91,7 @@ public class TwoController {
             @ApiImplicitParam(name = "title", value = "举报信息", required = true, dataType = "String")
     })
     @ResponseBody
-    @GetMapping("/report")
+    @PostMapping("/report")
     public Result report(@ModelAttribute TwoParameter twoParameter) {
         return ResultUtils.result(twoService.report(twoParameter));
     }
