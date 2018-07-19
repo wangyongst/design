@@ -70,6 +70,32 @@ public class ThreeServiceImpl implements ThreeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result recommend(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Help help = helpRepository.findOne(threeParameter.getHelpid());
+        if (help == null) {
+            result.setMessage("推荐的求助不存在");
+        } else {
+            User user = userRepository.findOne(threeParameter.getUserid());
+            if (user == null) {
+                result.setMessage("发送用户不存在!");
+            } else {
+                help.setRecommend(help.getRecommend() + 1);
+                helpRepository.save(help);
+                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次。", 5);
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result study(ThreeParameter threeParameter) {
         Result result = new Result();
         if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {

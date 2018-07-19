@@ -34,6 +34,19 @@ public class ThreeController {
         return threeService.click(threeParameter);
     }
 
+
+    @ApiOperation(value = "推荐", notes = "推荐")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/help/recommend")
+    public Result recommend(@ModelAttribute ThreeParameter threeParameter) {
+        return threeService.recommend(threeParameter);
+    }
+
+
     @ApiOperation(value = "想学", notes = "想学")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),

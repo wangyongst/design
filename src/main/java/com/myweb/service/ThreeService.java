@@ -10,6 +10,8 @@ public interface ThreeService {
 
     public Result click(ThreeParameter threeParameter);
 
+    public Result recommend(ThreeParameter threeParameter);
+
     public Result study(ThreeParameter threeParameter);
 
     public Result send(ThreeParameter threeParameter);
