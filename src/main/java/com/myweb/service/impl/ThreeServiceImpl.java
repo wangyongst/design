@@ -224,7 +224,13 @@ public class ThreeServiceImpl implements ThreeService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
-            result.setData(noticeRepository.findAllByUserAndIsreadNot(user, 1, pageable));
+            Page<Notice> notices = noticeRepository.findAllByUserAndIsreadNot(user, 1, pageable);
+            if (notices.getTotalPages() == 0) {
+                result.setStatus(2);
+                result.setData(user);
+            } else {
+                result.setData(notices);
+            }
         }
         return result;
     }
