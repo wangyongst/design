@@ -112,7 +112,7 @@ public class ThreeController {
     }
 
 
-    @ApiOperation(value = "求助最多的设计师", notes = "求助最多的设计师")
+    @ApiOperation(value = "求助最多的设计师", notes = "求助最多的设计师，传参userid将判断是否关注")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
