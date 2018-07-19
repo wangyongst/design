@@ -113,9 +113,17 @@ public class ThreeController {
 
 
     @ApiOperation(value = "求助最多的设计师", notes = "求助最多的设计师")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
     @ResponseBody
     @GetMapping("/user/most")
-    public Result mostUser() {
-        return ResultUtils.result(threeService.userMost());
+    public Result mostUser(@ModelAttribute ThreeParameter threeParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
+        return ResultUtils.result(threeService.userMost(threeParameter, pageable));
     }
 }
