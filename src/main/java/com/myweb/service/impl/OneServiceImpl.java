@@ -86,7 +86,6 @@ public class OneServiceImpl implements OneService {
                 return result;
             } else {
                 user.setRefer(refer.getId());
-                createNotice(user, refer, null, "邀请", 3);
                 createSysNotice(refer, null, "恭喜你，成功邀请好友注册，获得平台永久发布功能。", 5);
             }
         }
