@@ -357,10 +357,12 @@ public class TwoServiceImpl implements TwoService {
                 result.setMessage("选择的求助不存在!");
             } else if (twoParameter.getType() == 1) {
                 help.setDraft(5);
+                help.setAudience(3);
                 helpRepository.save(help);
                 result.setStatus(1);
             } else if (twoParameter.getType() == 2) {
                 help.setDraft(4);
+                help.setAudience(1);
                 helpRepository.save(help);
                 result.setStatus(1);
             }
