@@ -108,7 +108,6 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result send(ThreeParameter threeParameter) {
