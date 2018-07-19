@@ -345,7 +345,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null || isNotLogin(user)) {
+        if (user == null) {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
@@ -363,7 +363,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null || isNotLogin(user)) {
+        if (user == null) {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {

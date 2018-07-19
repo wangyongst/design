@@ -116,6 +116,6 @@ public class ThreeController {
     @ResponseBody
     @GetMapping("/user/most")
     public Result mostUser() {
-        return ResultUtils.result(null);
+        return ResultUtils.result(threeService.userMost());
     }
 }

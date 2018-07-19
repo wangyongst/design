@@ -6,6 +6,7 @@ import javax.persistence.Column;
 public class TwoParameter {
     private Integer helpid;
     private Integer userid;
+    private Integer touserid;
     private Integer audience;
     private String title;
     private String image;
@@ -20,6 +21,14 @@ public class TwoParameter {
     private Integer type;
     private Integer pagesize;
     private String indexpic;
+
+    public Integer getTouserid() {
+        return touserid;
+    }
+
+    public void setTouserid(Integer touserid) {
+        this.touserid = touserid;
+    }
 
     public String getIndexpic() {
         return indexpic;

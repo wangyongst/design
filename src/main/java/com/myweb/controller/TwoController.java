@@ -189,7 +189,8 @@ public class TwoController {
 
     @ApiOperation(value = "个人信息", notes = "个人信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "主页用户id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/info/mine")

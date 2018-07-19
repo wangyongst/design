@@ -156,6 +156,16 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+
+    @Override
+    public Result userMost() {
+        Result result = new Result();
+        result.setStatus(1);
+        //User user = userRepository.findOne(threeParameter.getUserid());
+
+        return result;
+    }
+
     @Override
     public Result message(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();

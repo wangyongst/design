@@ -243,7 +243,7 @@ public class TwoServiceImpl implements TwoService {
         User user = userRepository.findOne(twoParameter.getUserid());
         if (user == null) {
             result.setStatus(0);
-            result.setMessage("当前用户不存在0!");
+            result.setMessage("当前用户不存在!");
         } else {
             if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
                 result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
@@ -281,15 +281,33 @@ public class TwoServiceImpl implements TwoService {
     @Override
     public Result info(TwoParameter twoParameter) {
         Result result = new Result();
-        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+        if (twoParameter.getTouserid() == null || twoParameter.getTouserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        User user = userRepository.findOne(twoParameter.getUserid());
-        if (user == null || isNotLogin(user)) {
+        User user = userRepository.findOne(twoParameter.getTouserid());
+        if (user == null) {
             result.setStatus(9);
-            result.setMessage("当前用户不存在或未登录!");
+            result.setMessage("当前用户不存!");
         } else {
+            user.setPublished(helpRepository.countAllByUser(user));
+            user.setFollowed(followRepository.countAllByUser(user));
+            user.setFans(followRepository.countAllByTouser(user));
+            if (twoParameter.getUserid() != null || twoParameter.getUserid() != 0) {
+                User u = userRepository.findOne(twoParameter.getUserid());
+                if (u == null || isNotLogin(u)) {
+                    result.setStatus(9);
+                    result.setMessage("当前用户不存在或未登录!");
+                    return result;
+                } else {
+                    List<Follow> follows2 = followRepository.findByUserAndTouser(u, user);
+                    if (follows2.size() > 0) {
+                        user.setIsFollow(1);
+                    } else {
+                        user.setIsFollow(0);
+                    }
+                }
+            }
             result.setStatus(1);
             result.setData(user);
         }

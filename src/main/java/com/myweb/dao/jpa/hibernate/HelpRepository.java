@@ -39,4 +39,6 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
 
     @Query("select sum(help.studied) from Help help")
     public Long sumStudied();
+
+    public Integer countAllByUser(User user);
 }

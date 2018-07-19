@@ -50,7 +50,40 @@ public class User implements Serializable {
     @Column(name = "refertime", nullable = true, length = 255)
     private String refertime;
     @Transient
+    private Integer published;
+
+    @Transient
+    private Integer followed;
+
+    @Transient
+    private Integer fans;
+
+    @Transient
     private Integer isFollow;
+
+    public Integer getPublished() {
+        return published;
+    }
+
+    public void setPublished(Integer published) {
+        this.published = published;
+    }
+
+    public Integer getFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(Integer followed) {
+        this.followed = followed;
+    }
+
+    public Integer getFans() {
+        return fans;
+    }
+
+    public void setFans(Integer fans) {
+        this.fans = fans;
+    }
 
     public Integer getIsFollow() {
         return isFollow;
