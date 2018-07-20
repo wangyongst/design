@@ -193,7 +193,7 @@ public class ThreeServiceImpl implements ThreeService {
             e.setPublished(helpRepository.countAllByUser(e));
             e.setFollowed(followRepository.countAllByUser(e));
             e.setFans(followRepository.countAllByTouser(e));
-            if (threeParameter.getUserid() != null || threeParameter.getUserid() != 0) {
+            if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
                 User u = userRepository.findOne(threeParameter.getUserid());
                 if (u == null || isNotLogin(u)) {
                     result.setStatus(9);

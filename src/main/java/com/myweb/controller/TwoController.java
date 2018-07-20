@@ -67,7 +67,8 @@ public class TwoController {
 
     @ApiOperation(value = "搜索历史记录", notes = "搜索历史记录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")            ,
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型（可选）0全部，1搜图，2搜人,默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
@@ -81,10 +82,32 @@ public class TwoController {
         return ResultUtils.result(twoService.searchingUser(twoParameter, pageable));
     }
 
+    @ApiOperation(value = "清空搜索历史", notes = "清空搜索历史")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型（可选）0全部，1搜图，2搜人,默认为0", required = true, dataType = "Integer"),
+    })
+    @ResponseBody
+    @PostMapping("/searching/clear")
+    public Result searchingClear(@ModelAttribute TwoParameter twoParameter) {
+        return ResultUtils.result(twoService.searchingClear(twoParameter));
+    }
+
+    @ApiOperation(value = "删除搜索历史", notes = "删除搜索历史")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "searchingid", value = "类型（可选）0全部，1搜图，2搜人,默认为0", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/searching/clear/id")
+    public Result searchingClearId(@ModelAttribute TwoParameter twoParameter) {
+        return ResultUtils.result(twoService.searchingClearId(twoParameter));
+    }
+
 
     @ApiOperation(value = "举报", notes = "举报")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")            ,
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "helpid", value = "举报求助id（可选）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "touserid", value = "举报用户id（可选）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "type", value = "类型，1举报求助，2举报用户", required = true, dataType = "Integer"),

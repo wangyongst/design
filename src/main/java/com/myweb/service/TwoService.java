@@ -21,6 +21,10 @@ public interface TwoService {
 
     public Result info(TwoParameter twoParameter);
 
+    public Result searchingClear(TwoParameter twoParameter);
+
+    public Result searchingClearId(TwoParameter twoParameter);
+
     public Result report(TwoParameter twoParameter);
 
     public Result hidden(TwoParameter twoParameter);

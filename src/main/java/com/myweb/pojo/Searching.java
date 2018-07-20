@@ -24,8 +24,19 @@ public class Searching implements Serializable {
     @Column(name = "type", nullable = true)
     private Integer type;
     @Basic
+    @Column(name = "isclear", nullable = true)
+    private Integer isclear;
+    @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+
+    public Integer getIsclear() {
+        return isclear;
+    }
+
+    public void setIsclear(Integer isclear) {
+        this.isclear = isclear;
+    }
 
     public Integer getId() {
         return id;

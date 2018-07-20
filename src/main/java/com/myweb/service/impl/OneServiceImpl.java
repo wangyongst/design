@@ -408,6 +408,12 @@ public class OneServiceImpl implements OneService {
         }
         result.setStatus(1);
         if (oneParameter.getKeyword() == null) {
+            Searching searching = new Searching();
+            searching.setKeyword(oneParameter.getKeyword());
+            searching.setUser(user);
+            searching.setIsclear(0);
+            searching.setType(2);
+            searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             Page<User> users = userRepository.findAllByIdNot(1, pageable);
             users.forEach(e -> {
                 List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);

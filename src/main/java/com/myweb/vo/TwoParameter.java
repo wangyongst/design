@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 
 public class TwoParameter {
+    private Integer searchingid;
     private Integer helpid;
     private Integer userid;
     private Integer touserid;
@@ -21,6 +22,14 @@ public class TwoParameter {
     private Integer type;
     private Integer pagesize;
     private String indexpic;
+
+    public Integer getSearchingid() {
+        return searchingid;
+    }
+
+    public void setSearchingid(Integer searchingid) {
+        this.searchingid = searchingid;
+    }
 
     public Integer getTouserid() {
         return touserid;

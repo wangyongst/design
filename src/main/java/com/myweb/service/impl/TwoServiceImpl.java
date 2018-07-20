@@ -110,7 +110,6 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
-
     @Override
     public Result user(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
@@ -216,6 +215,13 @@ public class TwoServiceImpl implements TwoService {
                 });
                 result.setData(helps);
             } else {
+                Searching searching = new Searching();
+                searching.setKeyword(twoParameter.getTag());
+                searching.setUser(user);
+                searching.setIsclear(0);
+                searching.setType(1);
+                searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                searchingRepository.save(searching);
                 Page<Help> helps = helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getTag(), pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
@@ -226,12 +232,6 @@ public class TwoServiceImpl implements TwoService {
                     }
                 });
                 result.setData(helps);
-                Searching searching = new Searching();
-                searching.setKeyword(twoParameter.getTag());
-                searching.setType(1);
-                searching.setUser(user);
-                searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                searchingRepository.save(searching);
             }
         }
         return result;
@@ -277,7 +277,8 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("当前用户不存在0!");
         } else {
             result.setStatus(1);
-            result.setData(searchingRepository.findDistinctByUserAndType(user, 1, pageable));
+            if (twoParameter.getType() == null || twoParameter.getType() == 0) result.setData(searchingRepository.findDistinctByUserAndIsclearNot(user, 1, pageable));
+            else result.setData(searchingRepository.findDistinctByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1, pageable));
         }
         return result;
     }
@@ -338,6 +339,61 @@ public class TwoServiceImpl implements TwoService {
                 }
             }
             result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result searchingClear(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+                List<Searching> searchings = searchingRepository.findDistinctByUserAndIsclearNot(user, 1);
+                searchings.forEach(e -> {
+                    e.setIsclear(1);
+                    searchingRepository.save(e);
+                });
+            } else {
+                List<Searching> searchings = searchingRepository.findDistinctByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1);
+                searchings.forEach(e -> {
+                    e.setIsclear(1);
+                    searchingRepository.save(e);
+                });
+            }
+        }
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result searchingClearId(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0 || twoParameter.getSearchingid() == null || twoParameter.getSearchingid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Searching searching = searchingRepository.findOne(twoParameter.getSearchingid());
+            if (searching == null) {
+                result.setMessage("要删除的历史记录不存在!");
+            } else {
+                result.setStatus(1);
+                searchingRepository.delete(searching);
+            }
         }
         return result;
     }
