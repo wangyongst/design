@@ -96,7 +96,7 @@ public class TwoController {
     @ApiOperation(value = "删除搜索历史", notes = "删除搜索历史")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "searchingid", value = "类型（可选）0全部，1搜图，2搜人,默认为0", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "searchingid", value = "记录id(必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @PostMapping("/searching/clear/id")
