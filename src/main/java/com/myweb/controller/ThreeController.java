@@ -93,6 +93,7 @@ public class ThreeController {
     public Result message(@ModelAttribute ThreeParameter threeParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
         return ResultUtils.result(threeService.message(threeParameter, pageable));
     }
@@ -142,6 +143,7 @@ public class ThreeController {
     public Result noticeNew(@ModelAttribute ThreeParameter threeParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
         return ResultUtils.result(threeService.noticeNew(threeParameter, pageable));
     }
@@ -158,6 +160,7 @@ public class ThreeController {
     public Result mostUser(@ModelAttribute ThreeParameter threeParameter) {
         Sort sort = new Sort(Sort.Direction.DESC, "createtime");
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
         return ResultUtils.result(threeService.userMost(threeParameter, pageable));
     }

@@ -96,8 +96,6 @@ public class TwoController {
         return ResultUtils.result(twoService.report(twoParameter));
     }
 
-
-
     @ApiOperation(value = "首页求助推荐", notes = "首页推荐")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
@@ -185,7 +183,7 @@ public class TwoController {
 
     @ApiOperation(value = "个人主页", notes = "个人主页")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "主页用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "type", value = "查询方式 （可选，0,我发布的，1我想学的），默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "tag", value = "标签关键字 （可选)", required = true, dataType = "String"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
