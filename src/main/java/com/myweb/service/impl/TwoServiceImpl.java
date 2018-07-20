@@ -47,7 +47,6 @@ public class TwoServiceImpl implements TwoService {
     @Autowired
     private NoticeRepository noticeRepository;
 
-
     @Autowired
     private ReportRepository reportRepository;
 
@@ -56,7 +55,6 @@ public class TwoServiceImpl implements TwoService {
 
     @Autowired
     private FollowRepository followRepository;
-
 
     @Autowired
     private MessageRepository messageRepository;
@@ -263,7 +261,6 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
-
     @Override
     public Result searchingUser(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
@@ -398,7 +395,6 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result hidden(TwoParameter twoParameter) {
@@ -483,7 +479,6 @@ public class TwoServiceImpl implements TwoService {
         }
         return result;
     }
-
 
     public boolean isNotLogin(User user) {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
