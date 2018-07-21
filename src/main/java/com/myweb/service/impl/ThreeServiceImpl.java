@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -179,6 +180,9 @@ public class ThreeServiceImpl implements ThreeService {
             result.setStatus(1);
             List<User> userList = messageRepository.findUserByUserOrTouser(user);
             userList.addAll(messageRepository.findTouserByUserOrTouser(user));
+            HashSet h = new HashSet(userList);
+            userList.clear();
+            userList.addAll(h);
             userList.remove(user);
             result.setData(userList);
         }
