@@ -231,7 +231,7 @@ public class ThreeServiceImpl implements ThreeService {
                 result.setMessage("发送用户不存在!");
             } else {
                 result.setStatus(1);
-                result.setData(messageRepository.findByUserOrTouser(user, touser, pageable));
+                result.setData(messageRepository.findByUserAndTouser(user, touser, pageable));
             }
         }
         return result;
