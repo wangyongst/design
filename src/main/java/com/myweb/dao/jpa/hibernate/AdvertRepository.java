@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryDefinition(domainClass = Advert.class, idClass = Integer.class)
 public interface AdvertRepository extends JpaRepository<Advert, Integer> {
-    Page<Advert> findAllByReferAndOuttimeGreaterThan(Integer refer, String outtime, Pageable pageable);
+    Page<Advert> findAllByOuttimeGreaterThanAndOrderByReferDesc(String outtime, Pageable pageable);
 }
