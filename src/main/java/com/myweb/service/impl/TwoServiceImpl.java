@@ -180,7 +180,11 @@ public class TwoServiceImpl implements TwoService {
     public Result advert(Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(advertRepository.findAllByOuttimeGreaterThanOrderByReferDesc(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable));
+        Page<Advert> adverts = advertRepository.findAllByOuttimeGreaterThanOrderByReferDesc(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
+        adverts.forEach(e -> {
+            e.setAdminuser(null);
+        });
+        result.setData(adverts);
         return result;
     }
 
