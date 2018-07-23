@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -180,6 +181,9 @@ public class ThreeServiceImpl implements ThreeService {
             result.setStatus(1);
             List<User> userList = messageRepository.findUserByUserOrTouser(user);
             userList.addAll(messageRepository.findTouserByUserOrTouser(user));
+            HashSet h = new HashSet(userList);
+            userList.clear();
+            userList.addAll(h);
             userList.remove(user);
             result.setData(userList);
         }
@@ -267,7 +271,7 @@ public class ThreeServiceImpl implements ThreeService {
                 result.setMessage("发送用户不存在!");
             } else {
                 result.setStatus(1);
-                result.setData(messageRepository.findByUserOrTouser(user, touser, pageable));
+                result.setData(messageRepository.findByUserAndTouser(user, touser, pageable));
             }
         }
         return result;
