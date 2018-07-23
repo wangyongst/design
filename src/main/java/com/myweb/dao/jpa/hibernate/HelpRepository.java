@@ -44,4 +44,6 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
     public Page<User> findUserByMost(Pageable pageable);
 
     public Integer countAllByUser(User user);
+
+    public List<Help> findTop3ByUserOrderByStudiedDesc(User user);
 }

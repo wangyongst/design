@@ -13,4 +13,5 @@ import java.util.List;
 @Repository
 @RepositoryDefinition(domainClass = User2.class, idClass = Integer.class)
 public interface User2Repository extends JpaRepository<User2, Integer> {
+    public List<User2> findAllByIdNot(Integer id);
 }

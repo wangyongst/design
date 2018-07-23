@@ -14,9 +14,9 @@ public class Advert implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Basic
-    @Column(name = "adminuserid", nullable = true)
-    private Integer adminuserid;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "adminuserid", referencedColumnName = "id")
+    private AdminUser adminuser;
     @Basic
     @Column(name = "title", nullable = true, length = 255)
     private String title;
@@ -30,12 +30,6 @@ public class Advert implements Serializable {
     @Column(name = "exposure", nullable = true)
     private Integer exposure;
     @Basic
-    @Column(name = "forwarded", nullable = true)
-    private Integer forwarded;
-    @Basic
-    @Column(name = "fans", nullable = true)
-    private Integer fans;
-    @Basic
     @Column(name = "clicked", nullable = true)
     private Integer clicked;
     @Basic
@@ -45,8 +39,30 @@ public class Advert implements Serializable {
     @Column(name = "refer", nullable = true)
     private Integer refer;
     @Basic
+    @Column(name = "type", nullable = true)
+    private Integer type;
+    @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+    @Basic
+    @Column(name = "outtime", nullable = true, length = 255)
+    private String outtime;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getOuttime() {
+        return outtime;
+    }
+
+    public void setOuttime(String outtime) {
+        this.outtime = outtime;
+    }
 
     public Integer getId() {
         return id;
@@ -56,12 +72,12 @@ public class Advert implements Serializable {
         this.id = id;
     }
 
-    public Integer getAdminuserid() {
-        return adminuserid;
+    public AdminUser getAdminuser() {
+        return adminuser;
     }
 
-    public void setAdminuserid(Integer adminuserid) {
-        this.adminuserid = adminuserid;
+    public void setAdminuser(AdminUser adminuser) {
+        this.adminuser = adminuser;
     }
 
     public String getTitle() {
@@ -94,22 +110,6 @@ public class Advert implements Serializable {
 
     public void setExposure(Integer exposure) {
         this.exposure = exposure;
-    }
-
-    public Integer getForwarded() {
-        return forwarded;
-    }
-
-    public void setForwarded(Integer forwarded) {
-        this.forwarded = forwarded;
-    }
-
-    public Integer getFans() {
-        return fans;
-    }
-
-    public void setFans(Integer fans) {
-        this.fans = fans;
     }
 
     public Integer getClicked() {

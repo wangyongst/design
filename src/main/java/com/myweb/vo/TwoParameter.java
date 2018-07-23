@@ -22,6 +22,15 @@ public class TwoParameter {
     private Integer type;
     private Integer pagesize;
     private String indexpic;
+    private Integer advertid;
+
+    public Integer getAdvertid() {
+        return advertid;
+    }
+
+    public void setAdvertid(Integer advertid) {
+        this.advertid = advertid;
+    }
 
     public Integer getSearchingid() {
         return searchingid;

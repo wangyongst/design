@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -60,6 +61,17 @@ public class User implements Serializable {
 
     @Transient
     private Integer isFollow;
+
+    @Transient
+    private List<Help> helps;
+
+    public List<Help> getHelps() {
+        return helps;
+    }
+
+    public void setHelps(List<Help> helps) {
+        this.helps = helps;
+    }
 
     public Integer getPublished() {
         return published;

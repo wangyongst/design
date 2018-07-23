@@ -24,6 +24,8 @@ public interface ThreeService {
 
     public Result userMost(ThreeParameter threeParameter,Pageable pageable);
 
+    public Result userMostHelp(ThreeParameter threeParameter,Pageable pageable);
+
     public Result message(ThreeParameter threeParameter,Pageable pageable);
 
     public Result noticeNew(ThreeParameter threeParameter,Pageable pageable);

@@ -41,6 +41,9 @@ public class AdminOneServiceImpl implements AdminOneService {
     private UserRepository userRepository;
 
     @Autowired
+    private AdvertRepository advertRepository;
+
+    @Autowired
     private AdminMenuRepository adminMenuRepository;
 
     @Autowired
@@ -239,7 +242,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result userList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(user2Repository.findAll());
+        result.setData(user2Repository.findAllByIdNot(1));
         return result;
     }
 
@@ -334,10 +337,27 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result advert(TwoParameter twoParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (twoParameter.getAdvertid() == null || twoParameter.getAdvertid() == 0) return result;
+        result.setStatus(1);
+        result.setData(advertRepository.findOne(twoParameter.getAdvertid()));
+        return result;
+    }
+
+    @Override
     public Result helpList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
         result.setData(helpRepository.findAll());
+        return result;
+    }
+
+    @Override
+    public Result advertList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(advertRepository.findAll());
         return result;
     }
 
@@ -378,6 +398,19 @@ public class AdminOneServiceImpl implements AdminOneService {
         help.setRefertime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         helpRepository.save(help);
         createLog("设置ID为" + help.getId() + "的求助为强制推荐", httpSession);
+        return result;
+    }
+
+    @Override
+    public Result advertRefer(TwoParameter twoParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (twoParameter.getAdvertid() == null || twoParameter.getAdvertid() == 0) return result;
+        Advert advert = advertRepository.findOne(twoParameter.getAdvertid());
+        if (advert == null) return result;
+        advert.setRefer(1);
+        advertRepository.save(advert);
+        createLog("设置ID为" + advert.getId() + "的广告为强制推荐", httpSession);
         return result;
     }
 
@@ -430,28 +463,39 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result advert(AdminOneParameter adminOneParameter, HttpSession httpSession) {
+    public Result postAdvert(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-//        if (adminOneParameter.getType() == null || adminOneParameter.getType() == 0 || adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
-//        Advert advert = new Advert();
-//        if (adminOneParameter.getOperation() == 1) {
-//            if (StringUtils.isNotBlank(adminOneParameter.getTitle())) advert.setTitle(adminOneParameter.getTitle());
-//            if (StringUtils.isNotBlank(adminOneParameter.getImage())) advert.setImage(adminOneParameter.getImage());
-//            if (StringUtils.isNotBlank(adminOneParameter.getUrl())) advert.setUrl(adminOneParameter.getUrl());
-//            if (StringUtils.isNotBlank(adminOneParameter.getImage())) advert.setImage(adminOneParameter.getImage());
-//            createLog("上传广告", httpSession);
-//            result.setStatus(1);
-//            result.setData(settingRepository.save(setting));
-//        } else if (adminOneParameter.getOperation() == 2 && adminOneParameter.getSettingid() != null || adminOneParameter.getSettingid() != 0) {
-//            setting = settingRepository.findOne(adminOneParameter.getSettingid());
-//            if (setting == null) return result;
-//            result.setStatus(1);
-//            createLog("更改广告", httpSession);
-//            if (StringUtils.isNotBlank(adminOneParameter.getName())) setting.setName(adminOneParameter.getName());
-//            if (StringUtils.isNotBlank(adminOneParameter.getContent())) setting.setContent(adminOneParameter.getContent());
-//            setting.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-//            result.setData(settingRepository.save(setting));
-//        }
+        if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
+        Advert advert = new Advert();
+        if (adminOneParameter.getOperation() == 1) {
+            AdminUser adminUser = (AdminUser) httpSession.getAttribute("user");
+            advert.setAdminuser(adminUser);
+            advert.setTitle(adminOneParameter.getTitle());
+            advert.setImage(adminOneParameter.getImage());
+            advert.setUrl(adminOneParameter.getUrl());
+            advert.setType(adminOneParameter.getType());
+            advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            advert.setOuttime(adminOneParameter.getOuttime());
+            createLog("上传广告", httpSession);
+            result.setStatus(1);
+            result.setData(advertRepository.save(advert));
+        } else if (adminOneParameter.getOperation() == 2) {
+            advert = advertRepository.findOne(adminOneParameter.getAdvertid());
+            if (advert == null) return result;
+            result.setStatus(1);
+            createLog("更改广告", httpSession);
+            advert.setTitle(adminOneParameter.getTitle());
+            advert.setImage(adminOneParameter.getImage());
+            advert.setUrl(adminOneParameter.getUrl());
+            advert.setType(adminOneParameter.getType());
+            advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            result.setData(advertRepository.save(advert));
+        } else if (adminOneParameter.getOperation() == 3) {
+            advert = advertRepository.findOne(adminOneParameter.getAdvertid());
+            if (advert == null) return result;
+            result.setStatus(1);
+            advertRepository.delete(advert);
+        }
         return result;
     }
 

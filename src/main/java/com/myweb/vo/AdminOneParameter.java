@@ -14,6 +14,24 @@ public class AdminOneParameter {
     private String url;
     private Integer refer;
     private Integer touserid;
+    private Integer advertid;
+    private String  outtime;
+
+    public Integer getAdvertid() {
+        return advertid;
+    }
+
+    public void setAdvertid(Integer advertid) {
+        this.advertid = advertid;
+    }
+
+    public String getOuttime() {
+        return outtime;
+    }
+
+    public void setOuttime(String outtime) {
+        this.outtime = outtime;
+    }
 
     public Integer getTouserid() {
         return touserid;

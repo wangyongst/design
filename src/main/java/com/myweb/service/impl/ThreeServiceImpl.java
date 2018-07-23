@@ -159,6 +159,7 @@ public class ThreeServiceImpl implements ThreeService {
                 message.setIsread(0);
                 messageRepository.save(message);
                 result.setStatus(1);
+                result.setData(message);
             }
         }
         return result;
@@ -207,6 +208,41 @@ public class ThreeServiceImpl implements ThreeService {
                     }
                 }
             }
+        });
+        if (result.getStatus() == 9) return result;
+        result.setStatus(1);
+        result.setData(users);
+        return result;
+    }
+
+
+    @Override
+    public Result userMostHelp(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        Page<User> users = helpRepository.findUserByMost(pageable);
+        users.forEach(e -> {
+            e.setPublished(helpRepository.countAllByUser(e));
+            e.setFollowed(followRepository.countAllByUser(e));
+            e.setFans(followRepository.countAllByTouser(e));
+            if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
+                User u = userRepository.findOne(threeParameter.getUserid());
+                if (u == null || isNotLogin(u)) {
+                    result.setStatus(9);
+                    result.setMessage("当前用户不存在或未登录!");
+                } else {
+                    List<Follow> follows2 = followRepository.findByUserAndTouser(u, e);
+                    if (follows2.size() > 0) {
+                        e.setIsFollow(1);
+                    } else {
+                        e.setIsFollow(0);
+                    }
+                }
+            }
+            List<Help> helps = helpRepository.findTop3ByUserOrderByStudiedDesc(e);
+            helps.forEach(t->{
+                t.setUser(null);
+            });
+            e.setHelps(helps);
         });
         if (result.getStatus() == 9) return result;
         result.setStatus(1);

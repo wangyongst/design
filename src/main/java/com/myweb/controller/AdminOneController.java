@@ -119,7 +119,7 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.countToken(httpSession));
     }
 
-    //删除修改
+    //删除修改 type2删除
     @PostMapping("/user")
     public Result postUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.user(oneParameter, httpSession));
@@ -155,6 +155,12 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.help(twoParameter, httpSession));
     }
 
+    //广告详情
+    @GetMapping("/advert")
+    public Result advert(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.advert(twoParameter, httpSession));
+    }
+
     //求助列表
     @GetMapping("/help/list")
     public Object helpList(HttpSession httpSession) {
@@ -173,10 +179,10 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.postHelp(twoParameter, httpSession));
     }
 
-    //operation 1增 2改，3删除 type1上线,2下线
+    //operation 1增 2改，3删除
     @PostMapping("/advert")
     public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.advert(adminOneParameter, httpSession));
+        return ResultUtils.result(adminOneService.postAdvert(adminOneParameter, httpSession));
     }
 
     //operation 1增改,2删
@@ -222,6 +228,18 @@ public class AdminOneController {
     @PostMapping("/help/refer")
     public Result helpRefer(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.helpRefer(twoParameter, httpSession));
+    }
+
+    //强制推荐广告
+    @PostMapping("/advert/refer")
+    public Result advertRefer(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.advertRefer(twoParameter, httpSession));
+    }
+
+    //广告列表
+    @GetMapping("/advert/list")
+    public Object advertList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.advertList(httpSession));
     }
 
     //操作日志
