@@ -63,7 +63,18 @@ public class User implements Serializable {
     private Integer isFollow;
 
     @Transient
+    private String newTime;
+
+    @Transient
     private List<Help> helps;
+
+    public String getNewTime() {
+        return newTime;
+    }
+
+    public void setNewTime(String newTime) {
+        this.newTime = newTime;
+    }
 
     public List<Help> getHelps() {
         return helps;

@@ -402,7 +402,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null || isNotLogin(user)) {
+        if (user == null) {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         }
@@ -415,14 +415,16 @@ public class OneServiceImpl implements OneService {
             searching.setType(2);
             searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             Page<User> users = userRepository.findAllByIdNot(1, pageable);
-            users.forEach(e -> {
-                List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
-                if (follows2.size() > 0) {
-                    e.setIsFollow(1);
-                } else {
-                    e.setIsFollow(0);
-                }
-            });
+            if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
+                users.forEach(e -> {
+                    List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
+                    if (follows2.size() > 0) {
+                        e.setIsFollow(1);
+                    } else {
+                        e.setIsFollow(0);
+                    }
+                });
+            }
             result.setStatus(1);
             result.setData(users);
         } else {

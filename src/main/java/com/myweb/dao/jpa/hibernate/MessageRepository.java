@@ -22,6 +22,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public Page<Message> findByUserAndTouser(User user, User touser, Pageable pageable);
 
+    public Message findTop1ByUserOrTouserOrderByCreatetimeDesc(User user, User touser);
+
     public List<Message> findByUserOrTouser(User user, User touser);
 
     public void deleteAllByUserAndTouser(User user, User touser);
@@ -32,6 +34,6 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public int countAllByUserAndTouser(User user, User touser);
 
-    public void removeAllByUserOrTouser(User user,User touser);
+    public void removeAllByUserOrTouser(User user, User touser);
 
 }

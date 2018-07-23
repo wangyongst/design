@@ -185,6 +185,9 @@ public class ThreeServiceImpl implements ThreeService {
             userList.clear();
             userList.addAll(h);
             userList.remove(user);
+            userList.forEach(e -> {
+                e.setNewTime(messageRepository.findTop1ByUserOrTouserOrderByCreatetimeDesc(user, user).getCreatetime());
+            });
             result.setData(userList);
         }
         return result;
@@ -243,7 +246,7 @@ public class ThreeServiceImpl implements ThreeService {
                 }
             }
             List<Help> helps = helpRepository.findTop3ByUserOrderByStudiedDesc(e);
-            helps.forEach(t->{
+            helps.forEach(t -> {
                 t.setUser(null);
             });
             e.setHelps(helps);
