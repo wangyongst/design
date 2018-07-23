@@ -1,5 +1,4 @@
 $(function () {
-
     $("#look").click(function () {
         var selected = select();
         if (selected == "") {
@@ -33,7 +32,6 @@ $(function () {
         $('#myModal2').modal('toggle');
     });
 
-
     $("#refer").click(function () {
         var selected = select();
         if (selected == "") {
@@ -46,17 +44,17 @@ $(function () {
             return;
         }
 
+    });
+
+    $("#submit2").click(function () {
         $.ajax({
             type: "Post",
             cache: "false",
-            url: "/admin/advert/refer",
-            data: {
-                helpid: ids[1]
-            },
+            url: "/admin/advert",
+            data: $('#advertForm').serialize() + "&operation=1",
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
-                    alert("推荐成功");
                     $("#myTable").bootstrapTable('refresh');
                 }
             }

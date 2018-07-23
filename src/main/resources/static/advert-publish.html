@@ -88,10 +88,37 @@
                     <h4 class="modal-title">发布广告</h4>
                 </div>
                 <div class="modal-body">
-
+                    <form id="advertForm">
+                        <input id="advertid" name="advertid" hidden>
+                        <div class="form-group">
+                            <label for="type" class="control-label">类型:</label>
+                            <select class="form-control" id="type" name="type">
+                                <option value="1">类型1</option>
+                                <option value="2">类型2</option>
+                                <option value="3">类型3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="control-label">标题:</label>
+                            <input type="text" class="form-control" id="title" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="image" class="control-label">上传图片:</label>
+                            <input class="form-control" id="image" name="image"></input>
+                        </div>
+                        <div class="form-group">
+                            <label for="url" class="control-label">跳转链接:</label>
+                            <input class="form-control" id="url" name="url"></input>
+                        </div>
+                        <div class="form-group">
+                            <label for="outtime" class="control-label">到期时间:</label>
+                            <input type="datetime-local" class="form-control" id="outtime" name="outtime"></input>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="close2">关闭</button>
+                    <button type="button" class="btn btn-primary" id="submit2">确定</button>
                 </div>
             </div>
         </div>

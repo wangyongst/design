@@ -467,9 +467,10 @@ public class AdminOneServiceImpl implements AdminOneService {
         Result result = new Result();
         if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
         Advert advert = new Advert();
+        result.setStatus(1);
         if (adminOneParameter.getOperation() == 1) {
             AdminUser adminUser = (AdminUser) httpSession.getAttribute("user");
-            advert.setAdminuser(adminUser);
+            advert.setAdminuser(adminUserRepository.findOne(adminUser.getId()));
             advert.setTitle(adminOneParameter.getTitle());
             advert.setImage(adminOneParameter.getImage());
             advert.setUrl(adminOneParameter.getUrl());
@@ -493,7 +494,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         } else if (adminOneParameter.getOperation() == 3) {
             advert = advertRepository.findOne(adminOneParameter.getAdvertid());
             if (advert == null) return result;
-            result.setStatus(1);
             advertRepository.delete(advert);
         }
         return result;
