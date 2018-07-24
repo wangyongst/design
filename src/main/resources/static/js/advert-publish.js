@@ -10,13 +10,12 @@ $(function () {
             alert("请选择一条记录");
             return;
         }
-
         $.ajax({
             type: "GET",
             cache: "false",
-            url: "/admin/help",
+            url: "/admin/advert",
             data: {
-                helpid: ids[1]
+                advertid: ids[1]
             },
             dataType: "json",
             success: function (result) {
@@ -32,6 +31,25 @@ $(function () {
         $('#myModal2').modal('toggle');
     });
 
+    $("#upload").change(function () {
+        var formData = new FormData();
+        formData.append('image', this.files[0]);
+        $.ajax({
+            type: "POST",
+            cache: "false",
+            contentType: false,
+            processData: false,
+            url: "/upload/image",
+            data: formData,
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $('#image').val("http://pas99p7vd.bkt.clouddn.com/" + result.data);
+                }
+            }
+        });
+    });
+
     $("#refer").click(function () {
         var selected = select();
         if (selected == "") {
@@ -43,7 +61,20 @@ $(function () {
             alert("请选择一条记录");
             return;
         }
-
+        $.ajax({
+            type: "POST",
+            cache: "false",
+            url: "/admin/advert/refer",
+            data: {
+                advertid: ids[1]
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $("#myTable").bootstrapTable('refresh');
+                }
+            }
+        });
     });
 
     $("#submit2").click(function () {
@@ -55,6 +86,7 @@ $(function () {
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
+                    $('#myModal2').modal('toggle');
                     $("#myTable").bootstrapTable('refresh');
                 }
             }
@@ -82,3 +114,4 @@ function select() {
     });
     return ids;
 }
+
