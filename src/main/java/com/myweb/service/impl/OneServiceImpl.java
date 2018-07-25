@@ -397,25 +397,15 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result search(OneParameter oneParameter, Pageable pageable) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
-            result.setMessage("必须的参数不能为空!");
-            return result;
-        }
-        User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
-            result.setStatus(9);
-            result.setMessage("当前用户不存在或未登录!");
-        }
-        result.setStatus(1);
         if (oneParameter.getKeyword() == null) {
-            Searching searching = new Searching();
-            searching.setKeyword(oneParameter.getKeyword());
-            searching.setUser(user);
-            searching.setIsclear(0);
-            searching.setType(2);
-            searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             Page<User> users = userRepository.findAllByIdNot(1, pageable);
             if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
+                User user = userRepository.findOne(oneParameter.getUserid());
+                if (user == null || isNotLogin(user)) {
+                    result.setStatus(9);
+                    result.setMessage("当前用户不存在或未登录!");
+                    return result;
+                }
                 users.forEach(e -> {
                     List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
                     if (follows2.size() > 0) {
@@ -429,16 +419,31 @@ public class OneServiceImpl implements OneService {
             result.setData(users);
         } else {
             Page<User> users = userRepository.findAllByUsernameOrNicknameOrSexOrJobs(oneParameter.getKeyword(), pageable);
-            users.forEach(e -> {
-                List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
-                if (follows2.size() > 0) {
-                    e.setIsFollow(1);
-                } else {
-                    e.setIsFollow(0);
+            if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
+                User user = userRepository.findOne(oneParameter.getUserid());
+                if (user == null || isNotLogin(user)) {
+                    result.setStatus(9);
+                    result.setMessage("当前用户不存在或未登录!");
+                    return result;
                 }
-            });
-            result.setStatus(1);
-            result.setData(users);
+                users.forEach(e -> {
+                    List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
+                    if (follows2.size() > 0) {
+                        e.setIsFollow(1);
+                    } else {
+                        e.setIsFollow(0);
+                    }
+                });
+                Searching searching = new Searching();
+                searching.setKeyword(oneParameter.getKeyword());
+                searching.setUser(user);
+                searching.setIsclear(0);
+                searching.setType(2);
+                searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                searchingRepository.save(searching);
+                result.setStatus(1);
+                result.setData(users);
+            }
         }
         return result;
     }
