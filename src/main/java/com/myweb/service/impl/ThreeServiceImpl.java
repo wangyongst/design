@@ -344,6 +344,33 @@ public class ThreeServiceImpl implements ThreeService {
     }
 
     @Override
+    public Result followHelp(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            result.setStatus(1);
+            Page<Help> helps = helpRepository.queryByFollow(user, pageable);
+            helps.forEach(e -> {
+                List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                if (studies.size() > 0) {
+                    e.setIsStudied(1);
+                } else {
+                    e.setIsStudied(0);
+                }
+            });
+        }
+        return result;
+    }
+
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result read(ThreeParameter threeParameter) {
         Result result = new Result();

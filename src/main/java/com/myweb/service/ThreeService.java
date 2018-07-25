@@ -20,6 +20,8 @@ public interface ThreeService {
 
     public Result helpStudied(ThreeParameter threeParameter,Pageable pageable);
 
+    public Result followHelp(ThreeParameter threeParameter,Pageable pageable);
+
     public Result userDelete(ThreeParameter threeParameter);
 
     public Result messageDelete(ThreeParameter threeParameter);
