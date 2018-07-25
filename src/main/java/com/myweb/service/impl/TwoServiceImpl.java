@@ -177,11 +177,14 @@ public class TwoServiceImpl implements TwoService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result advert(Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
         Page<Advert> adverts = advertRepository.findAllByOuttimeGreaterThanOrderByReferDesc(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
         adverts.forEach(e -> {
+            e.setExposure(e.getExposure() + 1);
+            advertRepository.save(e);
             e.setAdminuser(null);
         });
         result.setData(adverts);
