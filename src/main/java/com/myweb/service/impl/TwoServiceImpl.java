@@ -303,7 +303,7 @@ public class TwoServiceImpl implements TwoService {
             user.setPublished(helpRepository.countAllByUser(user));
             user.setFollowed(followRepository.countAllByUser(user));
             user.setFans(followRepository.countAllByTouser(user));
-            if (twoParameter.getUserid() != null || twoParameter.getUserid() != 0) {
+            if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
                 User u = userRepository.findOne(twoParameter.getUserid());
                 if (u == null || isNotLogin(u)) {
                     result.setStatus(9);
