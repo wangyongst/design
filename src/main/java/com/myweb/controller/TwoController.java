@@ -203,7 +203,6 @@ public class TwoController {
         return ResultUtils.result(twoService.advert(pageable));
     }
 
-
     @ApiOperation(value = "个人主页", notes = "个人主页")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "主页用户id（必需）", required = true, dataType = "Integer"),
