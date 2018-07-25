@@ -495,6 +495,7 @@ public class TwoServiceImpl implements TwoService {
     }
 
     public void createNotice(User user, User fromuser, Help help, String message, Integer type) {
+        if (user.getId() == fromuser.getId()) return;
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(fromuser);
