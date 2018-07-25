@@ -251,14 +251,18 @@ public class TwoServiceImpl implements TwoService {
             result.setStatus(0);
             result.setMessage("当前用户不存在!");
         } else {
-            if (twoParameter.getTag() == null && twoParameter.getType() == null || twoParameter.getType() == 0) {
-                result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
-            } else if (twoParameter.getTag() != null && (twoParameter.getType() == null || twoParameter.getType() == 0)) {
-                result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
-            } else if (twoParameter.getTag() == null && twoParameter.getType() != null && twoParameter.getType() != 0) {
-                result.setData(studyRepository.findAllByUser(user, pageable));
+            if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+                if (StringUtils.isBlank(twoParameter.getTag())) {
+                    result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
+                } else {
+                    result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
+                }
             } else {
-                ///
+                if (StringUtils.isBlank(twoParameter.getTag())) {
+                    result.setData(studyRepository.queryAllByUser(user, pageable));
+                } else {
+                    result.setData(studyRepository.queryAllByUserAndTagLike(user, twoParameter.getTag(), pageable));
+                }
             }
             result.setStatus(1);
         }

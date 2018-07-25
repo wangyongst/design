@@ -247,6 +247,20 @@ public class ThreeServiceImpl implements ThreeService {
             }
             List<Help> helps = helpRepository.findTop3ByUserOrderByStudiedDesc(e);
             helps.forEach(t -> {
+                if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
+                    User u = userRepository.findOne(threeParameter.getUserid());
+                    if (u == null || isNotLogin(u)) {
+                        result.setStatus(9);
+                        result.setMessage("当前用户不存在或未登录!");
+                    } else {
+                        List<Study> studies = studyRepository.findAllByUserAndHelp(u, helpRepository.findOne(e.getId()));
+                        if (studies.size() > 0) {
+                            t.setIsStudied(1);
+                        } else {
+                            t.setIsStudied(0);
+                        }
+                    }
+                }
                 t.setUser(null);
             });
             e.setHelps(helps);
