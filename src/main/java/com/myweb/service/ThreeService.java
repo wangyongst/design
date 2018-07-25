@@ -16,6 +16,8 @@ public interface ThreeService {
 
     public Result send(ThreeParameter threeParameter);
 
+    public Result help(ThreeParameter threeParameter);
+
     public Result userDelete(ThreeParameter threeParameter);
 
     public Result messageDelete(ThreeParameter threeParameter);

@@ -294,6 +294,19 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+
+    @Override
+    public Result help(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(helpRepository.findOne(threeParameter.getHelpid()));
+        return result;
+    }
+
     @Override
     public Result noticeNew(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();

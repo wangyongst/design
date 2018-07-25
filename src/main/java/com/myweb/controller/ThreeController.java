@@ -47,6 +47,17 @@ public class ThreeController {
     }
 
 
+    @ApiOperation(value = "详情", notes = "详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/help")
+    public Result help(@ModelAttribute ThreeParameter threeParameter) {
+        return threeService.help(threeParameter);
+    }
+
+
     @ApiOperation(value = "想学", notes = "想学")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
