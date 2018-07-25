@@ -52,9 +52,25 @@ public class ThreeController {
             @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
-    @PostMapping("/help")
+    @GetMapping("/help")
     public Result help(@ModelAttribute ThreeParameter threeParameter) {
         return threeService.help(threeParameter);
+    }
+
+    @ApiOperation(value = "想学的人", notes = "想学的人")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/help/studied")
+    public Result helpStudied(@ModelAttribute ThreeParameter threeParameter) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
+        return threeService.helpStudied(threeParameter,pageable);
     }
 
 

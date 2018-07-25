@@ -308,6 +308,18 @@ public class ThreeServiceImpl implements ThreeService {
     }
 
     @Override
+    public Result helpStudied(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(studyRepository.findAllByHelp(helpRepository.findOne(threeParameter.getHelpid()), pageable));
+        return result;
+    }
+
+    @Override
     public Result noticeNew(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
         if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
