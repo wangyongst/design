@@ -395,6 +395,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result search(OneParameter oneParameter, Pageable pageable) {
         Result result = new Result();
         if (oneParameter.getKeyword() == null) {

@@ -49,7 +49,8 @@ public class ThreeController {
 
     @ApiOperation(value = "详情", notes = "详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/help")

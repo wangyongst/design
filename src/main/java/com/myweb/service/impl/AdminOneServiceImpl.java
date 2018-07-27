@@ -475,6 +475,7 @@ public class AdminOneServiceImpl implements AdminOneService {
             advert.setImage(adminOneParameter.getImage());
             advert.setUrl(adminOneParameter.getUrl());
             advert.setType(adminOneParameter.getType());
+            advert.setExposure(0);
             advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             advert.setOuttime(adminOneParameter.getOuttime());
             createLog("上传广告", httpSession);

@@ -302,8 +302,27 @@ public class ThreeServiceImpl implements ThreeService {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
+        Help help = helpRepository.findOne(threeParameter.getHelpid());
+        if (help == null) {
+            result.setMessage("未找到求助");
+            return result;
+        }
         result.setStatus(1);
-        result.setData(helpRepository.findOne(threeParameter.getHelpid()));
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
+            User user = userRepository.findOne(threeParameter.getUserid());
+            if (user == null || isNotLogin(user)) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            }
+            List<Study> studies = studyRepository.findAllByUserAndHelp(user, help);
+            if (studies.size() > 0) {
+                help.setIsStudied(1);
+            } else {
+                help.setIsStudied(0);
+            }
+        }
+        result.setData(help);
         return result;
     }
 
