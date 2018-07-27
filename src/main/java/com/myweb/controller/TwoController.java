@@ -188,18 +188,15 @@ public class TwoController {
 
     @ApiOperation(value = "广告", notes = "广告")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/advert")
     public Result advert(@ModelAttribute TwoParameter twoParameter) {
-        Sort sort = null;
-        if (twoParameter.getType() == null || twoParameter.getType() == 0) {
-            sort = new Sort(Sort.Direction.DESC, "createtime");
-        }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
-        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), null);
         return ResultUtils.result(twoService.advert(pageable));
     }
 
