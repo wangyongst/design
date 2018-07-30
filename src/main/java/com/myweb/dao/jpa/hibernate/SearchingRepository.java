@@ -5,6 +5,7 @@ import com.myweb.pojo.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Repository;
 
@@ -15,11 +16,13 @@ import java.util.List;
 public interface SearchingRepository extends JpaRepository<Searching, Integer> {
     public void removeAllByUser(User user);
 
-    public Page<Searching> findDistinctByUserAndTypeAndIsclearNot(User user, int type, int isclear, Pageable pageable);
+    @Query("select searching from Searching searching where searching.user = ?1 and searching.type = ?2 and searching.isclear <> ?3 group by searching.keyword")
+    public Page<Searching> findByUserAndTypeAndIsclearNot(User user, int type, int isclear, Pageable pageable);
 
-    public Page<Searching> findDistinctByUserAndIsclearNot(User user, int isclear, Pageable pageable);
+    @Query("select searching from Searching searching where searching.user = ?1 and searching.isclear <> ?2 group by searching.keyword")
+    public Page<Searching> findByUserAndIsclearNot(User user, int isclear, Pageable pageable);
 
-    public List<Searching> findDistinctByUserAndTypeAndIsclearNot(User user, int type, int isclear);
+    public List<Searching> findByUserAndTypeAndIsclearNot(User user, int type, int isclear);
 
-    public List<Searching> findDistinctByUserAndIsclearNot(User user, int isclear);
+    public List<Searching> findByUserAndIsclearNot(User user, int isclear);
 }

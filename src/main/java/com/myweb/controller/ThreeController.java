@@ -112,7 +112,7 @@ public class ThreeController {
     @ApiOperation(value = "我的消息（查看消息）", notes = "我的消息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "touserid", value = "发送用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "touserid", value = "对应用户id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })

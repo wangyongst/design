@@ -37,6 +37,8 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
 
     public Page<Help> findByUserAndDraftAndAudienceNot(User user, int draft, int audience, Pageable pageable);
 
+    public Page<Help> findByUserAndDraft(User user, int draft, Pageable pageable);
+
     @Query("select sum(help.studied) from Help help")
     public Long sumStudied();
 

@@ -122,6 +122,9 @@ public class TwoServiceImpl implements TwoService {
             if (twoParameter.getDraft() == null || twoParameter.getDraft() == 0) {
                 result.setStatus(1);
                 result.setData(helpRepository.findByUser(user, pageable));
+            } else if (twoParameter.getDraft() != null && twoParameter.getDraft() != 0) {
+                result.setStatus(1);
+                result.setData(helpRepository.findByUserAndDraft(user, twoParameter.getDraft(), pageable));
             } else {
                 result.setStatus(1);
                 result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, twoParameter.getDraft(), 3, pageable));
@@ -286,8 +289,8 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("当前用户不存在0!");
         } else {
             result.setStatus(1);
-            if (twoParameter.getType() == null || twoParameter.getType() == 0) result.setData(searchingRepository.findDistinctByUserAndIsclearNot(user, 1, pageable));
-            else result.setData(searchingRepository.findDistinctByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1, pageable));
+            if (twoParameter.getType() == null || twoParameter.getType() == 0) result.setData(searchingRepository.findByUserAndIsclearNot(user, 1, pageable));
+            else result.setData(searchingRepository.findByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1, pageable));
         }
         return result;
     }
@@ -366,13 +369,13 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             if (twoParameter.getType() == null || twoParameter.getType() == 0) {
-                List<Searching> searchings = searchingRepository.findDistinctByUserAndIsclearNot(user, 1);
+                List<Searching> searchings = searchingRepository.findByUserAndIsclearNot(user, 1);
                 searchings.forEach(e -> {
                     e.setIsclear(1);
                     searchingRepository.save(e);
                 });
             } else {
-                List<Searching> searchings = searchingRepository.findDistinctByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1);
+                List<Searching> searchings = searchingRepository.findByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1);
                 searchings.forEach(e -> {
                     e.setIsclear(1);
                     searchingRepository.save(e);

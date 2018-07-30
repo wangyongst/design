@@ -227,45 +227,42 @@ public class ThreeServiceImpl implements ThreeService {
     public Result userMostHelp(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
         Page<User> users = helpRepository.findUserByMost(pageable);
+        if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
+            User u = userRepository.findOne(threeParameter.getUserid());
+            if (u == null || isNotLogin(u)) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            }
+        }
         users.forEach(e -> {
             e.setPublished(helpRepository.countAllByUser(e));
             e.setFollowed(followRepository.countAllByUser(e));
             e.setFans(followRepository.countAllByTouser(e));
             if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
                 User u = userRepository.findOne(threeParameter.getUserid());
-                if (u == null || isNotLogin(u)) {
-                    result.setStatus(9);
-                    result.setMessage("当前用户不存在或未登录!");
+                List<Follow> follows2 = followRepository.findByUserAndTouser(u, e);
+                if (follows2.size() > 0) {
+                    e.setIsFollow(1);
                 } else {
-                    List<Follow> follows2 = followRepository.findByUserAndTouser(u, e);
-                    if (follows2.size() > 0) {
-                        e.setIsFollow(1);
-                    } else {
-                        e.setIsFollow(0);
-                    }
+                    e.setIsFollow(0);
                 }
             }
             List<Help> helps = helpRepository.findTop3ByUserOrderByStudiedDesc(e);
             helps.forEach(t -> {
                 if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
                     User u = userRepository.findOne(threeParameter.getUserid());
-                    if (u == null || isNotLogin(u)) {
-                        result.setStatus(9);
-                        result.setMessage("当前用户不存在或未登录!");
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(u,t);
+                    if (studies.size() > 0) {
+                        t.setIsStudied(1);
                     } else {
-                        List<Study> studies = studyRepository.findAllByUserAndHelp(u, helpRepository.findOne(e.getId()));
-                        if (studies.size() > 0) {
-                            t.setIsStudied(1);
-                        } else {
-                            t.setIsStudied(0);
-                        }
+                        t.setIsStudied(0);
                     }
                 }
                 t.setUser(null);
             });
             e.setHelps(helps);
         });
-        if (result.getStatus() == 9) return result;
         result.setStatus(1);
         result.setData(users);
         return result;
@@ -288,7 +285,7 @@ public class ThreeServiceImpl implements ThreeService {
                 result.setMessage("发送用户不存在!");
             } else {
                 result.setStatus(1);
-                result.setData(messageRepository.findByUserAndTouser(user, touser, pageable));
+                result.setData(messageRepository.QueryByUserAndTouser(user, touser, pageable));
             }
         }
         return result;
@@ -308,7 +305,7 @@ public class ThreeServiceImpl implements ThreeService {
             return result;
         }
         result.setStatus(1);
-        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
+        if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
             User user = userRepository.findOne(threeParameter.getUserid());
             if (user == null || isNotLogin(user)) {
                 result.setStatus(9);

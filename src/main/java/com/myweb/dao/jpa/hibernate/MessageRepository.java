@@ -20,7 +20,8 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     @Query("select message.user from Message message where message.user = ?1 or message.touser = ?1 group by message.user")
     public List<User> findUserByUserOrTouser(User user);
 
-    public Page<Message> findByUserAndTouser(User user, User touser, Pageable pageable);
+    @Query("select message from Message message where ( message.user = ?1 and message.touser = ?2) or (message.user = ?2 and message.touser = ?1)")
+    public Page<Message> QueryByUserAndTouser(User user, User touser, Pageable pageable);
 
     public Message findTop1ByUserOrTouserOrderByCreatetimeDesc(User user, User touser);
 
