@@ -18,6 +18,10 @@ public interface ThreeService {
 
     public Result help(ThreeParameter threeParameter);
 
+    public Result newsCount(ThreeParameter threeParameter);
+
+    public Result newsCountRead(ThreeParameter threeParameter);
+
     public Result helpStudied(ThreeParameter threeParameter,Pageable pageable);
 
     public Result followHelp(ThreeParameter threeParameter,Pageable pageable);

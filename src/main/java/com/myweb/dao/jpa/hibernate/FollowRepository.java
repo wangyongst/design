@@ -26,5 +26,9 @@ public interface FollowRepository extends JpaRepository<Follow, Integer> {
 
     public int countAllByUser(User touser);
 
+    public int countAllByUserAndCreatetimeGreaterThan(User user,String time);
+
+    public int countAllByTouserAndCreatetimeGreaterThan(User user,String time);
+
     public void removeAllByUserOrTouser(User user, User touser);
 }

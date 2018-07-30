@@ -164,7 +164,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result destroy(OneParameter oneParameter) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getText())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
@@ -173,15 +173,19 @@ public class OneServiceImpl implements OneService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            helpRepository.removeAllByUser(user);
-            studyRepository.removeAllByUser(user);
-            followRepository.removeAllByUserOrTouser(user, user);
-            messageRepository.removeAllByUserOrTouser(user, user);
-            noticeRepository.removeAllByUser(user);
-            searchingRepository.removeAllByUser(user);
-            tokenRepository.removeAllByUser(user);
-            userRepository.delete(user);
-            result.setStatus(1);
+            if (!user.getPassword().equals(oneParameter.getPassword())) {
+                result.setMessage("密码不正确!");
+            } else {
+                helpRepository.removeAllByUser(user);
+                studyRepository.removeAllByUser(user);
+                followRepository.removeAllByUserOrTouser(user, user);
+                messageRepository.removeAllByUserOrTouser(user, user);
+                noticeRepository.removeAllByUser(user);
+                searchingRepository.removeAllByUser(user);
+                tokenRepository.removeAllByUser(user);
+                userRepository.delete(user);
+                result.setStatus(1);
+            }
         }
         return result;
     }

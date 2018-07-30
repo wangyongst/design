@@ -21,6 +21,15 @@ public class OneParameter {
     private Integer refer;
     private Integer type;
     private String keyword;
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public Integer getHelpid() {
         return helpid;

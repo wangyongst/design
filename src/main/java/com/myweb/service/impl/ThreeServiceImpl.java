@@ -36,6 +36,9 @@ public class ThreeServiceImpl implements ThreeService {
     private UserRepository userRepository;
 
     @Autowired
+    private TimenewRepository timenewRepository;
+
+    @Autowired
     private StudyRepository studyRepository;
 
     @Autowired
@@ -222,7 +225,6 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
-
     @Override
     public Result userMostHelp(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
@@ -252,7 +254,7 @@ public class ThreeServiceImpl implements ThreeService {
             helps.forEach(t -> {
                 if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
                     User u = userRepository.findOne(threeParameter.getUserid());
-                    List<Study> studies = studyRepository.findAllByUserAndHelp(u,t);
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(u, t);
                     if (studies.size() > 0) {
                         t.setIsStudied(1);
                     } else {
@@ -290,7 +292,6 @@ public class ThreeServiceImpl implements ThreeService {
         }
         return result;
     }
-
 
     @Override
     public Result help(ThreeParameter threeParameter) {
@@ -385,7 +386,6 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result read(ThreeParameter threeParameter) {
@@ -458,6 +458,85 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result newsCountRead(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getType() == null || threeParameter.getType() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Timenew timenew = new Timenew();
+            List<Timenew> timenews = timenewRepository.findByUserAndType(user, threeParameter.getType());
+            if (timenews == null) {
+                timenew.setUser(user);
+                timenew.setType(threeParameter.getType());
+                timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                timenewRepository.save(timenew);
+            } else {
+                timenew = timenews.get(0);
+            }
+            switch (threeParameter.getType()) {
+                case 1:
+                    result.setStatus(1);
+                    result.setData(helpRepository.countByFollow(user, timenew.getNewtime()));
+                    break;
+                case 2:
+                    result.setStatus(1);
+                    result.setData(followRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
+                    break;
+                case 3:
+                    result.setStatus(1);
+                    result.setData(followRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
+                    break;
+                case 4:
+                    result.setStatus(1);
+                    result.setData(userRepository.countAllByReferAndCreatetimeGreaterThan(user.getId(), timenew.getNewtime()));
+                    break;
+                case 5:
+                    result.setStatus(1);
+                    result.setData(messageRepository.countAllByUserAndCreatetimeGreaterThan(user, timenew.getNewtime()) + messageRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
+                    break;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result newsCount(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getType() == null || threeParameter.getType() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            List<Timenew> timenews = timenewRepository.findByUserAndType(user, threeParameter.getType());
+            if (timenews == null) {
+                Timenew timenew = new Timenew();
+                timenew.setUser(user);
+                timenew.setType(threeParameter.getType());
+                timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                timenewRepository.save(timenew);
+            } else {
+                Timenew timenew = timenews.get(0);
+                timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                timenewRepository.save(timenew);
+            }
+            result.setStatus(1);
+        }
+        return result;
+    }
+
     public boolean isNotLogin(User user) {
         Token token = tokenRepository.findTop1ByUserOrderByCreatetimeDesc(user);
         if (token != null && token.getExpiretime() > new Date().getTime() && token.getOuttime() == null) return false;
@@ -495,4 +574,5 @@ public class ThreeServiceImpl implements ThreeService {
         me.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         messageRepository.save(me);
     }
+
 }

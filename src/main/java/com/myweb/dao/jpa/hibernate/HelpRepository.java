@@ -48,6 +48,9 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
     @Query("select help  from Help help where help.user in (select follow.touser from Follow follow where follow.user = ?1)")
     public Page<Help> queryByFollow(User user, Pageable pageable);
 
+    @Query("select count(help) from Help help where help.user in (select follow.touser from Follow follow where follow.user = ?1) and help.createtime >= ?2")
+    public int countByFollow(User user, String time);
+
     public Integer countAllByUser(User user);
 
     public List<Help> findTop3ByUserOrderByStudiedDesc(User user);

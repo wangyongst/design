@@ -224,4 +224,26 @@ public class ThreeController {
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), null);
         return ResultUtils.result(threeService.userMostHelp(threeParameter, pageable));
     }
+
+    @ApiOperation(value = "未读消息数量提示", notes = "未读消息数量提示")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型（必需）1关注动态，2我的关注，3我的粉丝，4邀请好友，5我的私息", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/news/count")
+    public Result newsCount(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.newsCount(threeParameter));
+    }
+
+    @ApiOperation(value = "未读消息数量设置成已读", notes = "未读消息数量设置成已读")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型（必需）1关注动态，2我的关注，3我的粉丝，4邀请好友，5我的私息", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/news/count/read")
+    public Result newsCountRead(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.newsCountRead(threeParameter));
+    }
 }

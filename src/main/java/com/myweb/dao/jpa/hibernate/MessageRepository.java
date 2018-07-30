@@ -33,6 +33,10 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public int countAllByTouser(User touser);
 
+    public int countAllByUserAndCreatetimeGreaterThan(User user,String time);
+
+    public int countAllByTouserAndCreatetimeGreaterThan(User touser,String time);
+
     public int countAllByUserAndTouser(User user, User touser);
 
     public void removeAllByUserOrTouser(User user, User touser);

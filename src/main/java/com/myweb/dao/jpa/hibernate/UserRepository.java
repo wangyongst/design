@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
@@ -27,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     public List<User> findByEmailAndPassword(String email, String password);
 
     public Page<User> findAllByUsernameOrNicknameOrSexOrJobs(String keword, Pageable pageable);
+
+    public int countAllByReferAndCreatetimeGreaterThan(Integer refer, String time);
 }
