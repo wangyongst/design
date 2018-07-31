@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public List<User> findByEmailAndPassword(String email, String password);
 
-    public Page<User> findAllByUsernameOrNicknameOrSexOrJobs(String keword, Pageable pageable);
+    public Page<User> findAllByUsernameContainsOrNicknameContainsOrSexContainsOrJobsContains(String username,String nickname,String sex,String jobs, Pageable pageable);
 
     public int countAllByReferAndCreatetimeGreaterThan(Integer refer, String time);
 }

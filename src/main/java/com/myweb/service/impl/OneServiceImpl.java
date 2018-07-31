@@ -423,7 +423,7 @@ public class OneServiceImpl implements OneService {
             result.setStatus(1);
             result.setData(users);
         } else {
-            Page<User> users = userRepository.findAllByUsernameOrNicknameOrSexOrJobs(oneParameter.getKeyword(), pageable);
+            Page<User> users = userRepository.findAllByUsernameContainsOrNicknameContainsOrSexContainsOrJobsContains(oneParameter.getKeyword(), oneParameter.getKeyword(), oneParameter.getKeyword(), oneParameter.getKeyword(), pageable);
             if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
                 User user = userRepository.findOne(oneParameter.getUserid());
                 if (user == null || isNotLogin(user)) {
