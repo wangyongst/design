@@ -3,6 +3,7 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.ThreeService;
+import com.myweb.vo.Count;
 import com.myweb.vo.ThreeParameter;
 import com.utils.Result;
 import org.apache.commons.lang3.StringUtils;
@@ -417,6 +418,7 @@ public class ThreeServiceImpl implements ThreeService {
                     e.setIsStudied(0);
                 }
             });
+            result.setData(helps);
         }
         return result;
     }
@@ -495,9 +497,9 @@ public class ThreeServiceImpl implements ThreeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result newsCountRead(ThreeParameter threeParameter) {
+    public Result newsCount(ThreeParameter threeParameter) {
         Result result = new Result();
-        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getType() == null || threeParameter.getType() == 0) {
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
@@ -506,45 +508,45 @@ public class ThreeServiceImpl implements ThreeService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            Timenew timenew = new Timenew();
-            List<Timenew> timenews = timenewRepository.findByUserAndType(user, threeParameter.getType());
-            if (timenews == null) {
-                timenew.setUser(user);
-                timenew.setType(threeParameter.getType());
-                timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                timenewRepository.save(timenew);
-            } else {
-                timenew = timenews.get(0);
+            Count count = new Count();
+            for (int i = 1; i <= 5; i++) {
+                Timenew timenew = new Timenew();
+                List<Timenew> timenews = timenewRepository.findByUserAndType(user, i);
+                if (timenews.size() ==0) {
+                    timenew.setUser(user);
+                    timenew.setType(threeParameter.getType());
+                    timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                    timenewRepository.save(timenew);
+                } else {
+                    timenew = timenews.get(0);
+                }
+                switch (i) {
+                    case 1:
+                        count.setHelps(helpRepository.countByFollow(user, timenew.getNewtime()));
+                        break;
+                    case 2:
+                        count.setFollows(followRepository.countAllByUserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
+                        break;
+                    case 3:
+                        count.setFans(followRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
+                        break;
+                    case 4:
+                        count.setUsers(userRepository.countAllByReferAndCreatetimeGreaterThan(user.getId(), timenew.getNewtime()));
+                        break;
+                    case 5:
+                        count.setMessages(messageRepository.countAllByUserAndCreatetimeGreaterThan(user, timenew.getNewtime()) + messageRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
+                        break;
+                }
             }
-            switch (threeParameter.getType()) {
-                case 1:
-                    result.setStatus(1);
-                    result.setData(helpRepository.countByFollow(user, timenew.getNewtime()));
-                    break;
-                case 2:
-                    result.setStatus(1);
-                    result.setData(followRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
-                    break;
-                case 3:
-                    result.setStatus(1);
-                    result.setData(followRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
-                    break;
-                case 4:
-                    result.setStatus(1);
-                    result.setData(userRepository.countAllByReferAndCreatetimeGreaterThan(user.getId(), timenew.getNewtime()));
-                    break;
-                case 5:
-                    result.setStatus(1);
-                    result.setData(messageRepository.countAllByUserAndCreatetimeGreaterThan(user, timenew.getNewtime()) + messageRepository.countAllByTouserAndCreatetimeGreaterThan(user, timenew.getNewtime()));
-                    break;
-            }
+            result.setStatus(1);
+            result.setData(count);
         }
         return result;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result newsCount(ThreeParameter threeParameter) {
+    public Result newsCountRead(ThreeParameter threeParameter) {
         Result result = new Result();
         if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getType() == null || threeParameter.getType() == 0) {
             result.setMessage("必须的参数不能为空!");
