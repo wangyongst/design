@@ -54,6 +54,9 @@ public class TwoServiceImpl implements TwoService {
     private SearchingRepository searchingRepository;
 
     @Autowired
+    private BuyRepository buyRepository;
+
+    @Autowired
     private FollowRepository followRepository;
 
     @Autowired
@@ -351,6 +354,55 @@ public class TwoServiceImpl implements TwoService {
                 }
             }
             result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result click(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getAdvertid() == null || twoParameter.getAdvertid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Advert advert = advertRepository.findOne(twoParameter.getAdvertid());
+        if (advert == null) {
+            result.setMessage("广告不存在!");
+        } else {
+            advert.setClicked(advert.getClicked() + 1);
+            advertRepository.save(advert);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result buy(TwoParameter twoParameter) {
+        Result result = new Result();
+        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0 || twoParameter.getAdvertid() == null || twoParameter.getAdvertid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(twoParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Advert advert = advertRepository.findOne(twoParameter.getAdvertid());
+            if (advert == null) {
+                result.setMessage("广告不存在!");
+            } else {
+                advert.setBuy(advert.getBuy() + 1);
+                advertRepository.save(advert);
+                Buy buy = new Buy();
+                buy.setUser(user);
+                buy.setAdvert(advert);
+                buy.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                buyRepository.save(buy);
+                result.setStatus(1);
+            }
         }
         return result;
     }

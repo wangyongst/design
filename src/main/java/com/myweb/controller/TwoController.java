@@ -3,6 +3,7 @@ package com.myweb.controller;
 
 import com.myweb.service.TwoService;
 import com.myweb.vo.ResultUtils;
+import com.myweb.vo.ThreeParameter;
 import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import io.swagger.annotations.Api;
@@ -198,6 +199,27 @@ public class TwoController {
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), null);
         return ResultUtils.result(twoService.advert(pageable));
+    }
+
+    @ApiOperation(value = "点击广告", notes = "点击广告")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/advert/click")
+    public Result click(@ModelAttribute TwoParameter twoParameter) {
+        return twoService.click(twoParameter);
+    }
+
+    @ApiOperation(value = "想买广告", notes = "想买广告")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/advert/buy")
+    public Result buy(@ModelAttribute TwoParameter twoParameter) {
+        return twoService.buy(twoParameter);
     }
 
     @ApiOperation(value = "个人主页", notes = "个人主页")

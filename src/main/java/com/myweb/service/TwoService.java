@@ -21,6 +21,10 @@ public interface TwoService {
 
     public Result info(TwoParameter twoParameter);
 
+    public Result click(TwoParameter twoParameter);
+
+    public Result buy(TwoParameter twoParameter);
+
     public Result searchingClear(TwoParameter twoParameter);
 
     public Result searchingClearId(TwoParameter twoParameter);

@@ -48,6 +48,17 @@ public class Advert implements Serializable {
     @Column(name = "outtime", nullable = true, length = 255)
     private String outtime;
 
+    @Transient
+    private Float rate;
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public void setRate(Float rate) {
+        this.rate = rate;
+    }
+
     public Integer getType() {
         return type;
     }

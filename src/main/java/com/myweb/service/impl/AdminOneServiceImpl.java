@@ -357,7 +357,11 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result advertList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(advertRepository.findAll());
+        List<Advert> adverts = advertRepository.findAll();
+        adverts.forEach(e->{
+            e.setRate((float)e.getClicked()/e.getExposure());
+        });
+        result.setData(adverts);
         return result;
     }
 
@@ -467,7 +471,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         Result result = new Result();
         if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
         Advert advert = new Advert();
-        result.setStatus(1);
         if (adminOneParameter.getOperation() == 1) {
             AdminUser adminUser = (AdminUser) httpSession.getAttribute("user");
             advert.setAdminuser(adminUserRepository.findOne(adminUser.getId()));
@@ -476,8 +479,14 @@ public class AdminOneServiceImpl implements AdminOneService {
             advert.setUrl(adminOneParameter.getUrl());
             advert.setType(adminOneParameter.getType());
             advert.setExposure(0);
+            advert.setClicked(0);
+            advert.setBuy(0);
             advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            advert.setOuttime(adminOneParameter.getOuttime());
+            try{
+            advert.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(adminOneParameter.getOuttime())));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             createLog("上传广告", httpSession);
             result.setStatus(1);
             result.setData(advertRepository.save(advert));
@@ -496,6 +505,7 @@ public class AdminOneServiceImpl implements AdminOneService {
             advert = advertRepository.findOne(adminOneParameter.getAdvertid());
             if (advert == null) return result;
             advertRepository.delete(advert);
+            result.setStatus(1);
         }
         return result;
     }
