@@ -515,7 +515,7 @@ public class ThreeServiceImpl implements ThreeService {
                 if (timenews.size() ==0) {
                     timenew.setUser(user);
                     timenew.setType(i);
-                    timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                    timenew.setNewtime("2018年01月01日 00:00:00");
                     timenewRepository.save(timenew);
                 } else {
                     timenew = timenews.get(0);
@@ -558,7 +558,7 @@ public class ThreeServiceImpl implements ThreeService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             List<Timenew> timenews = timenewRepository.findByUserAndType(user, threeParameter.getType());
-            if (timenews == null) {
+            if (timenews.size() == 0) {
                 Timenew timenew = new Timenew();
                 timenew.setUser(user);
                 timenew.setType(threeParameter.getType());
