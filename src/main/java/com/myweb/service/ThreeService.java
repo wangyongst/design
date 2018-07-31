@@ -6,11 +6,13 @@ import com.myweb.vo.TwoParameter;
 import com.utils.Result;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface ThreeService {
 
     public Result click(ThreeParameter threeParameter);
 
-    public Result recommend(ThreeParameter threeParameter);
+    public Result recommend(ThreeParameter threeParameter,HttpServletRequest request);
 
     public Result study(ThreeParameter threeParameter);
 

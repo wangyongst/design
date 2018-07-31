@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -53,6 +54,9 @@ public class ThreeServiceImpl implements ThreeService {
     @Autowired
     private FollowRepository followRepository;
 
+    @Autowired
+    private ReferipsRepository referipsRepository;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result click(ThreeParameter threeParameter) {
@@ -74,7 +78,7 @@ public class ThreeServiceImpl implements ThreeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result recommend(ThreeParameter threeParameter) {
+    public Result recommend(ThreeParameter threeParameter, HttpServletRequest request) {
         Result result = new Result();
         if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
@@ -88,6 +92,17 @@ public class ThreeServiceImpl implements ThreeService {
             if (user == null) {
                 result.setMessage("发送用户不存在!");
             } else {
+                Referips referips = referipsRepository.findTop1ByUserAndHelpAndIp(user, help, getIp(request));
+                if (referips == null) {
+                    referips = new Referips();
+                    referips.setUser(user);
+                    referips.setHelp(help);
+                    referips.setIp(getIp(request));
+                    referipsRepository.save(referips);
+                } else {
+                    result.setMessage("当前IP已经推荐过，不能再推荐!");
+                    return result;
+                }
                 help.setRecommend(help.getRecommend() + 1);
                 helpRepository.save(help);
                 if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次。", 5);
@@ -95,6 +110,26 @@ public class ThreeServiceImpl implements ThreeService {
             }
         }
         return result;
+    }
+
+    public String getIp(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
 

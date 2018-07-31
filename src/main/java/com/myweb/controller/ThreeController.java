@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Api
 @CrossOrigin("*")
 @Controller
@@ -42,8 +44,8 @@ public class ThreeController {
     })
     @ResponseBody
     @PostMapping("/help/recommend")
-    public Result recommend(@ModelAttribute ThreeParameter threeParameter) {
-        return threeService.recommend(threeParameter);
+    public Result recommend(@ModelAttribute ThreeParameter threeParameter,HttpServletRequest request) {
+        return threeService.recommend(threeParameter,request);
     }
 
 
