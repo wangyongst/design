@@ -514,7 +514,7 @@ public class ThreeServiceImpl implements ThreeService {
                 List<Timenew> timenews = timenewRepository.findByUserAndType(user, i);
                 if (timenews.size() ==0) {
                     timenew.setUser(user);
-                    timenew.setType(threeParameter.getType());
+                    timenew.setType(i);
                     timenew.setNewtime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                     timenewRepository.save(timenew);
                 } else {
