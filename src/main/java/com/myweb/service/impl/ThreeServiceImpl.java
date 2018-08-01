@@ -106,7 +106,7 @@ public class ThreeServiceImpl implements ThreeService {
                 }
                 help.setRecommend(help.getRecommend() + 1);
                 helpRepository.save(help);
-                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次。", 5);
+                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次。helpid="+help.getId(), 5);
                 result.setStatus(1);
             }
         }
