@@ -184,7 +184,7 @@ public class TwoServiceImpl implements TwoService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result advert(Pageable pageable) {
+    public Result advert(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
         Page<Advert> adverts = advertRepository.findAllByOuttimeGreaterThanOrderByReferDesc(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
@@ -192,6 +192,17 @@ public class TwoServiceImpl implements TwoService {
             e.setExposure(e.getExposure() + 1);
             advertRepository.save(e);
             e.setAdminuser(null);
+            if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
+                User user = userRepository.findOne(twoParameter.getUserid());
+                if (user != null) {
+                    List<Buy> buys = buyRepository.findAllByUserAndAdvert(user, e);
+                    if (buys.size() > 0) {
+                        e.setIsBuy(1);
+                    } else {
+                        e.setIsBuy(0);
+                    }
+                }
+            }
         });
         result.setData(adverts);
         return result;
@@ -566,7 +577,7 @@ public class TwoServiceImpl implements TwoService {
         noticeRepository.save(notice);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type,Integer mtype) {
+    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));
@@ -578,7 +589,7 @@ public class TwoServiceImpl implements TwoService {
         noticeRepository.save(notice);
         Message me = new Message();
         me.setIsread(0);
-        if(help!=null) me.setHelp(help);
+        if (help != null) me.setHelp(help);
         me.setType(mtype);
         me.setMessage(message);
         me.setTouser(user);

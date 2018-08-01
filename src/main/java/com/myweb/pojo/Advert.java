@@ -49,10 +49,21 @@ public class Advert implements Serializable {
     private String outtime;
 
     @Transient
+    private Integer isBuy;
+
+    @Transient
     private Float rate;
 
     public Float getRate() {
         return rate;
+    }
+
+    public Integer getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(Integer isBuy) {
+        this.isBuy = isBuy;
     }
 
     public void setRate(Float rate) {

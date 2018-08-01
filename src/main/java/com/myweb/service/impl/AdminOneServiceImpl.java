@@ -469,7 +469,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result postAdvert(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0) return result;
+        if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0 || StringUtils.isBlank(adminOneParameter.getTitle()) || StringUtils.isBlank(adminOneParameter.getImage()) || StringUtils.isBlank(adminOneParameter.getOuttime())){
+            result.setMessage("必需的项目未填写完整");
+            return result;
+        }
         Advert advert = new Advert();
         if (adminOneParameter.getOperation() == 1) {
             AdminUser adminUser = (AdminUser) httpSession.getAttribute("user");
@@ -483,7 +486,7 @@ public class AdminOneServiceImpl implements AdminOneService {
             advert.setBuy(0);
             advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             try{
-            advert.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(adminOneParameter.getOuttime())));
+            advert.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd").parse(adminOneParameter.getOuttime())));
             }catch (Exception e){
                 e.printStackTrace();
             }

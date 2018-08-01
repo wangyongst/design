@@ -33,7 +33,7 @@ public interface TwoService {
 
     public Result hidden(TwoParameter twoParameter);
 
-    public Result advert(Pageable pageable);
+    public Result advert(TwoParameter twoParameter,Pageable pageable);
 
     public Result delete(TwoParameter twoParameter, String helpids);
 }

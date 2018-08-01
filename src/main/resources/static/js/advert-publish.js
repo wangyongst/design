@@ -21,6 +21,8 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $('#lookImg').attr("src", result.data.image);
+                }else{
+                    alert(result.message);
                 }
             }
         });
@@ -45,6 +47,8 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $('#image').val("http://pas99p7vd.bkt.clouddn.com/" + result.data);
+                }else{
+                    alert(result.message);
                 }
             }
         });
@@ -72,6 +76,8 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $("#myTable").bootstrapTable('refresh');
+                }else{
+                    alert(result.message);
                 }
             }
         });
@@ -88,6 +94,8 @@ $(function () {
                 if (result.status == 1) {
                     $('#myModal2').modal('toggle');
                     $("#myTable").bootstrapTable('refresh');
+                }else{
+                    alert(result.message);
                 }
             }
         });
