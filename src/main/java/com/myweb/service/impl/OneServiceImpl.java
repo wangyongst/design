@@ -86,7 +86,7 @@ public class OneServiceImpl implements OneService {
                 return result;
             } else {
                 user.setRefer(refer.getId());
-                createSysNotice(refer, null, "恭喜你，成功邀请好友注册，获得平台永久发布功能。", 5);
+                createSysNotice(refer, null, "恭喜你，成功邀请好友注册，获得平台永久发布功能。", 5,2);
             }
         }
         user.setUsername(oneParameter.getUsername());
@@ -96,8 +96,8 @@ public class OneServiceImpl implements OneService {
         user.setNickname(oneParameter.getNickname());
         user.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         userRepository.save(user);
-        createSysNotice(user, null, "邀请 1 个好友成功注册，你就可以获得平台免费永久发布想学，立即邀请", 5);
-        createSysNotice(user, null, "恭喜你，成功注册热点设计，你已获得 1 次免费使用发布功能，邀请一个好友注册成功，获得平台永久发布效果功能", 5);
+        createSysNotice(user, null, "邀请 1 个好友成功注册，你就可以获得平台免费永久发布想学，立即邀请", 5,3);
+        createSysNotice(user, null, "恭喜你，成功注册热点设计，你已获得 1 次免费使用发布功能，邀请一个好友注册成功，获得平台永久发布效果功能", 5,4);
         result.setStatus(1);
         return result;
     }
@@ -256,7 +256,7 @@ public class OneServiceImpl implements OneService {
         } else {
             result.setMessage("旧密码不正确！");
         }
-        createSysNotice(user, null, "您的登录密码重置成功！\n为了保障您的账户安全，请保管好并定期更改登录及支付密码。", 5);
+        createSysNotice(user, null, "您的登录密码重置成功！\n为了保障您的账户安全，请保管好并定期更改登录及支付密码。", 5,5);
         return result;
     }
 
@@ -561,7 +561,7 @@ public class OneServiceImpl implements OneService {
         noticeRepository.save(notice);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type) {
+    public void createSysNotice(User user, Help help, String message, Integer type,Integer mtype) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));
@@ -573,6 +573,8 @@ public class OneServiceImpl implements OneService {
         noticeRepository.save(notice);
         Message me = new Message();
         me.setIsread(0);
+        if(help!=null) me.setHelp(help);
+        me.setType(mtype);
         me.setMessage(message);
         me.setTouser(user);
         me.setUser(userRepository.findOne(1));

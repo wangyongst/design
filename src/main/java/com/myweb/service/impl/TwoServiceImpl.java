@@ -566,7 +566,7 @@ public class TwoServiceImpl implements TwoService {
         noticeRepository.save(notice);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type) {
+    public void createSysNotice(User user, Help help, String message, Integer type,Integer mtype) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));
@@ -578,6 +578,8 @@ public class TwoServiceImpl implements TwoService {
         noticeRepository.save(notice);
         Message me = new Message();
         me.setIsread(0);
+        if(help!=null) me.setHelp(help);
+        me.setType(mtype);
         me.setMessage(message);
         me.setTouser(user);
         me.setUser(userRepository.findOne(1));

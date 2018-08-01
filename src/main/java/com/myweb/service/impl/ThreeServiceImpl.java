@@ -106,7 +106,7 @@ public class ThreeServiceImpl implements ThreeService {
                 }
                 help.setRecommend(help.getRecommend() + 1);
                 helpRepository.save(help);
-                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次。helpid="+help.getId(), 5);
+                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次", 5,1);
                 result.setStatus(1);
             }
         }
@@ -593,7 +593,7 @@ public class ThreeServiceImpl implements ThreeService {
         noticeRepository.save(notice);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type) {
+    public void createSysNotice(User user, Help help, String message, Integer type,Integer mtype) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));
@@ -605,6 +605,8 @@ public class ThreeServiceImpl implements ThreeService {
         noticeRepository.save(notice);
         Message me = new Message();
         me.setIsread(0);
+        if(help!=null) me.setHelp(help);
+        me.setType(mtype);
         me.setMessage(message);
         me.setTouser(user);
         me.setUser(userRepository.findOne(1));

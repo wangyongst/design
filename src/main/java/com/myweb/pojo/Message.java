@@ -21,6 +21,9 @@ public class Message implements Serializable {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "touserid", referencedColumnName = "id")
     private User touser;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "helpid", referencedColumnName = "id")
+    private Help help;
     @Basic
     @Column(name = "message", nullable = true, length = 255)
     private String message;
@@ -30,6 +33,25 @@ public class Message implements Serializable {
     @Basic
     @Column(name = "createtime", nullable = true, length = 255)
     private String createtime;
+    @Basic
+    @Column(name = "type", nullable = true)
+    private Integer type;
+
+    public Help getHelp() {
+        return help;
+    }
+
+    public void setHelp(Help help) {
+        this.help = help;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Integer getId() {
         return id;
