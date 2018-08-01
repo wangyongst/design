@@ -31,6 +31,8 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
 
     public Page<Help> findByUserAndAudienceNotAndDraftAndTagContains(User user, int audience, int draft, String tag, Pageable pageable);
 
+    public Page<Help> findByUserAndAudienceNotAndDraftNotAndTagContains(User user, int audience, int draft, String tag, Pageable pageable);
+
     public Page<Help> findByDesignAndAudienceNotAndDraft(String design, int audience, int draft, Pageable pageable);
 
     public Page<Help> findByDraftAndAudienceNotAndTagContains(int draft, int audience, String tag, Pageable pageable);

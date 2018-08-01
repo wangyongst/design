@@ -263,29 +263,62 @@ public class TwoServiceImpl implements TwoService {
     @Override
     public Result mine(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
-        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+        if (twoParameter.getTouserid() == null || twoParameter.getTouserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        User user = userRepository.findOne(twoParameter.getUserid());
+        User user = userRepository.findOne(twoParameter.getTouserid());
         if (user == null) {
             result.setStatus(0);
-            result.setMessage("当前用户不存在!");
+            result.setMessage("主页用户不存在!");
         } else {
-            if (twoParameter.getType() == null || twoParameter.getType() == 0) {
-                if (StringUtils.isBlank(twoParameter.getTag())) {
-                    result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
+            if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
+                if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+                    if (StringUtils.isBlank(twoParameter.getTag())) {
+                        result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
+                    } else {
+                        result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
+                    }
                 } else {
-                    result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
+                    if (StringUtils.isBlank(twoParameter.getTag())) {
+                        result.setData(studyRepository.queryAllByUser(user, pageable));
+                    } else {
+                        result.setData(studyRepository.queryAllByUserAndTagLike(user, twoParameter.getTag(), pageable));
+                    }
                 }
+                result.setStatus(1);
             } else {
-                if (StringUtils.isBlank(twoParameter.getTag())) {
-                    result.setData(studyRepository.queryAllByUser(user, pageable));
-                } else {
-                    result.setData(studyRepository.queryAllByUserAndTagLike(user, twoParameter.getTag(), pageable));
+                User user1 = userRepository.findOne(twoParameter.getUserid());
+                if (user1 == null) {
+                    result.setStatus(9);
+                    result.setMessage("当前用户不存!");
+                    return result;
                 }
+                Page<Help> helps = null;
+                if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+                    if (StringUtils.isBlank(twoParameter.getTag())) {
+                        helps = helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 0, pageable);
+                    } else {
+                        helps = helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 0, 4, twoParameter.getTag(), pageable);
+                    }
+                } else {
+                    if (StringUtils.isBlank(twoParameter.getTag())) {
+                        helps = studyRepository.queryAllByUser(user, pageable);
+                    } else {
+                        helps = studyRepository.queryAllByUserAndTagLike(user, twoParameter.getTag(), pageable);
+                    }
+                }
+                helps.forEach(e -> {
+                    List<Study> studies = studyRepository.findAllByUserAndHelp(user1, e);
+                    if (studies.size() > 0) {
+                        e.setIsStudied(1);
+                    } else {
+                        e.setIsStudied(0);
+                    }
+                });
+                result.setStatus(1);
+                result.setData(helps);
             }
-            result.setStatus(1);
         }
         return result;
     }
@@ -490,12 +523,10 @@ public class TwoServiceImpl implements TwoService {
             if (help == null) {
                 result.setMessage("选择的求助不存在!");
             } else if (twoParameter.getType() == 1) {
-                help.setDraft(5);
                 help.setAudience(3);
                 helpRepository.save(help);
                 result.setStatus(1);
             } else if (twoParameter.getType() == 2) {
-                help.setDraft(2);
                 help.setAudience(1);
                 helpRepository.save(help);
                 result.setStatus(1);
