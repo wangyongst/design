@@ -181,8 +181,7 @@ public class ThreeController {
 
     @ApiOperation(value = "系统提醒已读", notes = "系统提醒已读")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "notice", value = "提醒id(必需）", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/notice/new/read")

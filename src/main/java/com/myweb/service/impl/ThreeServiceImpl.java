@@ -470,7 +470,7 @@ public class ThreeServiceImpl implements ThreeService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result noticeNewRead(ThreeParameter threeParameter) {
         Result result = new Result();
-        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getNoticeid() == null || threeParameter.getNoticeid() == 0) {
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
@@ -479,12 +479,12 @@ public class ThreeServiceImpl implements ThreeService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            Notice notice = noticeRepository.findOne(threeParameter.getNoticeid());
-            if (notice != null) {
-                notice.setIsread(1);
-                noticeRepository.save(notice);
-                result.setStatus(1);
-            }
+            List<Notice> notices = noticeRepository.findAllByUserAndIsreadNot(user,1);
+            notices.forEach(e->{
+                e.setIsread(1);
+                noticeRepository.save(e);
+            });
+
         }
         return result;
     }
