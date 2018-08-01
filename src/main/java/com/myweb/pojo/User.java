@@ -50,6 +50,10 @@ public class User implements Serializable {
     @Basic
     @Column(name = "refertime", nullable = true, length = 255)
     private String refertime;
+    @JsonIgnore
+    @Basic
+    @Column(name = "openid", nullable = true, length = 255)
+    private String openid;
     @Transient
     private Integer published;
 
@@ -67,6 +71,14 @@ public class User implements Serializable {
 
     @Transient
     private List<Help> helps;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public String getNewTime() {
         return newTime;

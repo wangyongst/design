@@ -1,5 +1,6 @@
 package com.myweb.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.OneService;
@@ -7,6 +8,7 @@ import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
+import com.utils.WeixinUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
@@ -33,6 +36,9 @@ import java.util.List;
 public class OneServiceImpl implements OneService {
 
     private static final Logger logger = LogManager.getLogger(OneServiceImpl.class);
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     private UserRepository userRepository;
@@ -214,6 +220,44 @@ public class OneServiceImpl implements OneService {
         }
         return result;
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result weixinCode(String code) {
+        Result result = new Result();
+        if (StringUtils.isBlank(code)) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        String response = WeixinUtils.getOpenId(restTemplate, code);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            User user = mapper.readValue(response, User.class);
+            if (StringUtils.isNotBlank(user.getOpenid())) {
+                List<User> userList = userRepository.findByOpenid(user.getOpenid());
+                if (userList.size() == 1) {
+                    result.setStatus(1);
+                    result.setData(userList.get(0));
+                    return result;
+                } else if (userList.size() == 0) {
+                    userRepository.save(user);
+                    result.setStatus(1);
+                    result.setData(user);
+                    return result;
+                } else {
+                    result.setMessage("openid存在重复记录");
+                    return result;
+                }
+            } else {
+                result.setMessage("授权失败，无法获取openid");
+                return result;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)

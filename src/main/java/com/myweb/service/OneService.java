@@ -44,4 +44,6 @@ public interface OneService {
     public Result search(OneParameter oneParameter, Pageable pageable);
 
     public Result uploadImage(MultipartFile multipartFile);
+
+    public Result weixinCode(String code);
 }

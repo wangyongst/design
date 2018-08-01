@@ -262,6 +262,17 @@ public class OneController {
     }
 
 
+    @ApiOperation(value = "微信授权", notes = "微信授权,第一次使用，则自动注册用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code", value = "code（必需）", required = true, dataType = "String"),
+    })
+    @PostMapping("user/weixin/code/{code}")
+    @ResponseBody
+    public Result weixinCode(@PathVariable String code) {
+        return oneService.weixinCode(code);
+    }
+
+
     @ApiOperation(value = "获取后台设置", notes = "获取后台设置")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "类型（必需）1代表logo设置，2代表友情链接设置,3推荐关键字", required = true, dataType = "Integer")
