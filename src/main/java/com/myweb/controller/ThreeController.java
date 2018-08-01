@@ -62,6 +62,7 @@ public class ThreeController {
 
     @ApiOperation(value = "想学的人", notes = "想学的人")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")

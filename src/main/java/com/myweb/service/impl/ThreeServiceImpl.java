@@ -368,7 +368,21 @@ public class ThreeServiceImpl implements ThreeService {
             return result;
         }
         result.setStatus(1);
-        result.setData(studyRepository.findAllByHelp(helpRepository.findOne(threeParameter.getHelpid()), pageable));
+        Page<Study> studies = studyRepository.findAllByHelp(helpRepository.findOne(threeParameter.getHelpid()), pageable);
+        if(threeParameter.getUserid() !=null && threeParameter.getUserid() !=0){
+            User user = userRepository.findOne(threeParameter.getUserid());
+            if(user != null){
+                studies.forEach(e->{
+                    List<Follow> follows2 = followRepository.findByUserAndTouser(user, e.getUser());
+                    if (follows2.size() > 0) {
+                        e.getUser().setIsFollow(1);
+                    } else {
+                        e.getUser().setIsFollow(0);
+                    }
+                });
+            }
+        }
+        result.setData(studies);
         return result;
     }
 
