@@ -238,11 +238,21 @@ public class OneServiceImpl implements OneService {
                 if (userList.size() == 1) {
                     result.setStatus(1);
                     result.setData(userList.get(0));
+                    Token token = new Token();
+                    token.setUser(userList.get(0));
+                    token.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                    token.setExpiretime(new Date().getTime() + 60000 * 120);
+                    tokenRepository.save(token);
                     return result;
                 } else if (userList.size() == 0) {
                     userRepository.save(user);
                     result.setStatus(1);
                     result.setData(user);
+                    Token token = new Token();
+                    token.setUser(user);
+                    token.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                    token.setExpiretime(new Date().getTime() + 60000 * 120);
+                    tokenRepository.save(token);
                     return result;
                 } else {
                     result.setMessage("openid存在重复记录");
