@@ -484,8 +484,8 @@ public class ThreeServiceImpl implements ThreeService {
                 e.setIsread(1);
                 noticeRepository.save(e);
             });
-
         }
+        result.setStatus(1);
         return result;
     }
 
