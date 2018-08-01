@@ -4,11 +4,20 @@ public class ThreeParameter {
     private Integer messageid;
     private Integer userid;
     private Integer helpid;
+    private Integer noticeid;
     private Integer touserid;
     private String message;
     private Integer page;
     private Integer pagesize;
     private Integer type;
+
+    public Integer getNoticeid() {
+        return noticeid;
+    }
+
+    public void setNoticeid(Integer noticeid) {
+        this.noticeid = noticeid;
+    }
 
     public Integer getMessageid() {
         return messageid;

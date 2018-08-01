@@ -106,7 +106,7 @@ public class ThreeServiceImpl implements ThreeService {
                 }
                 help.setRecommend(help.getRecommend() + 1);
                 helpRepository.save(help);
-                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次", 5,1);
+                if (help.getRecommend() == 2000) createSysNotice(help.getUser(), help, "恭喜你，你想学的效果被推荐过2000次", 5, 1);
                 result.setStatus(1);
             }
         }
@@ -369,10 +369,10 @@ public class ThreeServiceImpl implements ThreeService {
         }
         result.setStatus(1);
         Page<Study> studies = studyRepository.findAllByHelp(helpRepository.findOne(threeParameter.getHelpid()), pageable);
-        if(threeParameter.getUserid() !=null && threeParameter.getUserid() !=0){
+        if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
             User user = userRepository.findOne(threeParameter.getUserid());
-            if(user != null){
-                studies.forEach(e->{
+            if (user != null) {
+                studies.forEach(e -> {
                     List<Follow> follows2 = followRepository.findByUserAndTouser(user, e.getUser());
                     if (follows2.size() > 0) {
                         e.getUser().setIsFollow(1);
@@ -465,6 +465,30 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result noticeNewRead(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getUserid() == null || threeParameter.getUserid() == 0 || threeParameter.getNoticeid() == null || threeParameter.getNoticeid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(threeParameter.getUserid());
+        if (user == null || isNotLogin(user)) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在或未登录!");
+        } else {
+            Notice notice = noticeRepository.findOne(threeParameter.getNoticeid());
+            if (notice != null) {
+                notice.setIsread(1);
+                noticeRepository.save(notice);
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result userDelete(ThreeParameter threeParameter) {
@@ -526,7 +550,7 @@ public class ThreeServiceImpl implements ThreeService {
             for (int i = 1; i <= 5; i++) {
                 Timenew timenew = new Timenew();
                 List<Timenew> timenews = timenewRepository.findByUserAndType(user, i);
-                if (timenews.size() ==0) {
+                if (timenews.size() == 0) {
                     timenew.setUser(user);
                     timenew.setType(i);
                     timenew.setNewtime("2018年01月01日 00:00:00");
@@ -607,7 +631,7 @@ public class ThreeServiceImpl implements ThreeService {
         noticeRepository.save(notice);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type,Integer mtype) {
+    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));
@@ -619,7 +643,7 @@ public class ThreeServiceImpl implements ThreeService {
         noticeRepository.save(notice);
         Message me = new Message();
         me.setIsread(0);
-        if(help!=null) me.setHelp(help);
+        if (help != null) me.setHelp(help);
         me.setType(mtype);
         me.setMessage(message);
         me.setTouser(user);

@@ -179,6 +179,17 @@ public class ThreeController {
         return ResultUtils.result(threeService.noticeNew(threeParameter, pageable));
     }
 
+    @ApiOperation(value = "系统提醒已读", notes = "系统提醒已读")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "notice", value = "提醒id(必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/notice/new/read")
+    public Result noticeNewRead(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.noticeNewRead(threeParameter));
+    }
+
 
     @ApiOperation(value = "关注动态", notes = "关注动态")
     @ApiImplicitParams({
@@ -241,7 +252,7 @@ public class ThreeController {
     @ApiOperation(value = "未读消息数量设置成已读", notes = "未读消息数量设置成已读")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "type", value = "类型（必需）1关注动态，2我的关注，3我的粉丝，4邀请好友，5我的私息", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "type", value = "类型（必需）1关注动态，2我的关注，3我的粉丝，4邀请好友，5我的私信", required = true, dataType = "Integer")
     })
     @ResponseBody
     @PostMapping("/news/count/read")
