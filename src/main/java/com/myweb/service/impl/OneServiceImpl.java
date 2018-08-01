@@ -531,7 +531,16 @@ public class OneServiceImpl implements OneService {
             result.setMessage("当前用户不存在或未登录!");
         } else {
             result.setStatus(1);
-            result.setData(userRepository.findByRefer(user.getId(), pageable));
+            Page<User> users = userRepository.findByRefer(user.getId(), pageable);
+            users.forEach(e -> {
+                List<Follow> follows = followRepository.findByUserAndTouser(user, e);
+                if (follows.size() > 0) {
+                    e.setIsFollow(1);
+                } else {
+                    e.setIsFollow(0);
+                }
+            });
+            result.setData(users);
         }
         return result;
     }
