@@ -44,6 +44,9 @@ public class OneServiceImpl implements OneService {
     private UserRepository userRepository;
 
     @Autowired
+    private BuyRepository buyRepository;
+
+    @Autowired
     private SettingRepository settingRepository;
 
     @Autowired
@@ -189,6 +192,7 @@ public class OneServiceImpl implements OneService {
                 noticeRepository.removeAllByUser(user);
                 searchingRepository.removeAllByUser(user);
                 tokenRepository.removeAllByUser(user);
+                buyRepository.removeAllByUser(user);
                 userRepository.delete(user);
                 result.setStatus(1);
             }

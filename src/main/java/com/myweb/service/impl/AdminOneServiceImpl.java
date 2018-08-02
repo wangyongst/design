@@ -32,6 +32,15 @@ public class AdminOneServiceImpl implements AdminOneService {
     private AdminUserRepository adminUserRepository;
 
     @Autowired
+    private BuyRepository buyRepository;
+
+    @Autowired
+    private NoticeRepository noticeRepository;
+
+    @Autowired
+    private SearchingRepository searchingRepository;
+
+    @Autowired
     private AdminLogRepository adminLogRepository;
 
     @Autowired
@@ -269,7 +278,16 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setStatus(1);
         if (oneParameter.getType() != null && oneParameter.getType() == 2) {
             createLog("删除ID为" + oneParameter.getUserid() + "的用户", httpSession);
-            userRepository.delete(oneParameter.getUserid());
+            User user = userRepository.findOne(oneParameter.getUserid());
+            helpRepository.removeAllByUser(user);
+            studyRepository.removeAllByUser(user);
+            followRepository.removeAllByUserOrTouser(user, user);
+            messageRepository.removeAllByUserOrTouser(user, user);
+            buyRepository.removeAllByUser(user);
+            noticeRepository.removeAllByUser(user);
+            searchingRepository.removeAllByUser(user);
+            tokenRepository.removeAllByUser(user);
+            userRepository.delete(user);
         } else {
             User user = userRepository.findOne(oneParameter.getUserid());
             if (StringUtils.isNotBlank(oneParameter.getEmail())) {

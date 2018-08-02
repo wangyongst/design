@@ -13,4 +13,6 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Buy.class, idClass = Integer.class)
 public interface BuyRepository extends JpaRepository<Buy, Integer> {
     public List<Buy> findAllByUserAndAdvert(User user, Advert advert);
+
+    public void removeAllByUser(User user);
 }
