@@ -34,7 +34,6 @@ $(function () {
             alert("请选择一条记录");
             return;
         }
-
         $.ajax({
             type: "POST",
             cache: "false",
@@ -50,7 +49,6 @@ $(function () {
                 }
             }
         });
-        $('#myModal').modal('toggle');
     });
 });
 
