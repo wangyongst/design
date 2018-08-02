@@ -37,7 +37,7 @@ public interface AdminOneService {
 
     public Result showlog(HttpSession httpSession);
 
-    public Result userToken(Pageable pageable, HttpSession httpSession);
+    public Result userTokenList(HttpSession httpSession);
 
     public Result user(OneParameter oneParameter, HttpSession httpSession);
 
@@ -45,7 +45,7 @@ public interface AdminOneService {
 
     public Result countUser(HttpSession httpSession);
 
-    public Result countMessage(HttpSession httpSession);
+    public Result messageList(HttpSession httpSession);
 
     public Result countMessageUser(OneParameter oneParameter, HttpSession httpSession);
 

@@ -286,10 +286,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result userToken(Pageable pageable, HttpSession httpSession) {
+    public Result userTokenList( HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(tokenRepository.findAll(pageable));
+        result.setData(tokenRepository.findAll());
         return result;
     }
 
@@ -356,10 +356,10 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result countMessage(HttpSession httpSession) {
+    public Result messageList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(messageRepository.count());
+        result.setData(messageRepository.findAll());
         return result;
     }
 

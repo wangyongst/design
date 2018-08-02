@@ -104,13 +104,9 @@ public class AdminOneController {
     }
 
     //登录时间列表
-    @GetMapping("/user/token")
-    public Result userToken(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
-        if (oneParameter.getPage() == null) oneParameter.setPage(0);
-        if (oneParameter.getPagesize() == null) oneParameter.setPagesize(10);
-        Pageable pageable = new PageRequest(oneParameter.getPage(), oneParameter.getPagesize(), sort);
-        return ResultUtils.result(adminOneService.userToken(pageable, httpSession));
+    @GetMapping("/user/token/list")
+    public Object userTokenList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userTokenList(httpSession));
     }
 
     //在线人数
@@ -137,10 +133,10 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.studyCount(httpSession));
     }
 
-    //全网私信数
-    @GetMapping("/count/message")
-    public Result countMessage(HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.countMessage(httpSession));
+    //全网私信
+    @GetMapping("/message/list")
+    public Object messageList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.messageList(httpSession));
     }
 
     //1发送，2接收，3发送给谁
