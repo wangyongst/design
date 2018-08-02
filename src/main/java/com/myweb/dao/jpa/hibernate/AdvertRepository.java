@@ -1,5 +1,6 @@
 package com.myweb.dao.jpa.hibernate;
 
+import com.myweb.pojo.AdminUser;
 import com.myweb.pojo.Advert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,4 +12,6 @@ import org.springframework.stereotype.Repository;
 @RepositoryDefinition(domainClass = Advert.class, idClass = Integer.class)
 public interface AdvertRepository extends JpaRepository<Advert, Integer> {
     Page<Advert> findAllByOuttimeGreaterThanOrderByReferDesc(String outtime, Pageable pageable);
+
+    public void deleteAllByAdminuser(AdminUser adminUser);
 }

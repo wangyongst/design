@@ -40,11 +40,12 @@ $(function () {
             url: "/admin/user",
             data: {
                 userid: ids[1],
-                type:2
+                type: 2
             },
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
+                    alert("删除用户成功")
                     $("#myTable").bootstrapTable('refresh');
                 }
             }
@@ -63,5 +64,9 @@ function select() {
         }
     });
     return ids;
+}
+
+function showAvatar(value, row, index) {
+    return "<img style='width: auto;height: 60px' src='" + value + "'><img>";
 }
 

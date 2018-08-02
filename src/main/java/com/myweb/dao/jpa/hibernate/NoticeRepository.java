@@ -16,6 +16,8 @@ import java.util.List;
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     public void removeAllByUser(User user);
 
+    public void removeAllByFromuser(User user);
+
     public void deleteAllByHelp(Help help);
 
     public Page<Notice> findAllByUserAndIsreadNot(User user, int isread, Pageable pageable);

@@ -1,5 +1,6 @@
 package com.myweb.dao.jpa.hibernate;
 
+import com.myweb.pojo.AdminRole;
 import com.myweb.pojo.AdminUser;
 import com.myweb.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ import java.util.List;
 @RepositoryDefinition(domainClass = AdminUser.class, idClass = Integer.class)
 public interface AdminUserRepository extends JpaRepository<AdminUser, Integer> {
     public List<AdminUser> findByUsernameAndPassword(String username, String password);
+
+    public List<AdminUser> findAllByAdminRole(AdminRole adminRole);
 }

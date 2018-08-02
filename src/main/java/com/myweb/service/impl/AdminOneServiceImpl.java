@@ -163,6 +163,8 @@ public class AdminOneServiceImpl implements AdminOneService {
             }
         } else if (fourParameter.getType() == 2) {
             AdminUser adminUser = adminUserRepository.findOne(fourParameter.getUserid());
+            adminLogRepository.deleteAllByAdminUser(adminUser);
+            advertRepository.deleteAllByAdminuser(adminUser);
             adminUserRepository.delete(adminUser);
             createLog("删除后台用户:" + adminUser.getUsername(), httpSession);
             result.setStatus(1);
@@ -191,6 +193,13 @@ public class AdminOneServiceImpl implements AdminOneService {
             }
         } else if (fourParameter.getType() == 2) {
             AdminRole adminRole = adminRoleRepository.findOne(fourParameter.getRoleid());
+            adminRole.getAdminPrivileges().forEach(e -> {
+                adminPrivilegeRepository.delete(e);
+            });
+            adminUserRepository.findAllByAdminRole(adminRole).forEach(e -> {
+                e.setAdminRole(null);
+                adminUserRepository.save(e);
+            });
             adminRoleRepository.delete(adminRole);
             createLog("删除后台角色:" + adminRole.getName(), httpSession);
             result.setStatus(1);
@@ -306,6 +315,7 @@ public class AdminOneServiceImpl implements AdminOneService {
             studyRepository.removeAllByUser(user);
             messageRepository.removeAllByUserOrTouser(user, user);
             noticeRepository.removeAllByUser(user);
+            noticeRepository.removeAllByFromuser(user);
             searchingRepository.removeAllByUser(user);
             tokenRepository.removeAllByUser(user);
             reportRepository.deleteAllByUser(user);
