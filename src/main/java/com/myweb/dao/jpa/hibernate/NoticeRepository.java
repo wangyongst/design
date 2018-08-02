@@ -1,5 +1,6 @@
 package com.myweb.dao.jpa.hibernate;
 
+import com.myweb.pojo.Help;
 import com.myweb.pojo.Notice;
 import com.myweb.pojo.User;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Notice.class, idClass = Integer.class)
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     public void removeAllByUser(User user);
+
+    public void deleteAllByHelp(Help help);
 
     public Page<Notice> findAllByUserAndIsreadNot(User user, int isread, Pageable pageable);
 

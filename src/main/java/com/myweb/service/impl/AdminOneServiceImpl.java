@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -24,6 +27,7 @@ import java.util.List;
 
 @Service("AdminOneService")
 @SuppressWarnings("All")
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 public class AdminOneServiceImpl implements AdminOneService {
 
     private static final Logger logger = LogManager.getLogger(AdminOneServiceImpl.class);
@@ -35,10 +39,19 @@ public class AdminOneServiceImpl implements AdminOneService {
     private BuyRepository buyRepository;
 
     @Autowired
+    private TimenewRepository timenewRepository;
+
+    @Autowired
     private NoticeRepository noticeRepository;
 
     @Autowired
     private SearchingRepository searchingRepository;
+
+    @Autowired
+    private ReferipsRepository referipsRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
 
     @Autowired
     private AdminLogRepository adminLogRepository;
@@ -279,14 +292,30 @@ public class AdminOneServiceImpl implements AdminOneService {
         if (oneParameter.getType() != null && oneParameter.getType() == 2) {
             createLog("删除ID为" + oneParameter.getUserid() + "的用户", httpSession);
             User user = userRepository.findOne(oneParameter.getUserid());
+            buyRepository.removeAllByUser(user);
+            followRepository.removeAllByUserOrTouser(user, user);
+            List<Help> helps = helpRepository.findByUser(user);
+            helps.forEach(e -> {
+                studyRepository.deleteAllByHelp(e);
+                reportRepository.deleteAllByHelp(e);
+                referipsRepository.deleteAllByHelp(e);
+                noticeRepository.deleteAllByHelp(e);
+                messageRepository.removeAllByHelp(e);
+            });
             helpRepository.removeAllByUser(user);
             studyRepository.removeAllByUser(user);
-            followRepository.removeAllByUserOrTouser(user, user);
             messageRepository.removeAllByUserOrTouser(user, user);
-            buyRepository.removeAllByUser(user);
             noticeRepository.removeAllByUser(user);
             searchingRepository.removeAllByUser(user);
             tokenRepository.removeAllByUser(user);
+            reportRepository.deleteAllByUser(user);
+            timenewRepository.deleteAllByUser(user);
+            referipsRepository.deleteAllByUser(user);
+            List<User> users = userRepository.findByRefer(user.getId());
+            users.forEach(e -> {
+                e.setRefer(null);
+                userRepository.save(e);
+            });
             userRepository.delete(user);
         } else {
             User user = userRepository.findOne(oneParameter.getUserid());
@@ -376,8 +405,8 @@ public class AdminOneServiceImpl implements AdminOneService {
         Result result = new Result();
         result.setStatus(1);
         List<Advert> adverts = advertRepository.findAll();
-        adverts.forEach(e->{
-            e.setRate((float)e.getClicked()/e.getExposure());
+        adverts.forEach(e -> {
+            e.setRate((float) e.getClicked() / e.getExposure());
         });
         result.setData(adverts);
         return result;
@@ -392,8 +421,12 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setStatus(1);
         if (twoParameter.getType() != null && twoParameter.getType() == 2) {
             createLog("删除ID为" + twoParameter.getHelpid() + "的求助", httpSession);
-            helpRepository.delete(help);
             studyRepository.deleteAllByHelp(help);
+            reportRepository.deleteAllByHelp(help);
+            referipsRepository.deleteAllByHelp(help);
+            noticeRepository.deleteAllByHelp(help);
+            messageRepository.removeAllByHelp(help);
+            helpRepository.delete(help);
         } else if (twoParameter.getType() != null && twoParameter.getType() == 1 && twoParameter.getDraft() != null && twoParameter.getDraft() != 0) {
             createLog("审核ID为" + twoParameter.getHelpid() + "的求助", httpSession);
             help.setDraft(twoParameter.getDraft());
@@ -487,7 +520,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result postAdvert(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0 || StringUtils.isBlank(adminOneParameter.getTitle()) || StringUtils.isBlank(adminOneParameter.getImage()) || StringUtils.isBlank(adminOneParameter.getOuttime())){
+        if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0 || StringUtils.isBlank(adminOneParameter.getTitle()) || StringUtils.isBlank(adminOneParameter.getImage()) || StringUtils.isBlank(adminOneParameter.getOuttime())) {
             result.setMessage("必需的项目未填写完整");
             return result;
         }
@@ -503,9 +536,9 @@ public class AdminOneServiceImpl implements AdminOneService {
             advert.setClicked(0);
             advert.setBuy(0);
             advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            try{
-            advert.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd").parse(adminOneParameter.getOuttime())));
-            }catch (Exception e){
+            try {
+                advert.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd").parse(adminOneParameter.getOuttime())));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             createLog("上传广告", httpSession);

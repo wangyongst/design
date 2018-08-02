@@ -12,4 +12,6 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Timenew.class, idClass = Integer.class)
 public interface TimenewRepository extends JpaRepository<Timenew, Integer> {
     public List<Timenew> findByUserAndType(User user, Integer type);
+
+    public void deleteAllByUser(User user);
 }

@@ -41,6 +41,15 @@ public class OneServiceImpl implements OneService {
     private RestTemplate restTemplate;
 
     @Autowired
+    private TimenewRepository timenewRepository;
+
+    @Autowired
+    private ReferipsRepository referipsRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -185,14 +194,30 @@ public class OneServiceImpl implements OneService {
             if (!user.getPassword().equals(oneParameter.getPassword())) {
                 result.setMessage("密码不正确!");
             } else {
+                buyRepository.removeAllByUser(user);
+                followRepository.removeAllByUserOrTouser(user, user);
+                List<Help> helps = helpRepository.findByUser(user);
+                helps.forEach(e -> {
+                    studyRepository.deleteAllByHelp(e);
+                    reportRepository.deleteAllByHelp(e);
+                    referipsRepository.deleteAllByHelp(e);
+                    noticeRepository.deleteAllByHelp(e);
+                    messageRepository.removeAllByHelp(e);
+                });
                 helpRepository.removeAllByUser(user);
                 studyRepository.removeAllByUser(user);
-                followRepository.removeAllByUserOrTouser(user, user);
                 messageRepository.removeAllByUserOrTouser(user, user);
                 noticeRepository.removeAllByUser(user);
                 searchingRepository.removeAllByUser(user);
                 tokenRepository.removeAllByUser(user);
-                buyRepository.removeAllByUser(user);
+                reportRepository.deleteAllByUser(user);
+                timenewRepository.deleteAllByUser(user);
+                referipsRepository.deleteAllByUser(user);
+                List<User> users = userRepository.findByRefer(user.getId());
+                users.forEach(e -> {
+                    e.setRefer(null);
+                    userRepository.save(e);
+                });
                 userRepository.delete(user);
                 result.setStatus(1);
             }

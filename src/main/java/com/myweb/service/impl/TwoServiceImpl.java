@@ -62,6 +62,9 @@ public class TwoServiceImpl implements TwoService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    private ReferipsRepository referipsRepository;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result seek(TwoParameter twoParameter) {
@@ -394,7 +397,13 @@ public class TwoServiceImpl implements TwoService {
             String[] ids = helpids.split(",");
             for (String id : ids) {
                 if (StringUtils.isNotBlank(id)) {
-                    helpRepository.delete(Integer.parseInt(id));
+                    Help help = helpRepository.findOne(Integer.parseInt(id));
+                    studyRepository.deleteAllByHelp(help);
+                    reportRepository.deleteAllByHelp(help);
+                    referipsRepository.deleteAllByHelp(help);
+                    noticeRepository.deleteAllByHelp(help);
+                    messageRepository.removeAllByHelp(help);
+                    helpRepository.delete(help);
                 }
             }
             result.setStatus(1);

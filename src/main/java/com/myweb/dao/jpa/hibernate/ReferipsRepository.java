@@ -13,4 +13,8 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Referips.class, idClass = Integer.class)
 public interface ReferipsRepository extends JpaRepository<Referips, Integer> {
     public Referips findTop1ByUserAndHelpAndIp(User user, Help help,String ip);
+
+    public void deleteAllByUser(User user);
+
+    public void deleteAllByHelp(Help help);
 }

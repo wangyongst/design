@@ -1,5 +1,6 @@
 package com.myweb.dao.jpa.hibernate;
 
+import com.myweb.pojo.Help;
 import com.myweb.pojo.Message;
 import com.myweb.pojo.User;
 import org.springframework.data.domain.Page;
@@ -40,5 +41,7 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
     public int countAllByUserAndTouser(User user, User touser);
 
     public void removeAllByUserOrTouser(User user, User touser);
+
+    public void removeAllByHelp(Help help);
 
 }
