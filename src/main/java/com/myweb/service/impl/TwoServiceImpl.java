@@ -218,7 +218,7 @@ public class TwoServiceImpl implements TwoService {
         Result result = new Result();
         result.setStatus(1);
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
-            if (twoParameter.getTag() == null) {
+            if (StringUtils.isBlank(twoParameter.getTag())) {
                 result.setData(helpRepository.findByDraft(4, pageable));
             } else {
                 result.setData(helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getTag(), pageable));
@@ -230,7 +230,7 @@ public class TwoServiceImpl implements TwoService {
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (twoParameter.getTag() == null) {
+            if (StringUtils.isBlank(twoParameter.getTag()))  {
                 Page<Help> helps = helpRepository.findByDraft(4, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));

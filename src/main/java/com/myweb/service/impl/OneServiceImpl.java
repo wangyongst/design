@@ -506,7 +506,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result search(OneParameter oneParameter, Pageable pageable) {
         Result result = new Result();
-        if (oneParameter.getKeyword() == null) {
+        if (StringUtils.isBlank(oneParameter.getKeyword())) {
             Page<User> users = userRepository.findAllByIdNot(1, pageable);
             if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
                 User user = userRepository.findOne(oneParameter.getUserid());
