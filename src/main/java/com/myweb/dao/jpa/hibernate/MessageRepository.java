@@ -44,4 +44,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public void removeAllByHelp(Help help);
 
+    public List<Message> findAllByOrderByCreatetimeDesc();
 }

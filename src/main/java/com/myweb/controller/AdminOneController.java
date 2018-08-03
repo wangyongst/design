@@ -164,6 +164,13 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.advert(twoParameter, httpSession));
     }
 
+    //搜索详情
+    @GetMapping("/searcing/list")
+    public Object searchingList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.searchingList(httpSession));
+    }
+
+
     //求助列表
     @GetMapping("/help/list")
     public Object helpList(HttpSession httpSession) {
@@ -206,9 +213,14 @@ public class AdminOneController {
         return ResultUtils.data(adminOneService.settingList(httpSession));
     }
 
-    @GetMapping("/searching")
-    public Result getSearching(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.setting(adminOneParameter, httpSession));
+    @GetMapping("/searching/list")
+    public Object searchingList(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.searchingList(httpSession));
+    }
+
+    @GetMapping("/report/list")
+    public Object reportList(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.reportList(httpSession));
     }
 
     //每个用户被关注的次数

@@ -289,7 +289,23 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result userTokenList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(tokenRepository.findAll());
+        result.setData(tokenRepository.findAllByOrderByCreatetimeDesc());
+        return result;
+    }
+
+    @Override
+    public Result searchingList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(searchingRepository.findAllTimes());
+        return result;
+    }
+
+    @Override
+    public Result reportList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(reportRepository.findAllByOrderByCreatetimeDesc());
         return result;
     }
 
@@ -338,7 +354,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         return result;
     }
 
-
     @Override
     public Result getUser(OneParameter oneParameter, HttpSession httpSession) {
         Result result = new Result();
@@ -369,7 +384,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result messageList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(messageRepository.findAll());
+        result.setData(messageRepository.findAllByOrderByCreatetimeDesc());
         return result;
     }
 

@@ -106,3 +106,11 @@ function select() {
     });
     return ids;
 }
+
+function getStatus(value, row, index) {
+    if(value ==1) return "草稿";
+    else if(value ==2) return "待审核";
+    else if(value ==3) return "未通过审核";
+    else if(value ==4) return "已经发表";
+    else return "其它";
+}

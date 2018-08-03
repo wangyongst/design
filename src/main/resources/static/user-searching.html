@@ -35,14 +35,13 @@
                     <h4 class="card-title">搜索统计</h4>
                     <h6 class="card-subtitle">搜索统计</h6>
                     <div class="table-responsive m-t-40">
-                        <table data-toggle="table" data-url="admin/user/list" data-show-refresh="true" id="myTable"
+                        <table data-toggle="table" data-url="admin/searching/list" data-show-refresh="true" id="myTable"
                                data-search="true" data-pagination="true" data-sort-class="createtime" data-sort-order="desc">
                             <thead>
                             <tr>
-                                <th data-field="state" data-checkbox="true"></th>
-                                <th data-field="id">ID</th>
-                                <th data-field="username">关键字</th>
-                                <th data-field="jobs">次数</th>
+                                <th data-field="[0]" data-formatter="gettype">类别</th>
+                                <th data-field="[0]" data-formatter="getkeyword">关键字</th>
+                                <th data-field="[1]">次数</th>
                             </tr>
                             </thead>
                         </table>
@@ -54,11 +53,20 @@
     <!-- End PAge Content -->
 </div>
 
+<script type="text/javascript">
+    function gettype(value, row, index) {
+        if(value.type ==2) return "搜人";
+        else return "搜图";
+    }
+    function getkeyword(value, row, index) {
+        return value.keyword;
+    }
+
+</script>
+
 <script src="js/lib/jquery/jquery.min.js"></script>
 
 <script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
-
-<script src="js/user-index.js"></script>
 
 
 <link href="css/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">

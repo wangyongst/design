@@ -10,6 +10,7 @@ import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RepositoryDefinition(domainClass = Searching.class, idClass = Integer.class)
@@ -25,4 +26,7 @@ public interface SearchingRepository extends JpaRepository<Searching, Integer> {
     public List<Searching> findByUserAndTypeAndIsclearNot(User user, int type, int isclear);
 
     public List<Searching> findByUserAndIsclearNot(User user, int isclear);
+
+    @Query("select searching,count (searching) from Searching searching group by searching.keyword,searching.type order by count(searching) desc")
+    public List<Object[]> findAllTimes();
 }

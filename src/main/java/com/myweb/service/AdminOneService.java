@@ -31,6 +31,10 @@ public interface AdminOneService {
 
     public Result userMenuList(HttpSession httpSession);
 
+    public Result searchingList(HttpSession httpSession);
+
+    public Result reportList(HttpSession httpSession);
+
     public Result logout(HttpSession httpSession);
 
     public Result userList(HttpSession httpSession);
