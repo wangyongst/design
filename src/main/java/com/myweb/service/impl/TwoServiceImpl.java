@@ -128,7 +128,7 @@ public class TwoServiceImpl implements TwoService {
             if (twoParameter.getDraft() == null || twoParameter.getDraft() == 0) {
                 result.setStatus(1);
                 result.setData(helpRepository.findByUser(user, pageable));
-            } else if (twoParameter.getDraft() != null && twoParameter.getDraft() != 0 && twoParameter.getType() != 5) {
+            } else if (twoParameter.getDraft() != null && twoParameter.getDraft() != 0 && twoParameter.getDraft() != 5) {
                 result.setStatus(1);
                 result.setData(helpRepository.findByUserAndDraft(user, twoParameter.getDraft(), pageable));
             } else {
