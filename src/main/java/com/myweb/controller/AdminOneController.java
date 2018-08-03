@@ -109,6 +109,11 @@ public class AdminOneController {
         return ResultUtils.data(adminOneService.userTokenList(httpSession));
     }
 
+    @GetMapping("/user/group/list")
+    public Object userGroupList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userGroupList(httpSession));
+    }
+
     //在线人数
     @GetMapping("/count/token")
     public Result countToken(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {

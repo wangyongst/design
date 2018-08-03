@@ -302,6 +302,14 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result userGroupList(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(userRepository.findAllTimes());
+        return result;
+    }
+
+    @Override
     public Result reportList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);

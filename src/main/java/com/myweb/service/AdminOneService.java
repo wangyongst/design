@@ -33,6 +33,8 @@ public interface AdminOneService {
 
     public Result searchingList(HttpSession httpSession);
 
+    public Result userGroupList(HttpSession httpSession);
+
     public Result reportList(HttpSession httpSession);
 
     public Result logout(HttpSession httpSession);

@@ -4,6 +4,7 @@ import com.myweb.pojo.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     public Page<User> findAllByUsernameContainsOrNicknameContainsOrSexContainsOrJobsContains(String username,String nickname,String sex,String jobs, Pageable pageable);
 
     public int countAllByReferAndCreatetimeGreaterThan(Integer refer, String time);
+
+    @Query("select user.jobs,count (user) from User user group by user.jobs order by count(user.jobs) desc")
+    public List<Object[]> findAllTimes();
 }
