@@ -25,13 +25,15 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
 
     public Page<Help> findByDraft(int draft, Pageable pageable);
 
+    public Page<Help> findByDraftAndAudience(int draft, int audience, Pageable pageable);
+
     public Page<Help> findByDraftAndAudienceNot(int draft, int audience, Pageable pageable);
 
     public List<Help> findByDraft(int draft);
 
     public Page<Help> findByUserAndAudienceNotAndDraftAndTagContains(User user, int audience, int draft, String tag, Pageable pageable);
 
-    public Page<Help> findByUserAndAudienceNotAndDraftNotAndTagContains(User user, int audience, int draft, String tag, Pageable pageable);
+    public Page<Help> findByDesignAndAudienceAndDraft(String design, int audience, int draft, Pageable pageable);
 
     public Page<Help> findByDesignAndAudienceNotAndDraft(String design, int audience, int draft, Pageable pageable);
 

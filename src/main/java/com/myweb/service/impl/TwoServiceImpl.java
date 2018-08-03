@@ -145,11 +145,12 @@ public class TwoServiceImpl implements TwoService {
         result.setStatus(1);
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             if (twoParameter.getDesign() == null) {
-                result.setData(helpRepository.findByDraft(4, pageable));
+                result.setData(helpRepository.findByDraftAndAudience(4,1, pageable));
             } else {
-                result.setData(helpRepository.findByDesignAndAudienceNotAndDraft(twoParameter.getDesign(), 3, 4, pageable));
+                result.setData(helpRepository.findByDesignAndAudienceAndDraft(twoParameter.getDesign(), 1, 4, pageable));
             }
         } else {
+            //自己或粉丝
             User user = userRepository.findOne(twoParameter.getUserid());
             if (user == null || isNotLogin(user)) {
                 result.setStatus(9);
