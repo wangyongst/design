@@ -121,6 +121,13 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.user(oneParameter, httpSession));
     }
 
+    //用户
+    @GetMapping("/user")
+    public Result getUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.getUser(oneParameter,httpSession));
+    }
+
+
     //注册人数
     @GetMapping("/count/user")
     public Result countUser(HttpSession httpSession) {

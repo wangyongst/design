@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary col-1" id="update">修改用户</button>
+                    <button type="button" class="btn btn-primary col-1" id="update">修改用户邮箱</button>
                     <button type="button" class="btn btn-primary col-1" id="delete">删除用户</button>
                     <div class="table-responsive m-t-40">
                         <table data-toggle="table" data-url="admin/user/list" data-show-refresh="true" id="myTable"
@@ -90,6 +90,31 @@
         </div>
     </div>
     <!-- End PAge Content -->
+
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 1000px;left: -500px">
+                <div class="modal-header">
+                    <h4 class="modal-title">修改用户邮箱</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="advertForm">
+                        <input id="userid" name="userid" hidden>
+                        <div class="form-group">
+                            <label for="email" class="control-label">邮箱:</label>
+                            <input type="text" class="form-control" id="email" name="email"></div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="close">关闭</button>
+                    <button type="button" class="btn btn-primary" id="submit">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="js/lib/jquery/jquery.min.js"></script>

@@ -51,6 +51,63 @@ $(function () {
             }
         });
     });
+
+
+    $("#update").click(function () {
+        var selected = select();
+        if (selected == "") {
+            alert("请先选择你要查看的记录");
+            return;
+        }
+        var ids = selected.split(",");
+        if (ids.length > 2) {
+            alert("请选择一条记录");
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            cache: "false",
+            url: "/admin/user",
+            data: {
+                userid:ids[1],
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $('#userid').val(result.data.id)
+                    $('#email').val(result.data.email)
+                    $('#myModal').modal('toggle');
+                } else {
+                    alert(result.message);
+                }
+            }
+        });
+
+        $('#myModal').modal('toggle');
+    });
+
+    $("#close").click(function () {
+        $('#myModal').modal('toggle');
+    });
+
+
+    $("#submit").click(function () {
+        $.ajax({
+            type: "Post",
+            cache: "false",
+            url: "/admin/user",
+            data: $('#advertForm').serialize() + "&operation=1",
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $('#myModal').modal('toggle');
+                    $("#myTable").bootstrapTable('refresh');
+                } else {
+                    alert(result.message);
+                }
+            }
+        });
+    });
 });
 
 

@@ -286,7 +286,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result userTokenList( HttpSession httpSession) {
+    public Result userTokenList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
         result.setData(tokenRepository.findAll());
@@ -335,6 +335,16 @@ public class AdminOneServiceImpl implements AdminOneService {
             }
             result.setData(userRepository.save(user));
         }
+        return result;
+    }
+
+
+    @Override
+    public Result getUser(OneParameter oneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) return result;
+        result.setStatus(1);
+        result.setData(userRepository.findOne(oneParameter.getUserid()));
         return result;
     }
 
@@ -517,7 +527,6 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setData(settingRepository.findOne(adminOneParameter.getSettingid()));
         return result;
     }
-
 
     @Override
     public Result settingList(HttpSession httpSession) {
