@@ -289,7 +289,7 @@ public class OneController {
             @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String")
     })
     @ResponseBody
-    @GetMapping("/advert/login")
+    @PostMapping("/advert/login")
     public Result advertLogin(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.advertLogin(oneParameter));
     }

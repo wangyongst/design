@@ -283,7 +283,7 @@ public class ThreeController {
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
     @ResponseBody
-    @PostMapping("/advert/studied/list")
+    @GetMapping("/advert/studied/list")
     public Result advertStudiedList(@ModelAttribute ThreeParameter threeParameter) {
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
         if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
