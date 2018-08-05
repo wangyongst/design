@@ -44,6 +44,12 @@ public class AdminOneController {
     }
 
     //后端角色
+    @GetMapping("/user/role/15")
+    public Result userRole15(HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userRole15(httpSession));
+    }
+
+    //后端角色
     @GetMapping("/user/role/list")
     public Object userRole(HttpSession httpSession) {
         return ResultUtils.data(adminOneService.userRoleList(httpSession));

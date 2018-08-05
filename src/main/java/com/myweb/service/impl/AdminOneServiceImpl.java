@@ -269,6 +269,15 @@ public class AdminOneServiceImpl implements AdminOneService {
         return result;
     }
 
+
+    @Override
+    public Result userRole15(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(adminUserRepository.findAllByAdminRole(adminRoleRepository.findOne(15)));
+        return result;
+    }
+
     @Override
     public Result userList(HttpSession httpSession) {
         Result result = new Result();
