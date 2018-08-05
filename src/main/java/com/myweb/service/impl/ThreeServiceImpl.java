@@ -40,6 +40,16 @@ public class ThreeServiceImpl implements ThreeService {
     @Autowired
     private TimenewRepository timenewRepository;
 
+
+    @Autowired
+    private AdminUserRepository adminUserRepository;
+
+    @Autowired
+    private AdvertRepository advertRepository;
+
+    @Autowired
+    private BuyRepository buyRepository;
+
     @Autowired
     private StudyRepository studyRepository;
 
@@ -261,6 +271,49 @@ public class ThreeServiceImpl implements ThreeService {
         return result;
     }
 
+
+    @Override
+    public Result advertStudiedList(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getAdminuserid() != null && threeParameter.getAdminuserid() != 0 && threeParameter.getAdvertid() != null && threeParameter.getAdvertid() != 0) {
+            AdminUser u = adminUserRepository.findOne(threeParameter.getUserid());
+            if (u == null) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            } else {
+                Page<Buy> adverts = buyRepository.findByAdminuser(u, pageable);
+                result.setStatus(1);
+                result.setData(adverts);
+            }
+        } else {
+            result.setMessage("必须的参数不能为空!");
+        }
+        return result;
+    }
+
+
+    @Override
+    public Result advertList(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getAdminuserid() != null && threeParameter.getAdminuserid() != 0) {
+            AdminUser u = adminUserRepository.findOne(threeParameter.getUserid());
+            if (u == null) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            } else {
+                Page<Advert> adverts = advertRepository.findByAdminuserOrderByOuttimeDesc(u, pageable);
+                result.setStatus(1);
+                result.setData(adverts);
+            }
+        }else{
+            result.setMessage("必须的参数不能为空!");
+        }
+        return result;
+    }
+
+
     @Override
     public Result userMostHelp(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
@@ -479,8 +532,8 @@ public class ThreeServiceImpl implements ThreeService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            List<Notice> notices = noticeRepository.findAllByUserAndIsreadNot(user,1);
-            notices.forEach(e->{
+            List<Notice> notices = noticeRepository.findAllByUserAndIsreadNot(user, 1);
+            notices.forEach(e -> {
                 e.setIsread(1);
                 noticeRepository.save(e);
             });

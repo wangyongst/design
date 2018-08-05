@@ -1,6 +1,8 @@
 package com.myweb.vo;
 
 public class ThreeParameter {
+    private Integer adminuserid;
+    private Integer advertid;
     private Integer messageid;
     private Integer userid;
     private Integer helpid;
@@ -10,6 +12,22 @@ public class ThreeParameter {
     private Integer page;
     private Integer pagesize;
     private Integer type;
+
+    public Integer getAdvertid() {
+        return advertid;
+    }
+
+    public void setAdvertid(Integer advertid) {
+        this.advertid = advertid;
+    }
+
+    public Integer getAdminuserid() {
+        return adminuserid;
+    }
+
+    public void setAdminuserid(Integer adminuserid) {
+        this.adminuserid = adminuserid;
+    }
 
     public Integer getNoticeid() {
         return noticeid;

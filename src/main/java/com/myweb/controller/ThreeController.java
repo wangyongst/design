@@ -44,8 +44,8 @@ public class ThreeController {
     })
     @ResponseBody
     @PostMapping("/help/recommend")
-    public Result recommend(@ModelAttribute ThreeParameter threeParameter,HttpServletRequest request) {
-        return threeService.recommend(threeParameter,request);
+    public Result recommend(@ModelAttribute ThreeParameter threeParameter, HttpServletRequest request) {
+        return threeService.recommend(threeParameter, request);
     }
 
 
@@ -74,7 +74,7 @@ public class ThreeController {
         if (threeParameter.getPage() == null) threeParameter.setPage(0);
         if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), sort);
-        return threeService.helpStudied(threeParameter,pageable);
+        return threeService.helpStudied(threeParameter, pageable);
     }
 
 
@@ -258,4 +258,37 @@ public class ThreeController {
     public Result newsCountRead(@ModelAttribute ThreeParameter threeParameter) {
         return ResultUtils.result(threeService.newsCountRead(threeParameter));
     }
+
+    @ApiOperation(value = "广告列表", notes = "广告列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminuserid", value = "广告主id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型（必需）1，想买广告2，了解详情3，立即购买", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/advert/list")
+    public Result advertList(@ModelAttribute ThreeParameter threeParameter) {
+        if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), null);
+        return ResultUtils.result(threeService.advertList(threeParameter, pageable));
+    }
+
+    @ApiOperation(value = "广告想买详情", notes = "广告想买详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminuserid", value = "广告主id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/advert/studied/list")
+    public Result advertStudiedList(@ModelAttribute ThreeParameter threeParameter) {
+        if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), null);
+        return ResultUtils.result(threeService.advertStudiedList(threeParameter, pageable));
+    }
+
 }

@@ -14,4 +14,6 @@ public interface AdvertRepository extends JpaRepository<Advert, Integer> {
     Page<Advert> findAllByOuttimeGreaterThanOrderByReferDesc(String outtime, Pageable pageable);
 
     public void deleteAllByAdminuser(AdminUser adminUser);
+
+    public Page<Advert> findByAdminuserOrderByOuttimeDesc(AdminUser adminUser,Pageable pageable);
 }

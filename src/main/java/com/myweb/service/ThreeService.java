@@ -28,6 +28,10 @@ public interface ThreeService {
 
     public Result followHelp(ThreeParameter threeParameter,Pageable pageable);
 
+    public Result advertList(ThreeParameter threeParameter,Pageable pageable);
+
+    public Result advertStudiedList(ThreeParameter threeParameter,Pageable pageable);
+
     public Result userDelete(ThreeParameter threeParameter);
 
     public Result messageDelete(ThreeParameter threeParameter);
