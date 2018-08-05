@@ -1,4 +1,8 @@
 $(function () {
+
+    $("#upload2").hide();
+
+
     $.ajax({
         type: "GET",
         cache: "false",
@@ -93,11 +97,11 @@ $(function () {
        if($("#type").val() == 2){
            $("#selectNot2").text("上传大图:");
            $("#url").hide();
-           $("#selectNot2").show();
+           $("#upload2").show();
        }else{
            $("#selectNot2").text("跳转链接:");
            $("#url").show();
-           $("#selectNot2").hide();
+           $("#upload2").hide();
        }
     });
 
@@ -190,5 +194,12 @@ function clearForm(form) {
     for (i = 0; i < boxes.length; i++) {
         boxes[i].checked = false;
     }
+}
+
+function getType(value, row, index) {
+    if(value ==1) return "想买广告";
+    else if(value ==2) return "了解详情";
+    else if(value ==3) return "立即购买";
+    else return "其它";
 }
 

@@ -282,4 +282,15 @@ public class OneController {
     public Result setting(@ModelAttribute AdminOneParameter adminOneParameter) {
         return ResultUtils.result(oneService.getSetting(adminOneParameter));
     }
+
+    @ApiOperation(value = "广告主登录", notes = "广告主登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @GetMapping("/advert/login")
+    public Result advertLogin(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.advertLogin(oneParameter));
+    }
 }

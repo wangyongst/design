@@ -35,6 +35,8 @@ public interface OneService {
 
     public Result destroy(OneParameter oneParameter);
 
+    public Result advertLogin(OneParameter oneParameter);
+
     public Result unfollow(OneParameter oneParameter);
 
     public Result studiedIs(OneParameter oneParameter);

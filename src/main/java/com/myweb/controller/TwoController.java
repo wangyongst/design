@@ -2,6 +2,7 @@ package com.myweb.controller;
 
 
 import com.myweb.service.TwoService;
+import com.myweb.vo.OneParameter;
 import com.myweb.vo.ResultUtils;
 import com.myweb.vo.ThreeParameter;
 import com.myweb.vo.TwoParameter;

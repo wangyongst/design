@@ -44,6 +44,9 @@ public class OneServiceImpl implements OneService {
     private TimenewRepository timenewRepository;
 
     @Autowired
+    private AdminUserRepository adminUserRepository;
+
+    @Autowired
     private ReferipsRepository referipsRepository;
 
     @Autowired
@@ -147,6 +150,29 @@ public class OneServiceImpl implements OneService {
                 return result;
             } else if (userList.size() == 0) {
                 result.setMessage("邮箱不存在或密码错误！");
+                return result;
+            }
+        } else {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setMessage("登录失败！");
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result advertLogin(OneParameter oneParameter) {
+        Result result = new Result();
+        if (StringUtils.isNotBlank(oneParameter.getUsername()) || StringUtils.isNotBlank(oneParameter.getPassword())) {
+            List<AdminUser> userList = adminUserRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
+            if (userList.size() == 1 && userList.get(0).getAdminRole().getId() == 15) {
+                result.setStatus(1);
+                result.setData(userList.get(0));
+                return result;
+            } else if (userList.size() != 1) {
+                result.setMessage("用户不存在或密码错误！");
                 return result;
             }
         } else {
