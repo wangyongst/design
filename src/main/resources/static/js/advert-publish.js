@@ -1,5 +1,4 @@
 $(function () {
-
     $.ajax({
         type: "GET",
         cache: "false",
