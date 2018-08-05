@@ -577,8 +577,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         }
         Advert advert = new Advert();
         if (adminOneParameter.getOperation() == 1) {
-            AdminUser adminUser = (AdminUser) httpSession.getAttribute("user");
-            advert.setAdminuser(adminUserRepository.findOne(adminUser.getId()));
+            advert.setAdminuser(adminUserRepository.findOne(adminOneParameter.getAdminuserid()));
             advert.setTitle(adminOneParameter.getTitle());
             advert.setImage(adminOneParameter.getImage());
             advert.setUrl(adminOneParameter.getUrl());

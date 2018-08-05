@@ -1,4 +1,19 @@
 $(function () {
+
+    $.ajax({
+        type: "GET",
+        cache: "false",
+        url: "/admin/user/role/15",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 1) {
+                $.each(result.data, function (key, val) {
+                    $('#adminuserid').append("<option value='" + val.id + "'>" + val.username + "</option>");
+                });
+            }
+        }
+    });
+
     $("#look").click(function () {
         var selected = select();
         if (selected == "") {
@@ -52,6 +67,39 @@ $(function () {
                 }
             }
         });
+    });
+
+    $("#upload2").change(function () {
+        var formData = new FormData();
+        formData.append('image', this.files[0]);
+        $.ajax({
+            type: "POST",
+            cache: "false",
+            contentType: false,
+            processData: false,
+            url: "/upload/image",
+            data: formData,
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $('#url').val("http://pas99p7vd.bkt.clouddn.com/" + result.data);
+                }else{
+                    alert(result.message);
+                }
+            }
+        });
+    });
+
+    $("#type").change(function () {
+       if($("#type").val() == 2){
+           $("#selectNot2").text("上传大图:");
+           $("#url").hide();
+           $("#selectNot2").show();
+       }else{
+           $("#selectNot2").text("跳转链接:");
+           $("#url").show();
+           $("#selectNot2").hide();
+       }
     });
 
     $("#refer").click(function () {

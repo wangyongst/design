@@ -39,7 +39,8 @@
                     <button type="button" class="btn btn-primary col-1" id="refer">强制推荐</button>
                     <div class="table-responsive m-t-40">
                         <table data-toggle="table" data-url="admin/advert/list" data-show-refresh="true" id="myTable"
-                               data-search="true" data-pagination="true" data-sort-class="studied" data-sort-order="desc">
+                               data-search="true" data-pagination="true" data-sort-class="studied"
+                               data-sort-order="desc">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true">全选</th>
@@ -99,17 +100,22 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="url" class="control-label">选择广告主:</label>
+                            <input class="form-control" id="adminuserid" name="adminuserid">
+                        </div>
+                        <div class="form-group">
                             <label for="title" class="control-label">标题:</label>
                             <input type="text" class="form-control" id="title" name="title">
                         </div>
                         <div class="form-group">
                             <label for="image" class="control-label">上传图片:</label>
-                            <input class="form-control" id="image" name="image" hidden></input>
+                            <input class="form-control" id="image" name="image" hidden>
                             <input type="file" name="file" id="upload">
                         </div>
                         <div class="form-group">
-                            <label for="url" class="control-label">跳转链接:</label>
-                            <input class="form-control" id="url" name="url"></input>
+                            <label for="url" class="control-label" id="selectNot2">跳转链接:</label>
+                            <input class="form-control" id="url" name="url">
+                            <input type="file" name="file" id="upload2" hidden>
                         </div>
                         <div class="form-group">
                             <label for="outtime" class="control-label">到期时间:格式2018-07-05</label>
