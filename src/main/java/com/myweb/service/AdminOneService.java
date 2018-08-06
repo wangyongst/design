@@ -88,4 +88,6 @@ public interface AdminOneService {
     public Result helpRefer(TwoParameter twoParameter, HttpSession httpSession);
 
     public Result advertRefer(TwoParameter twoParameter, HttpSession httpSession);
+
+    public Result advertOut(TwoParameter twoParameter, HttpSession httpSession);
 }

@@ -37,6 +37,7 @@
                     <button type="button" class="btn btn-primary col-1" id="create">发布广告</button>
                     <button type="button" class="btn btn-primary col-1" id="look">查看图片</button>
                     <button type="button" class="btn btn-primary col-1" id="refer">强制推荐</button>
+                    <button type="button" class="btn btn-primary col-1" id="down">广告下线</button>
                     <div class="table-responsive m-t-40">
                         <table data-toggle="table" data-url="admin/advert/list" data-show-refresh="true" id="myTable"
                                data-search="true" data-pagination="true" data-sort-class="studied"
@@ -53,7 +54,7 @@
                                 <th data-field="clicked" data-sortable="true">点击量</th>
                                 <th data-field="rate" data-sortable="true">点击率</th>
                                 <th data-field="buy" data-sortable="true">想买数</th>
-                                <th data-field="refer" data-sortable="true">强制推荐</th>
+                                <th data-field="refer" data-sortable="true" data-formatter="getStatus">状态</th>
                                 <th data-field="createtime">创建时间</th>
                                 <th data-field="outtime">到期时间</th>
                             </tr>

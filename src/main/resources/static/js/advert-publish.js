@@ -134,6 +134,35 @@ $(function () {
         });
     });
 
+    $("#down").click(function () {
+        var selected = select();
+        if (selected == "") {
+            alert("请先选择你要下线的记录");
+            return;
+        }
+        var ids = selected.split(",");
+        if (ids.length > 2) {
+            alert("请选择一条记录");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            cache: "false",
+            url: "/admin/advert/out",
+            data: {
+                advertid: ids[1]
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $("#myTable").bootstrapTable('refresh');
+                }else{
+                    alert(result.message);
+                }
+            }
+        });
+    });
+
     $("#submit2").click(function () {
         $.ajax({
             type: "Post",
@@ -201,5 +230,11 @@ function getType(value, row, index) {
     else if(value ==2) return "了解详情";
     else if(value ==3) return "立即购买";
     else return "其它";
+}
+
+function getStatus(value, row, index) {
+    if(value ==1) return "强制推荐";
+    if(value ==2) return "已经下线";
+    else return "普通广告";
 }
 

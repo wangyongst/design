@@ -191,7 +191,7 @@ public class TwoServiceImpl implements TwoService {
     public Result advert(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        Page<Advert> adverts = advertRepository.findAllByOuttimeGreaterThanOrderByReferDesc(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
+        Page<Advert> adverts = advertRepository.findAllByReferNotAndOuttimeGreaterThanOrderByReferDesc(2,new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
         adverts.forEach(e -> {
             e.setExposure(e.getExposure() + 1);
             advertRepository.save(e);

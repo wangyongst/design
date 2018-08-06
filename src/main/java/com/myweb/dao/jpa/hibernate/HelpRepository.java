@@ -49,7 +49,7 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
     @Query("select help.user from Help help group by help.user order by count(help) desc")
     public Page<User> findUserByMost(Pageable pageable);
 
-    @Query("select help  from Help help where help.user in (select follow.touser from Follow follow where follow.user = ?1)")
+    @Query("select help  from Help help where help.user in (select follow.touser from Follow follow where follow.user = ?1 and help.draft = 4 and help.audience <> 3)")
     public Page<Help> queryByFollow(User user, Pageable pageable);
 
     @Query("select count(help) from Help help where help.user in (select follow.touser from Follow follow where follow.user = ?1) and help.createtime >= ?2")

@@ -262,6 +262,12 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.advertRefer(twoParameter, httpSession));
     }
 
+    //下线广告
+    @PostMapping("/advert/out")
+    public Result advertOut(@ModelAttribute TwoParameter twoParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.advertOut(twoParameter, httpSession));
+    }
+
     //广告列表
     @GetMapping("/advert/list")
     public Object advertList(HttpSession httpSession) {

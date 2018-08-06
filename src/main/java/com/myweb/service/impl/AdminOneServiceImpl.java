@@ -522,6 +522,19 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
+    public Result advertOut(TwoParameter twoParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        if (twoParameter.getAdvertid() == null || twoParameter.getAdvertid() == 0) return result;
+        Advert advert = advertRepository.findOne(twoParameter.getAdvertid());
+        if (advert == null) return result;
+        advert.setRefer(2);
+        advertRepository.save(advert);
+        createLog("下线ID为" + advert.getId() + "的广告", httpSession);
+        return result;
+    }
+
+    @Override
     public Result setting(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
         if (adminOneParameter.getOperation() == 1) {
