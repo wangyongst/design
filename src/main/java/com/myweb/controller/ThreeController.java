@@ -36,6 +36,16 @@ public class ThreeController {
         return threeService.click(threeParameter);
     }
 
+    @ApiOperation(value = "阅读", notes = "阅读")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/help/read")
+    public Result helpRead(@ModelAttribute ThreeParameter threeParameter) {
+        return threeService.helpRead(threeParameter);
+    }
+
 
     @ApiOperation(value = "推荐", notes = "推荐")
     @ApiImplicitParams({
@@ -88,6 +98,16 @@ public class ThreeController {
     @PostMapping("/help/study")
     public Result study(@ModelAttribute ThreeParameter threeParameter) {
         return threeService.study(threeParameter);
+    }
+
+    @ApiOperation(value = "转发", notes = "转发")
+    @ApiImplicitParams({
+                       @ApiImplicitParam(name = "helpid", value = "求助id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/help/forward")
+    public Result forward(@ModelAttribute ThreeParameter threeParameter) {
+        return threeService.forward(threeParameter);
     }
 
     @ApiOperation(value = "发送消息", notes = "发送消息")

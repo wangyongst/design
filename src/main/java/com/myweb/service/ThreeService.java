@@ -38,6 +38,10 @@ public interface ThreeService {
 
     public Result user(ThreeParameter threeParameter);
 
+    public Result forward(ThreeParameter threeParameter);
+
+    public Result helpRead(ThreeParameter threeParameter);
+
     public Result userMost(ThreeParameter threeParameter,Pageable pageable);
 
     public Result userMostHelp(ThreeParameter threeParameter,Pageable pageable);

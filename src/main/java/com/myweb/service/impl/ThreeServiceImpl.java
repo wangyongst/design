@@ -89,6 +89,44 @@ public class ThreeServiceImpl implements ThreeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result forward(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Help help = helpRepository.findOne(threeParameter.getHelpid());
+        if (help == null) {
+            result.setMessage("转发的求助不存在");
+        } else {
+            help.setClicked(help.getForwarded() + 1);
+            helpRepository.save(help);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result helpRead(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Help help = helpRepository.findOne(threeParameter.getHelpid());
+        if (help == null) {
+            result.setMessage("转发的求助不存在");
+        } else {
+            help.setClicked(help.getReaded() + 1);
+            helpRepository.save(help);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result recommend(ThreeParameter threeParameter, HttpServletRequest request) {
         Result result = new Result();
         if (threeParameter.getHelpid() == null || threeParameter.getHelpid() == 0 || threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
@@ -307,7 +345,7 @@ public class ThreeServiceImpl implements ThreeService {
                 result.setStatus(1);
                 result.setData(adverts);
             }
-        }else{
+        } else {
             result.setMessage("必须的参数不能为空!");
         }
         return result;
