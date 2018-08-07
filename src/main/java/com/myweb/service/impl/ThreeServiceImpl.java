@@ -335,7 +335,7 @@ public class ThreeServiceImpl implements ThreeService {
     public Result advertList(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
         if (threeParameter.getAdminuserid() != null && threeParameter.getAdminuserid() != 0) {
-            AdminUser u = adminUserRepository.findOne(threeParameter.getUserid());
+            AdminUser u = adminUserRepository.findOne(threeParameter.getAdminuserid());
             if (u == null) {
                 result.setStatus(9);
                 result.setMessage("当前用户不存在或未登录!");
