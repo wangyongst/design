@@ -54,6 +54,7 @@ public class User implements Serializable {
     @Basic
     @Column(name = "openid", nullable = true, length = 255)
     private String openid;
+
     @Transient
     private Integer published;
 
