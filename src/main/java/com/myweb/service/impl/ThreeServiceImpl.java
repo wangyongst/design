@@ -99,7 +99,7 @@ public class ThreeServiceImpl implements ThreeService {
         if (help == null) {
             result.setMessage("转发的求助不存在");
         } else {
-            help.setClicked(help.getForwarded() + 1);
+            help.setForwarded(help.getForwarded() + 1);
             helpRepository.save(help);
             result.setStatus(1);
         }
@@ -116,9 +116,9 @@ public class ThreeServiceImpl implements ThreeService {
         }
         Help help = helpRepository.findOne(threeParameter.getHelpid());
         if (help == null) {
-            result.setMessage("转发的求助不存在");
+            result.setMessage("阅读的求助不存在");
         } else {
-            help.setClicked(help.getReaded() + 1);
+            help.setReaded(help.getReaded() + 1);
             helpRepository.save(help);
             result.setStatus(1);
         }

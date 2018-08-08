@@ -52,9 +52,11 @@ public class OneController {
         return ResultUtils.result(oneService.login(oneParameter));
     }
 
-    @ApiOperation(value = "登出", notes = "登出")
+    @ApiOperation(value = "注销", notes = "注销")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "text", value = "原因（必需）", required = true, dataType = "String")
     })
     @ResponseBody
     @PostMapping("/user/destroy")
@@ -63,14 +65,13 @@ public class OneController {
     }
 
 
-    @ApiOperation(value = "注销", notes = "注销")
+    @ApiOperation(value = "登出", notes = "登出")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "text", value = "原因（必需）", required = true, dataType = "String")
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @PostMapping("/user/logout")
+
     public Result logout(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.logout(oneParameter));
     }
