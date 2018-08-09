@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -101,6 +102,40 @@ public class ThreeServiceImpl implements ThreeService {
         } else {
             help.setForwarded(help.getForwarded() + 1);
             helpRepository.save(help);
+            result.setStatus(1);
+        }
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result advertInfo(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getAdvertid() == null || threeParameter.getAdvertid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(helpRepository.findOne(threeParameter.getHelpid()));
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result advertForward(ThreeParameter threeParameter) {
+        Result result = new Result();
+        if (threeParameter.getAdvertid() == null || threeParameter.getAdvertid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        Advert advert = advertRepository.findOne(threeParameter.getAdvertid());
+        if (advert == null) {
+            result.setMessage("转发的广告不存在");
+        } else {
+            advert.setForwarded(advert.getForwarded() + 1);
+            advertRepository.save(advert);
             result.setStatus(1);
         }
         return result;
@@ -342,6 +377,16 @@ public class ThreeServiceImpl implements ThreeService {
                 return result;
             } else {
                 Page<Advert> adverts = advertRepository.findByAdminuserOrderByOuttimeDesc(u, pageable);
+                adverts.forEach(e -> {
+                    try {
+                        if (e.getRefer() == 2) e.setStatus(1);
+                        else if (new SimpleDateFormat("yyyy-MM-dd").parse(e.getOuttime()).getTime() < new Date().getTime())
+                            e.setStatus(3);
+                        else e.setStatus(2);
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                });
                 result.setStatus(1);
                 result.setData(adverts);
             }

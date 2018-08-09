@@ -33,6 +33,9 @@ public class Advert implements Serializable {
     @Column(name = "clicked", nullable = true)
     private Integer clicked;
     @Basic
+    @Column(name = "forwarded", nullable = true)
+    private Integer forwarded;
+    @Basic
     @Column(name = "buy", nullable = true)
     private Integer buy;
     @Basic
@@ -52,7 +55,26 @@ public class Advert implements Serializable {
     private Integer isBuy;
 
     @Transient
+    private Integer status;
+
+    @Transient
     private Float rate;
+
+    public Integer getForwarded() {
+        return forwarded;
+    }
+
+    public void setForwarded(Integer forwarded) {
+        this.forwarded = forwarded;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public Float getRate() {
         return rate;

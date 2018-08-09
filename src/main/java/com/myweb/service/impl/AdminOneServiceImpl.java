@@ -598,6 +598,8 @@ public class AdminOneServiceImpl implements AdminOneService {
             advert.setExposure(0);
             advert.setClicked(0);
             advert.setBuy(0);
+            advert.setForwarded(0);
+            advert.setRefer(0);
             advert.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             try {
                 advert.setOuttime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd").parse(adminOneParameter.getOuttime())));

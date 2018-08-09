@@ -110,6 +110,17 @@ public class ThreeController {
         return threeService.forward(threeParameter);
     }
 
+
+    @ApiOperation(value = "广告转发", notes = "广告转发")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/advert/forward")
+    public Result advertForward(@ModelAttribute ThreeParameter threeParameter) {
+        return threeService.advertForward(threeParameter);
+    }
+
     @ApiOperation(value = "发送消息", notes = "发送消息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
@@ -293,6 +304,17 @@ public class ThreeController {
         if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
         Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), null);
         return ResultUtils.result(threeService.advertList(threeParameter, pageable));
+    }
+
+
+    @ApiOperation(value = "广告详情", notes = "广告详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/advert/info")
+    public Result advertInfo(@ModelAttribute ThreeParameter threeParameter) {
+        return ResultUtils.result(threeService.advertInfo(threeParameter));
     }
 
     @ApiOperation(value = "广告想买详情", notes = "广告想买详情")

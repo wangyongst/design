@@ -127,7 +127,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result login(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isNotBlank(oneParameter.getUsername()) || StringUtils.isNotBlank(oneParameter.getPassword())) {
+        if (StringUtils.isNotBlank(oneParameter.getUsername()) && !oneParameter.getUsername().contains("@") && StringUtils.isNotBlank(oneParameter.getPassword())) {
             List<User> userList = userRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
             if (userList.size() == 1) {
                 result.setStatus(1);
@@ -142,7 +142,7 @@ public class OneServiceImpl implements OneService {
                 result.setMessage("用户不存在或密码错误！");
                 return result;
             }
-        } else if (StringUtils.isNotBlank(oneParameter.getEmail()) || StringUtils.isNotBlank(oneParameter.getPassword())) {
+        } else if (StringUtils.isNotBlank(oneParameter.getUsername()) && oneParameter.getUsername().contains("@") && StringUtils.isNotBlank(oneParameter.getPassword())) {
             List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getEmail(), oneParameter.getPassword());
             if (userList.size() == 1) {
                 result.setStatus(1);
@@ -453,30 +453,29 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result followMy(OneParameter oneParameter, Pageable pageable) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+        if (oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
-            result.setStatus(9);
-            result.setMessage("当前用户不存在或未登录!");
+        User touser = userRepository.findOne(oneParameter.getTouserid());
+        if (touser == null) {
+            result.setMessage("主页用户用户不存在!");
+            return null;
         } else {
-            Page<Follow> follows = null;
-            if (oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
-                follows = followRepository.findByUser(user, pageable);
-            } else {
-                User user1 = userRepository.findOne(oneParameter.getTouserid());
-                follows = followRepository.findByUser(user1, pageable);
-            }
-            follows.forEach(e -> {
-                List<Follow> follows2 = followRepository.findByUserAndTouser(user, e.getUser());
-                if (follows2.size() > 0) {
-                    e.setIsFollow(1);
-                } else {
-                    e.setIsFollow(0);
+            Page<Follow> follows = followRepository.findByUser(touser, pageable);
+            if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
+                User user = userRepository.findOne(oneParameter.getUserid());
+                if (user != null) {
+                    follows.forEach(e -> {
+                        List<Follow> follows2 = followRepository.findByUserAndTouser(user, touser);
+                        if (follows2.size() > 0) {
+                            e.setIsFollow(1);
+                        } else {
+                            e.setIsFollow(0);
+                        }
+                    });
                 }
-            });
+            }
             result.setStatus(1);
             result.setData(follows);
         }
@@ -486,30 +485,29 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result followMe(OneParameter oneParameter, Pageable pageable) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) {
+        if (oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
-            result.setStatus(9);
-            result.setMessage("当前用户不存在或未登录!");
+        User touser = userRepository.findOne(oneParameter.getTouserid());
+        if (touser == null) {
+            result.setMessage("主页用户用户不存在!");
+            return null;
         } else {
-            Page<Follow> follows = null;
-            if (oneParameter.getTouserid() == null || oneParameter.getTouserid() == 0) {
-                follows = followRepository.findByTouser(user, pageable);
-            } else {
-                User user1 = userRepository.findOne(oneParameter.getTouserid());
-                follows = followRepository.findByTouser(user1, pageable);
-            }
-            follows.forEach(e -> {
-                List<Follow> follows2 = followRepository.findByUserAndTouser(user, e.getUser());
-                if (follows2.size() > 0) {
-                    e.setIsFollow(1);
-                } else {
-                    e.setIsFollow(0);
+            Page<Follow> follows = followRepository.findByTouser(touser, pageable);
+            if (oneParameter.getUserid() != null && oneParameter.getUserid() != 0) {
+                User user = userRepository.findOne(oneParameter.getUserid());
+                if (user != null) {
+                    follows.forEach(e -> {
+                        List<Follow> follows2 = followRepository.findByUserAndTouser(user, e.getUser());
+                        if (follows2.size() > 0) {
+                            e.setIsFollow(1);
+                        } else {
+                            e.setIsFollow(0);
+                        }
+                    });
                 }
-            });
+            }
             result.setStatus(1);
             result.setData(follows);
         }

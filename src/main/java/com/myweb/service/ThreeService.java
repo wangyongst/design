@@ -12,7 +12,7 @@ public interface ThreeService {
 
     public Result click(ThreeParameter threeParameter);
 
-    public Result recommend(ThreeParameter threeParameter,HttpServletRequest request);
+    public Result recommend(ThreeParameter threeParameter, HttpServletRequest request);
 
     public Result study(ThreeParameter threeParameter);
 
@@ -24,13 +24,13 @@ public interface ThreeService {
 
     public Result newsCountRead(ThreeParameter threeParameter);
 
-    public Result helpStudied(ThreeParameter threeParameter,Pageable pageable);
+    public Result helpStudied(ThreeParameter threeParameter, Pageable pageable);
 
-    public Result followHelp(ThreeParameter threeParameter,Pageable pageable);
+    public Result followHelp(ThreeParameter threeParameter, Pageable pageable);
 
-    public Result advertList(ThreeParameter threeParameter,Pageable pageable);
+    public Result advertList(ThreeParameter threeParameter, Pageable pageable);
 
-    public Result advertStudiedList(ThreeParameter threeParameter,Pageable pageable);
+    public Result advertStudiedList(ThreeParameter threeParameter, Pageable pageable);
 
     public Result userDelete(ThreeParameter threeParameter);
 
@@ -40,17 +40,23 @@ public interface ThreeService {
 
     public Result forward(ThreeParameter threeParameter);
 
+    public Result advertForward(ThreeParameter threeParameter);
+
     public Result helpRead(ThreeParameter threeParameter);
 
-    public Result userMost(ThreeParameter threeParameter,Pageable pageable);
+    public Result userMost(ThreeParameter threeParameter, Pageable pageable);
 
-    public Result userMostHelp(ThreeParameter threeParameter,Pageable pageable);
+    public Result userMostHelp(ThreeParameter threeParameter, Pageable pageable);
 
-    public Result message(ThreeParameter threeParameter,Pageable pageable);
+    public Result message(ThreeParameter threeParameter, Pageable pageable);
 
-    public Result noticeNew(ThreeParameter threeParameter,Pageable pageable);
+    public Result noticeNew(ThreeParameter threeParameter, Pageable pageable);
 
     public Result noticeNewRead(ThreeParameter threeParameter);
 
     public Result read(ThreeParameter threeParameter);
+
+    public Result advertInfo(ThreeParameter threeParameter);
+
+
 }
