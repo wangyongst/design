@@ -128,6 +128,12 @@ public class OneServiceImpl implements OneService {
     public Result login(OneParameter oneParameter) {
         Result result = new Result();
         if (StringUtils.isNotBlank(oneParameter.getUsername()) && !oneParameter.getUsername().contains("@") && StringUtils.isNotBlank(oneParameter.getPassword())) {
+            List<User> users = userRepository.findByUsernameAndLocktimeGreaterThan(oneParameter.getUsername(), new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            if (users.size() > 0) {
+                result.setStatus(2);
+                result.setMessage("账号被冻结");
+                return result;
+            }
             List<User> userList = userRepository.findByUsernameAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
             if (userList.size() == 1) {
                 result.setStatus(1);
@@ -143,6 +149,12 @@ public class OneServiceImpl implements OneService {
                 return result;
             }
         } else if (StringUtils.isNotBlank(oneParameter.getUsername()) && oneParameter.getUsername().contains("@") && StringUtils.isNotBlank(oneParameter.getPassword())) {
+            List<User> users = userRepository.findByEmailAndLocktimeGreaterThan(oneParameter.getUsername(), new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+            if (users.size() > 0) {
+                result.setStatus(2);
+                result.setMessage("账号被冻结");
+                return result;
+            }
             List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getEmail(), oneParameter.getPassword());
             if (userList.size() == 1) {
                 result.setStatus(1);

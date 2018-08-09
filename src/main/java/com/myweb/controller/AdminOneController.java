@@ -132,6 +132,12 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.user(oneParameter, httpSession));
     }
 
+
+    @PostMapping("/user/lock")
+    public Result userLock(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userLock(oneParameter, httpSession));
+    }
+
     //用户
     @GetMapping("/user")
     public Result getUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {

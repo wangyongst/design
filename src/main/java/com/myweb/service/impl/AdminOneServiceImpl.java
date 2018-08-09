@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -377,6 +378,18 @@ public class AdminOneServiceImpl implements AdminOneService {
         if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) return result;
         result.setStatus(1);
         result.setData(userRepository.findOne(oneParameter.getUserid()));
+        return result;
+    }
+
+    @Override
+    public Result userLock(OneParameter oneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) return result;
+        result.setStatus(1);
+        User user = userRepository.findOne(oneParameter.getUserid());
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 3);
+        user.setLocktime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(calendar.getTime()));
         return result;
     }
 

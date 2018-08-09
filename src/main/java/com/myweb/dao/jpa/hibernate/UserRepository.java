@@ -18,6 +18,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public List<User> findByUsername(String username);
 
+    public List<User> findByUsernameAndLocktimeGreaterThan(String username, String locktime);
+
+    public List<User> findByEmailAndLocktimeGreaterThan(String username, String locktime);
+
     public List<User> findByEmail(String email);
 
     public Page<User> findAllByIdNot(Integer id, Pageable pageable);
@@ -30,7 +34,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public List<User> findByEmailAndPassword(String email, String password);
 
-    public Page<User> findAllByUsernameContainsOrNicknameContainsOrSexContainsOrJobsContains(String username,String nickname,String sex,String jobs, Pageable pageable);
+    public Page<User> findAllByUsernameContainsOrNicknameContainsOrSexContainsOrJobsContains(String username, String nickname, String sex, String jobs, Pageable pageable);
 
     public int countAllByReferAndCreatetimeGreaterThan(Integer refer, String time);
 

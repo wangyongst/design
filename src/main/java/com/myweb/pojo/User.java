@@ -50,6 +50,9 @@ public class User implements Serializable {
     @Basic
     @Column(name = "refertime", nullable = true, length = 255)
     private String refertime;
+    @Basic
+    @Column(name = "locktime", nullable = true, length = 255)
+    private String locktime;
     @JsonIgnore
     @Basic
     @Column(name = "openid", nullable = true, length = 255)
@@ -72,6 +75,14 @@ public class User implements Serializable {
 
     @Transient
     private List<Help> helps;
+
+    public String getLocktime() {
+        return locktime;
+    }
+
+    public void setLocktime(String locktime) {
+        this.locktime = locktime;
+    }
 
     public String getOpenid() {
         return openid;

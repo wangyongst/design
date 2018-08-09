@@ -49,6 +49,8 @@ public interface AdminOneService {
 
     public Result user(OneParameter oneParameter, HttpSession httpSession);
 
+    public Result userLock(OneParameter oneParameter, HttpSession httpSession);
+
     public Result getUser(OneParameter oneParameter, HttpSession httpSession);
 
     public Result studyCount(HttpSession httpSession);

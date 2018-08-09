@@ -32,10 +32,9 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">举报图片</h4>
-                    <h6 class="card-subtitle">举报图片</h6>
-                    <button type="button" class="btn btn-primary col-1" id="look">查看图片</button>
-                    <button type="button" class="btn btn-primary col-1" id="delete">删除</button>
+                    <h4 class="card-title">举报用户</h4>
+                    <h6 class="card-subtitle">举报用户</h6>
+                    <button type="button" class="btn btn-primary col-1" id="lock">冻结账号</button>
                     <div class="table-responsive m-t-40">
                         <table data-toggle="table" data-url="admin/report/list" data-show-refresh="true" id="myTable"
                                data-search="true" data-pagination="true" data-sort-class="createtime"
@@ -43,10 +42,9 @@
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true">全选</th>
-                                <th data-field="help.id">ID</th>
+                                <th data-field="touser.id">ID</th>
                                 <th data-field="user.username">举报人</th>
-                                <th data-field="help.title">被举报求助</th>
-                                <th data-field="help.user.username">被举报人</th>
+                                <th data-field="touser.username">被举报人</th>
                                 <th data-field="title">被举报原因</th>
                                 <th data-field="createtime">举报时间</th>
                             </tr>
@@ -57,23 +55,6 @@
             </div>
         </div>
     </div>
-
-    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 800px;left: -300px;">
-                <div class="modal-header">
-                    <h4 class="modal-title">查看图片</h4>
-                </div>
-                <div class="modal-body">
-                    <img width="100%" id="lookImg">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="close">关闭</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- End PAge Content -->
 </div>
 
@@ -81,7 +62,7 @@
 
 <script src="js/lib/bootstrap/js/bootstrap.min.js"></script>
 
-<script src="js/content-report.js"></script>
+<script src="js/user-report.js"></script>
 
 <link href="css/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
 
