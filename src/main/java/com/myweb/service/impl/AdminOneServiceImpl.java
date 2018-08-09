@@ -320,10 +320,18 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result reportList(HttpSession httpSession) {
+    public Result reportListUser(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(reportRepository.findAllByOrderByCreatetimeDesc());
+        result.setData(reportRepository.findAllByUserIsNotNullOrderByCreatetimeDesc());
+        return result;
+    }
+
+    @Override
+    public Result reportListHelp(HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(reportRepository.findAllByHelpIsNotNullOrderByCreatetimeDesc());
         return result;
     }
 

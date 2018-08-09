@@ -235,9 +235,14 @@ public class AdminOneController {
         return ResultUtils.data(adminOneService.searchingList(httpSession));
     }
 
-    @GetMapping("/report/list")
-    public Object reportList(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.reportList(httpSession));
+    @GetMapping("/report/list/user")
+    public Object reportListUser(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.reportListUser(httpSession));
+    }
+
+    @GetMapping("/report/list/help")
+    public Object reportListHelp(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.reportListHelp(httpSession));
     }
 
     //每个用户被关注的次数

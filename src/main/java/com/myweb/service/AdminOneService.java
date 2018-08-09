@@ -37,7 +37,9 @@ public interface AdminOneService {
 
     public Result userGroupList(HttpSession httpSession);
 
-    public Result reportList(HttpSession httpSession);
+    public Result reportListUser(HttpSession httpSession);
+
+    public Result reportListHelp(HttpSession httpSession);
 
     public Result logout(HttpSession httpSession);
 

@@ -17,5 +17,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     public void deleteAllByHelp(Help help);
 
-    public List<Report> findAllByOrderByCreatetimeDesc();
+    public List<Report> findAllByHelpIsNotNullOrderByCreatetimeDesc();
+
+    public List<Report> findAllByUserIsNotNullOrderByCreatetimeDesc();
 }

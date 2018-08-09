@@ -1,5 +1,5 @@
 $(function () {
-    $("#look").click(function () {
+    $("#lock").click(function () {
         var selected = select();
         if (selected == "") {
             alert("请先选择你要查看的记录");
