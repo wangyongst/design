@@ -19,5 +19,5 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     public List<Report> findAllByHelpIsNotNullOrderByCreatetimeDesc();
 
-    public List<Report> findAllByUserIsNotNullOrderByCreatetimeDesc();
+    public List<Report> findAllByTouserIsNotNullOrderByCreatetimeDesc();
 }

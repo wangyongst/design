@@ -323,7 +323,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result reportListUser(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(reportRepository.findAllByUserIsNotNullOrderByCreatetimeDesc());
+        result.setData(reportRepository.findAllByTouserIsNotNullOrderByCreatetimeDesc());
         return result;
     }
 

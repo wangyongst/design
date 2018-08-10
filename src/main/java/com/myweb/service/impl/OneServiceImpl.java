@@ -155,7 +155,7 @@ public class OneServiceImpl implements OneService {
                 result.setMessage("账号被冻结");
                 return result;
             }
-            List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getEmail(), oneParameter.getPassword());
+            List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
             if (userList.size() == 1) {
                 result.setStatus(1);
                 result.setData(userList.get(0));
