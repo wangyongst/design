@@ -30,5 +30,8 @@ public interface StudyRepository extends JpaRepository<Study, Integer> {
     @Query("select study.help from Study study where study.user = ?1 and study.help.tag like '%?2%' group by study.help")
     public Page<Help> queryAllByUserAndTagLike(User user, String tag, Pageable pageable);
 
+    @Query("select study.user from Study study where study.help = ?1")
+    public List<User> queryAllByHelp(Help help);
+
     public Page<Study> findAllByHelp(Help help, Pageable pageable);
 }

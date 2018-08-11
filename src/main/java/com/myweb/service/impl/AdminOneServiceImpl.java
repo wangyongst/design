@@ -398,6 +398,11 @@ public class AdminOneServiceImpl implements AdminOneService {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, 3);
         user.setLocktime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(calendar.getTime()));
+        userRepository.save(user);
+        List<Report> reports = reportRepository.findAllByTouserIsNotNullOrderByCreatetimeDesc();
+        reports.forEach(e -> {
+            createSysNotice(user, null, "您在" + e.getCreatetime() + ",对\"" + e.getTouser().getNickname() + "\"的举报已确认存在违规行为，并已经对举报对象进行了处理 。", 5, 6);
+        });
         return result;
     }
 
@@ -482,6 +487,25 @@ public class AdminOneServiceImpl implements AdminOneService {
             e.setRate((float) e.getClicked() / e.getExposure());
         });
         result.setData(adverts);
+        return result;
+    }
+
+    @Override
+    public Result studyHelpList(OneParameter oneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setData(studyRepository.queryAllByHelp(helpRepository.findOne(oneParameter.getHelpid())));
+        return result;
+    }
+
+    @Override
+    public Result userSendMessage(OneParameter oneParameter, HttpSession httpSession) {
+        Result result = new Result();
+        result.setStatus(1);
+        List<User> userList = studyRepository.queryAllByHelp(helpRepository.findOne(oneParameter.getHelpid()));
+        userList.forEach(e -> {
+            createSysNotice(e, null, oneParameter.getText(), 5, 7);
+        });
         return result;
     }
 
@@ -689,5 +713,26 @@ public class AdminOneServiceImpl implements AdminOneService {
         adminLog.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
         adminLog.setMessage(message);
         adminLogRepository.saveAndFlush(adminLog);
+    }
+
+    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype) {
+        Notice notice = new Notice();
+        notice.setUser(user);
+        notice.setFromuser(userRepository.findOne(1));
+        notice.setHelp(help);
+        notice.setType(type);
+        notice.setIsread(0);
+        notice.setMessage(message);
+        notice.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        noticeRepository.save(notice);
+        Message me = new Message();
+        me.setIsread(0);
+        if (help != null) me.setHelp(help);
+        me.setType(mtype);
+        me.setMessage(message);
+        me.setTouser(user);
+        me.setUser(userRepository.findOne(1));
+        me.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        messageRepository.save(me);
     }
 }

@@ -141,7 +141,7 @@ public class AdminOneController {
     //用户
     @GetMapping("/user")
     public Result getUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.getUser(oneParameter,httpSession));
+        return ResultUtils.result(adminOneService.getUser(oneParameter, httpSession));
     }
 
 
@@ -243,6 +243,16 @@ public class AdminOneController {
     @GetMapping("/report/list/help")
     public Object reportListHelp(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.data(adminOneService.reportListHelp(httpSession));
+    }
+
+    @GetMapping("/study/help/list")
+    public Object studyHelpList(HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.studyHelpList(httpSession));
+    }
+
+    @PostMapping("/user/send/message")
+    public Result userSendMessage(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.result(adminOneService.userSendMessage(oneParameter, httpSession));
     }
 
     //每个用户被关注的次数

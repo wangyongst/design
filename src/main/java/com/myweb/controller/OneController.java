@@ -63,7 +63,8 @@ public class OneController {
 
     @ApiOperation(value = "检验验证码", notes = "检验验证码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String")
+            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "text", value = "验证码（必需）", required = true, dataType = "String")
     })
     @ResponseBody
     @PostMapping("/user/check/captcha")

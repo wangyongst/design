@@ -31,6 +31,10 @@ public interface AdminOneService {
 
     public Result userMenuList(HttpSession httpSession);
 
+    public Result studyHelpList(OneParameter oneParameter, HttpSession httpSession);
+
+    public Result userSendMessage(OneParameter oneParameter, HttpSession httpSession);
+
     public Result userRole15(HttpSession httpSession);
 
     public Result searchingList(HttpSession httpSession);
@@ -87,7 +91,7 @@ public interface AdminOneService {
 
     public Result getSetting(AdminOneParameter adminOneParameter, HttpSession httpSession);
 
-    public Result settingList( HttpSession httpSession);
+    public Result settingList(HttpSession httpSession);
 
     public Result helpRefer(TwoParameter twoParameter, HttpSession httpSession);
 
