@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.OneService;
+import com.myweb.utils.HttpClientUtil;
 import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
 import com.myweb.vo.MsgVo;
@@ -12,14 +13,12 @@ import com.utils.Result;
 import com.utils.WeixinUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -119,6 +118,7 @@ public class OneServiceImpl implements OneService {
         }
         user.setUsername(oneParameter.getUsername());
         user.setPassword(oneParameter.getPassword());
+        user.setMobile(oneParameter.getMobile());
         user.setEmail(oneParameter.getEmail());
         user.setAvatar("http://pas99p7vd.bkt.clouddn.com/eM1jGVzQ");
         user.setNickname(oneParameter.getNickname());
@@ -188,25 +188,25 @@ public class OneServiceImpl implements OneService {
             result.setMessage("必须的参数不能为空!");
             return result;
         } else {
+            if(captchaRepository.findByMobileAndCreatetimeGreaterThan(oneParameter.getMobile(), new SimpleDateFormat("yyyy年MM月dd日").format(new Date())).size() >= 3){
+                result.setMessage("获取短信验证码每天不能超过三次!");
+                return result;
+            }
             String code = RandomStringUtils.randomNumeric(6);
-            String requestUrl = "https://sms.yunpian.com/v2/sms/single_send.json";
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaType("application/x-www-form-urlencoded;charset=utf-8"));
-            List<MediaType> accept = new ArrayList<>();
-            accept.add((MediaType.parseMediaType("application/json; charset=UTF-8")));
-            headers.setAccept(accept);
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("apikey", "d25e63352163b9be775dd3a81f54fc5c");
-            params.put("text", "【热点设计】感谢您注册热点设计，验证码为：" + code + "，请勿泄露！");
-            params.put("mobile", oneParameter.getMobile());
-            MsgVo msgVo = restTemplate.postForObject(requestUrl, params, MsgVo.class);
-            if (msgVo.getCode() == 0) {
-                Captcha captcha = new Captcha();
-                captcha.setMobile(oneParameter.getMobile());
-                captcha.setCode(code);
-                captcha.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                captchaRepository.save(captcha);
-                result.setStatus(1);
+            try {
+                HttpClientUtil httpClientUtil = new HttpClientUtil();
+                ObjectMapper objectMapper = new ObjectMapper();
+                MsgVo msgVo = objectMapper.readValue(EntityUtils.toString(httpClientUtil.sendMessage(oneParameter.getMobile(), code).getEntity()), MsgVo.class);
+                if (msgVo.getCode() == 0) {
+                    Captcha captcha = new Captcha();
+                    captcha.setMobile(oneParameter.getMobile());
+                    captcha.setCode(code);
+                    captcha.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                    captchaRepository.save(captcha);
+                    result.setStatus(1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return result;

@@ -12,6 +12,8 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Captcha.class, idClass = Integer.class)
 public interface CaptchaRepository extends JpaRepository<Captcha, Integer> {
 
-    public List<Setting> findByMobileAndCode(String mobile, String code);
+    public List<Captcha> findByMobileAndCode(String mobile, String code);
+
+    public List<Captcha> findByMobileAndCreatetimeGreaterThan(String mobile, String createTime);
 
 }

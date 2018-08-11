@@ -1,5 +1,8 @@
 package com.myweb.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 public class MsgVo {
 
     private Integer code;

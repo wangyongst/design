@@ -32,6 +32,7 @@ public class OneController {
             @ApiImplicitParam(name = "password", value = " 密码（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "nickname", value = " 昵称（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "email", value = "邮箱 （必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "mobile", value = " 手机号（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "refer", value = "推荐人id （可选）", required = true, dataType = "String")
     })
     @ResponseBody
