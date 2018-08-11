@@ -17,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,10 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service("OneService")
@@ -190,6 +190,11 @@ public class OneServiceImpl implements OneService {
         } else {
             String code = RandomStringUtils.randomNumeric(6);
             String requestUrl = "https://sms.yunpian.com/v2/sms/single_send.json";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/x-www-form-urlencoded;charset=utf-8"));
+            List<MediaType> accept = new ArrayList<>();
+            accept.add((MediaType.parseMediaType("application/json; charset=UTF-8")));
+            headers.setAccept(accept);
             Map<String, String> params = new HashMap<String, String>();
             params.put("apikey", "d25e63352163b9be775dd3a81f54fc5c");
             params.put("text", "【热点设计】感谢您注册热点设计，验证码为：" + code + "，请勿泄露！");
