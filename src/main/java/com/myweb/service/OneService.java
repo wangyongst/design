@@ -13,6 +13,10 @@ public interface OneService {
 
     public Result login(OneParameter oneParameter);
 
+    public Result sendCaptcha(OneParameter oneParameter);
+
+    public Result checkCaptcha(OneParameter oneParameter);
+
     public Result logout(OneParameter oneParameter);
 
     public Result setBasic(OneParameter oneParameter);

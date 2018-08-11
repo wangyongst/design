@@ -51,6 +51,26 @@ public class OneController {
         return ResultUtils.result(oneService.login(oneParameter));
     }
 
+    @ApiOperation(value = "发送验证码", notes = "发送验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @PostMapping("/user/send/captcha")
+    public Result sendCaptcha(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.sendCaptcha(oneParameter));
+    }
+
+    @ApiOperation(value = "检验验证码", notes = "检验验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @PostMapping("/user/check/captcha")
+    public Result checkCaptcha(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.checkCaptcha(oneParameter));
+    }
+
     @ApiOperation(value = "注销", notes = "注销")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),

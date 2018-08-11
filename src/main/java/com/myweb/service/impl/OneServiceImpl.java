@@ -6,6 +6,7 @@ import com.myweb.pojo.*;
 import com.myweb.service.OneService;
 import com.myweb.utils.QiniuUtil;
 import com.myweb.vo.AdminOneParameter;
+import com.myweb.vo.MsgVo;
 import com.myweb.vo.OneParameter;
 import com.utils.Result;
 import com.utils.WeixinUtils;
@@ -27,7 +28,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service("OneService")
@@ -39,6 +42,10 @@ public class OneServiceImpl implements OneService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+
+    @Autowired
+    private CaptchaRepository captchaRepository;
 
     @Autowired
     private TimenewRepository timenewRepository;
@@ -169,6 +176,51 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         result.setMessage("登录失败！");
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result sendCaptcha(OneParameter oneParameter) {
+        Result result = new Result();
+        if (StringUtils.isBlank(oneParameter.getMobile())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        } else {
+            String code = RandomStringUtils.randomNumeric(6);
+            String requestUrl = "https://sms.yunpian.com/v2/sms/single_send.json";
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("apikey", "d25e63352163b9be775dd3a81f54fc5c");
+            params.put("text", "【热点设计】感谢您注册热点设计，验证码为：" + code + "，请勿泄露！");
+            params.put("mobile", oneParameter.getMobile());
+            MsgVo msgVo = restTemplate.postForObject(requestUrl, params, MsgVo.class);
+            if (msgVo.getCode() == 0) {
+                Captcha captcha = new Captcha();
+                captcha.setMobile(oneParameter.getMobile());
+                captcha.setCode(code);
+                captcha.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                captchaRepository.save(captcha);
+                result.setStatus(1);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result checkCaptcha(OneParameter oneParameter) {
+        Result result = new Result();
+        if (StringUtils.isBlank(oneParameter.getMobile()) || StringUtils.isBlank(oneParameter.getText())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        } else {
+            if (captchaRepository.findByMobileAndCode(oneParameter.getMobile(), oneParameter.getText()).size() > 0) {
+                result.setStatus(1);
+            } else {
+                result.setMessage("验证码不正确！");
+            }
+        }
         return result;
     }
 
