@@ -241,13 +241,13 @@ public class AdminOneController {
     }
 
     @GetMapping("/report/list/help")
-    public Object reportListHelp(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+    public Object reportListHelp(HttpSession httpSession) {
         return ResultUtils.data(adminOneService.reportListHelp(httpSession));
     }
 
     @GetMapping("/study/help/list")
-    public Object studyHelpList(HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.studyHelpList(httpSession));
+    public Object studyHelpList(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.studyHelpList(oneParameter, httpSession));
     }
 
     @PostMapping("/user/send/message")
