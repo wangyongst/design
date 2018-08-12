@@ -50,9 +50,13 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary col-1" id="look">查看图片</button>
-                    <div class="table-responsive m-t-40">
+                    <button type="button" class="btn btn-primary col-1" id="person">想学的人</button>
+                    <button type="button" class="btn btn-primary col-1" id="send">发送私信</button>
+                    <input id="studyhelpid" hidden>
+                    <div class="table-responsive m-t-40" id="helpstable">
                         <table data-toggle="table" data-url="admin/help/list" data-show-refresh="true" id="myTable"
-                               data-search="true" data-pagination="true" data-sort-class="studied" data-sort-order="desc">
+                               data-search="true" data-pagination="true" data-sort-class="studied"
+                               data-sort-order="desc">
                             <thead>
                             <tr>
                                 <th data-field="state" data-checkbox="true">全选</th>
@@ -64,6 +68,27 @@
                                 <th data-field="design">设计分类</th>
                                 <th data-field="studied" data-sortable="true">想学次数</th>
                                 <th data-field="clicked" data-sortable="true">点击量</th>
+                                <th data-field="createtime">创建时间</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div class="table-responsive m-t-40" id="userstable">
+                        <table data-toggle="table" data-url="" data-show-refresh="true" id="myTable2"
+                               data-search="true" data-pagination="true" data-sort-class="createtime"
+                               data-sort-order="desc">
+                            <thead>
+                            <tr>
+                                <!--<th data-field="state" data-checkbox="true"></th>-->
+                                <th data-field="id">ID</th>
+                                <th data-field="username">用户名</th>
+                                <th data-field="nickname">昵称</th>
+                                <th data-field="email">邮箱</th>
+                                <th data-field="mobile">手机号</th>
+                                <th data-field="jobs">职业</th>
+                                <th data-field="sex">性别</th>
+                                <th data-field="refer.username">推荐人</th>
                                 <th data-field="createtime">创建时间</th>
                             </tr>
                             </thead>
@@ -86,6 +111,26 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="close">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal2" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 800px;left: -300px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">发送私信</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="content" class="control-label">私信内容</label>
+                        <input type="text" class="form-control" id="content" name="content">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="close2">关闭</button>
+                    <button type="button" class="btn btn-primary" id="submit2">确定</button>
                 </div>
             </div>
         </div>
