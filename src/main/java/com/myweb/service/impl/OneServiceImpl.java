@@ -164,6 +164,11 @@ public class OneServiceImpl implements OneService {
             }
             List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
             if (userList.size() == 1) {
+                Token token = new Token();
+                token.setUser(userList.get(0));
+                token.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+                token.setExpiretime(new Date().getTime() + 60000 * 120);
+                tokenRepository.save(token);
                 result.setStatus(1);
                 result.setData(userList.get(0));
                 return result;
