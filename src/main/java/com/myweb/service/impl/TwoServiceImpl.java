@@ -212,6 +212,34 @@ public class TwoServiceImpl implements TwoService {
         return result;
     }
 
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result advertUser(TwoParameter twoParameter, Pageable pageable) {
+        Result result = new Result();
+//        result.setStatus(1);
+//        Page<User> users = userRepository.findAllByReferNotAndOuttimeGreaterThanOrderByReferDesc(2,new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
+//        adverts.forEach(e -> {
+//            e.setExposure(e.getExposure() + 1);
+//            advertRepository.save(e);
+//            e.setAdminuser(null);
+//            if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
+//                User user = userRepository.findOne(twoParameter.getUserid());
+//                if (user != null) {
+//                    List<Buy> buys = buyRepository.findAllByUserAndAdvert(user, e);
+//                    if (buys.size() > 0) {
+//                        e.setIsBuy(1);
+//                    } else {
+//                        e.setIsBuy(0);
+//                    }
+//                }
+//            }
+//        });
+//        result.setData(adverts);
+        return result;
+    }
+
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result search(TwoParameter twoParameter, Pageable pageable) {

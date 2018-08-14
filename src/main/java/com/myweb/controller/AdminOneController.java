@@ -94,8 +94,7 @@ public class AdminOneController {
     //登录
     @PostMapping("/user/login")
     public Result login(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.login(oneParameter, httpSession));
-    }
+        return ResultUtils.result(adminOneService.login(oneParameter, httpSession));    }
 
     //登出
     @PostMapping("/user/logout")

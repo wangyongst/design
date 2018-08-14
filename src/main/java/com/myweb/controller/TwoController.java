@@ -203,6 +203,21 @@ public class TwoController {
         return ResultUtils.result(twoService.advert(twoParameter,pageable));
     }
 
+    @ApiOperation(value = "广告人", notes = "广告人")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "当前用户id（可选）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/advert/user")
+    public Result advertUser(@ModelAttribute TwoParameter twoParameter) {
+        if (twoParameter.getPage() == null) twoParameter.setPage(0);
+        if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), null);
+        return ResultUtils.result(twoService.advertUser(twoParameter,pageable));
+    }
+
     @ApiOperation(value = "点击广告", notes = "点击广告")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer")

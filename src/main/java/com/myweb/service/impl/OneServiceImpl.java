@@ -101,10 +101,6 @@ public class OneServiceImpl implements OneService {
             result.setMessage("用户名已经被占用!");
             return result;
         }
-        if (userRepository.findByEmail(oneParameter.getEmail()).size() > 0) {
-            result.setMessage("邮箱已经已经被注册!");
-            return result;
-        }
         User user = new User();
         if (oneParameter.getRefer() != null && oneParameter.getRefer() != 0) {
             User refer = userRepository.findOne(oneParameter.getRefer());
@@ -119,7 +115,6 @@ public class OneServiceImpl implements OneService {
         user.setUsername(oneParameter.getUsername());
         user.setPassword(oneParameter.getPassword());
         user.setMobile(oneParameter.getMobile());
-        user.setEmail(oneParameter.getEmail());
         user.setAvatar("http://pas99p7vd.bkt.clouddn.com/eM1jGVzQ");
         user.setNickname(oneParameter.getNickname());
         user.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));

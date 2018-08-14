@@ -35,5 +35,7 @@ public interface TwoService {
 
     public Result advert(TwoParameter twoParameter,Pageable pageable);
 
+    public Result advertUser(TwoParameter twoParameter,Pageable pageable);
+
     public Result delete(TwoParameter twoParameter, String helpids);
 }
