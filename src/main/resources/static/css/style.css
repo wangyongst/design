@@ -208,10 +208,10 @@ h6 {
 }
 .page-wrapper {
   background: #fafafa;
-  padding-bottom: 60px;
+  padding-bottom: 0px;
 }
 .container-fluid {
-  padding: 0 30px 25px;
+  padding: 0 0px 0px;
 }
 @media (min-width: 1024px) {
   .page-wrapper {
@@ -754,7 +754,7 @@ h6.h1 {
   top: -13px;
 }
 .notify .heartbit {
-  animation: 1s ease-out 0s normal none infinite running heartbit;
+  animation: 1s ease-out 0s normal none infinite running;
   border: 5px solid #4680ff;
   border-radius: 70px;
   height: 25px;
@@ -1338,9 +1338,6 @@ ul.list-style-none li a:hover {
 .dropdown-item {
   padding: 8px 1rem;
   color: #67757c;
-}
-.custom-select {
-  background: url("../../assets/images/custom-select.png") right 0.75rem center no-repeat;
 }
 textarea {
   resize: none;
@@ -2111,9 +2108,6 @@ textarea {
   stroke-linejoin: round;
   stroke-linecap: round;
   stroke-dasharray: 500%;
-  stroke-dasharray: 0 /;
-  /* fixes IE prob */
-  stroke-dashoffset: 0 /;
   /* fixes IE prob */
   -webkit-animation: am-draw 40s;
   animation: am-draw 40s;
@@ -2143,12 +2137,12 @@ textarea {
 /*    Brand color
 ----------------------*/
 .card {
-  margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 .card .card-subtitle {
   color: #99abb4;
   font-weight: 300;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
 }
 .card-inverse .card-bodyquote .blockquote-footer {
   color: rgba(255, 255, 255, 0.65);
@@ -2204,7 +2198,7 @@ textarea {
   opacity: 1;
 }
 .card-columns .card {
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 .collapsing {
   transition: height 0.08s ease 0s;

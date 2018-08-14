@@ -1,6 +1,7 @@
 $(function () {
 
-    $("#upload2").hide();
+    $("#selectNot2").text("上传大图:");
+    $("#url").hide();
 
 
     $.ajax({
@@ -94,7 +95,7 @@ $(function () {
     });
 
     $("#type").change(function () {
-       if($("#type").val() == 2){
+       if($("#type").val() == 1){
            $("#selectNot2").text("上传大图:");
            $("#url").hide();
            $("#upload2").show();

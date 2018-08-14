@@ -504,7 +504,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setStatus(1);
         List<User> userList = studyRepository.queryAllByHelp(helpRepository.findOne(oneParameter.getHelpid()));
         userList.forEach(e -> {
-            createSysNotice(e, null, oneParameter.getText(), 5, 7);
+            createSysNotice(e, helpRepository.findOne(oneParameter.getHelpid()), oneParameter.getText(), 5, 7);
         });
         return result;
     }
