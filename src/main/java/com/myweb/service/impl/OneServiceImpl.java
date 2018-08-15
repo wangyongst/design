@@ -451,12 +451,12 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setEmail(OneParameter oneParameter) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getEmail())) {
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getMobile()) || StringUtils.isBlank(oneParameter.getPassword())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        if (userRepository.findByEmail(oneParameter.getEmail()).size() > 0) {
-            result.setMessage("邮箱已经已经被注册!");
+        if (userRepository.findByUsername(oneParameter.getUsername()).size() > 0) {
+            result.setMessage("手机号已经已经被注册!");
             return result;
         }
         User user = userRepository.findOne(oneParameter.getUserid());
@@ -464,7 +464,8 @@ public class OneServiceImpl implements OneService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            user.setEmail(oneParameter.getEmail());
+            user.setUsername(oneParameter.getMobile());
+            user.setMobile(oneParameter.getMobile());
             userRepository.save(user);
             result.setStatus(1);
             result.setData(user);

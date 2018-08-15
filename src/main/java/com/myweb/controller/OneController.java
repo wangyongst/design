@@ -136,13 +136,14 @@ public class OneController {
         return ResultUtils.result(oneService.setPassword(oneParameter));
     }
 
-    @ApiOperation(value = "账户设置(修改邮箱)", notes = "账户设置(修改邮箱)")
+    @ApiOperation(value = "账户设置(修改手机号)", notes = "账户设置(修改手机号)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "email", value = "邮箱（必需）", required = true, dataType = "String")
+            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String")
     })
     @ResponseBody
-    @PostMapping("/user/set/email")
+    @PostMapping("/user/set/mobile")
     public Result setEmail(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.setEmail(oneParameter));
     }
