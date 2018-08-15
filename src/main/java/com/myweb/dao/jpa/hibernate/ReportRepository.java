@@ -15,6 +15,8 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     public void deleteAllByUser(User user);
 
+    public void deleteAllByTouser(User user);
+
     public void deleteAllByHelp(Help help);
 
     public List<Report> findAllByHelpIsNotNullOrderByCreatetimeDesc();

@@ -404,6 +404,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         reports.forEach(e -> {
             createSysNotice(user, null, "您在" + e.getCreatetime() + ",对\"" + e.getTouser().getNickname() + "\"的举报已确认存在违规行为，并已经对举报对象进行了处理 。", 5, 6);
         });
+        reportRepository.deleteAllByTouser(user);
         return result;
     }
 
