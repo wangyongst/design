@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 @Service("AdminOneService")
@@ -526,6 +527,7 @@ public class AdminOneServiceImpl implements AdminOneService {
             helpRepository.delete(help);
         } else if (twoParameter.getType() != null && twoParameter.getType() == 1 && twoParameter.getDraft() != null && twoParameter.getDraft() != 0) {
             createLog("审核ID为" + twoParameter.getHelpid() + "的求助", httpSession);
+            help.setRecommend(new Random().nextInt(700) + 300);
             help.setDraft(twoParameter.getDraft());
             helpRepository.save(help);
         }

@@ -102,7 +102,7 @@ public class TwoServiceImpl implements TwoService {
             help.setClicked(0);
             help.setFans(0);
             help.setForwarded(0);
-            help.setRecommend(new Random().nextInt(700) + 300);
+            help.setRecommend(0);
             helpRepository.save(help);
             result.setStatus(1);
             result.setData(help);
