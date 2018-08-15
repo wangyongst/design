@@ -213,11 +213,13 @@ $(function () {
             alert("广告主必选！！")
             return;
         }
+        var oper = 1;
+        if($("#advertid").val() != "") oper = 2;
         $.ajax({
             type: "Post",
             cache: "false",
             url: "/admin/advert",
-            data: $('#advertForm').serialize() + "&operation=1",
+            data: $('#advertForm').serialize() + "&operation="+oper,
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {

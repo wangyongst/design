@@ -119,3 +119,10 @@ function clearForm(form) {
         boxes[i].checked = false;
     }
 }
+
+
+function gettype(value, row, index) {
+    if(value.type ==2) return "友情链接";
+    if(value.type ==3) return "推荐关键字";
+    else return "设计分类";
+}

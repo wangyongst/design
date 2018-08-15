@@ -205,7 +205,7 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.postHelp(twoParameter, httpSession));
     }
 
-    //operation 1增 2改，3删除
+    //operation 1增，2改，3删除
     @PostMapping("/advert")
     public Result PostAdvert(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
         return ResultUtils.result(adminOneService.postAdvert(adminOneParameter, httpSession));

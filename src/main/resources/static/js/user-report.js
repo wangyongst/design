@@ -16,12 +16,12 @@ $(function () {
             cache: "false",
             url: "/admin/user/lock",
             data: {
-                helpid: ids[1]
+                userid: ids[1]
             },
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
-                    $('#lookImg').attr("src", result.data.image);
+                    alert("账号冻结三天")
                 }
             }
         });
