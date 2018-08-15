@@ -315,4 +315,14 @@ public class OneController {
     public Result advertLogin(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.advertLogin(oneParameter));
     }
+
+    @ApiOperation(value = "广告主退出", notes = "广告主退出")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", value = "广告主id（必需）", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @PostMapping("/advert/logout")
+    public Result advertLogout(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.advertLogout(oneParameter));
+    }
 }

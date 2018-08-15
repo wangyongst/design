@@ -23,8 +23,6 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
 
     public List<Help> findByUser(User user);
 
-    public Page<Help> findByDraft(int draft, Pageable pageable);
-
     public Page<Help> findByDraftAndAudience(int draft, int audience, Pageable pageable);
 
     public List<Help> findByDraft(int draft);
@@ -32,8 +30,6 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
     public Page<Help> findByUserAndAudienceNotAndDraftAndTagContains(User user, int audience, int draft, String tag, Pageable pageable);
 
     public Page<Help> findByDesignAndAudienceAndDraft(String design, int audience, int draft, Pageable pageable);
-
-    public Page<Help> findByDesignAndAudienceNotAndDraft(String design, int audience, int draft, Pageable pageable);
 
     public Page<Help> findByDraftAndAudienceAndTagContains(int draft, int audience, String tag, Pageable pageable);
 

@@ -29,7 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 
 @Service("OneService")
@@ -188,7 +189,7 @@ public class OneServiceImpl implements OneService {
             result.setMessage("必须的参数不能为空!");
             return result;
         } else {
-            if(captchaRepository.findByMobileAndCreatetimeGreaterThan(oneParameter.getMobile(), new SimpleDateFormat("yyyy年MM月dd日").format(new Date())).size() >= 3){
+            if (captchaRepository.findByMobileAndCreatetimeGreaterThan(oneParameter.getMobile(), new SimpleDateFormat("yyyy年MM月dd日").format(new Date())).size() >= 3) {
                 result.setMessage("获取短信验证码每天不能超过三次!");
                 return result;
             }
@@ -249,6 +250,14 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         result.setMessage("登录失败！");
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result advertLogout(OneParameter oneParameter) {
+        Result result = new Result();
+        result.setStatus(1);
         return result;
     }
 

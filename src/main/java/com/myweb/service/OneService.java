@@ -41,6 +41,8 @@ public interface OneService {
 
     public Result advertLogin(OneParameter oneParameter);
 
+    public Result advertLogout(OneParameter oneParameter);
+
     public Result unfollow(OneParameter oneParameter);
 
     public Result studiedIs(OneParameter oneParameter);
