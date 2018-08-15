@@ -94,12 +94,12 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result regist(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getEmail()) || StringUtils.isBlank(oneParameter.getNickname())) {
+        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getMobile()) || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getNickname())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
         if (userRepository.findByUsername(oneParameter.getUsername()).size() > 0) {
-            result.setMessage("用户名已经被占用!");
+            result.setMessage("手机号已经被占用!");
             return result;
         }
         User user = new User();
@@ -176,7 +176,10 @@ public class OneServiceImpl implements OneService {
             try {
                 HttpClientUtil httpClientUtil = new HttpClientUtil();
                 ObjectMapper objectMapper = new ObjectMapper();
-                MsgVo msgVo = objectMapper.readValue(EntityUtils.toString(httpClientUtil.sendMessage(oneParameter.getMobile(), code).getEntity()), MsgVo.class);
+                String tplid = "2430168";
+                if (oneParameter.getType() != null && oneParameter.getType() == 1) tplid = "2442708";
+                if (oneParameter.getType() != null && oneParameter.getType() == 2) tplid = "2442688";
+                MsgVo msgVo = objectMapper.readValue(EntityUtils.toString(httpClientUtil.sendMessage(oneParameter.getMobile(), code, tplid).getEntity()), MsgVo.class);
                 if (msgVo.getCode() == 0) {
                     Captcha captcha = new Captcha();
                     captcha.setMobile(oneParameter.getMobile());
@@ -434,7 +437,7 @@ public class OneServiceImpl implements OneService {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        if (userRepository.findByUsername(oneParameter.getUsername()).size() > 0) {
+        if (userRepository.findByUsername(oneParameter.getMobile()).size() > 0) {
             result.setMessage("手机号已经已经被注册!");
             return result;
         }
@@ -445,6 +448,28 @@ public class OneServiceImpl implements OneService {
         } else {
             user.setUsername(oneParameter.getMobile());
             user.setMobile(oneParameter.getMobile());
+            userRepository.save(user);
+            result.setStatus(1);
+            result.setData(user);
+        }
+        return result;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result reset(OneParameter oneParameter) {
+        Result result = new Result();
+        if (StringUtils.isBlank(oneParameter.getMobile()) || StringUtils.isBlank(oneParameter.getPassword())) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        User user = userRepository.findOne(oneParameter.getUserid());
+        if (user == null) {
+            result.setStatus(9);
+            result.setMessage("当前用户不存在!");
+        } else {
+            user.setPassword(oneParameter.getPassword());
             userRepository.save(user);
             result.setStatus(1);
             result.setData(user);

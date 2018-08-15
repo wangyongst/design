@@ -26,13 +26,13 @@ public class HttpClientUtil {
         }
     }
 
-    public HttpResponse sendMessage(String mobile, String text) throws IOException {
+    public HttpResponse sendMessage(String mobile, String text,String tplid) throws IOException {
         HttpPost httpPost = new HttpPost("https://sms.yunpian.com/v2/sms/tpl_single_send.json");
         //设置参数
         List<NameValuePair> list = new ArrayList<NameValuePair>();
         list.add(new BasicNameValuePair("apikey", "d25e63352163b9be775dd3a81f54fc5c"));
         list.add(new BasicNameValuePair("mobile", mobile));
-        list.add(new BasicNameValuePair("tpl_id", "2430168"));
+        list.add(new BasicNameValuePair("tpl_id", tplid));
         list.add(new BasicNameValuePair("tpl_value", "#code#=" + text));
         if (list.size() > 0) {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list);
