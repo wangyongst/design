@@ -64,21 +64,8 @@ $(function () {
             alert("请选择一条记录");
             return;
         }
-        $.ajax({
-            type: "POST",
-            cache: "false",
-            url: "/admin/user",
-            data: {
-                userid: ids[1],
-                type: 3
-            },
-            dataType: "json",
-            success: function (result) {
-                if (result.status == 1) {
-                    alert("推广成功")
-                }
-            }
-        });
+        $('#userid2').val(ids[1])
+        $('#myModal2').modal('toggle');
     });
 
 
@@ -94,7 +81,7 @@ $(function () {
             return;
         }
         $.ajax({
-            type: "GET",
+            type: "POST",
             cache: "false",
             url: "/admin/user",
             data: {
@@ -116,24 +103,19 @@ $(function () {
         $('#myModal').modal('toggle');
     });
 
-    $("#refer").click(function () {
-        var selected = select();
-        if (selected == "") {
-            alert("请先选择你要查看的记录");
-            return;
-        }
-        var ids = selected.split(",");
-        if (ids.length > 2) {
-            alert("请选择一条记录");
-            return;
+    $("#submit2").click(function () {
+        if($('#refertime').val() == "") {
+            alert("推广有效期不能为空")
+            return ;
         }
         $.ajax({
-            type: "GET",
+            type: "POST",
             cache: "false",
             url: "/admin/user",
             data: {
-                userid: ids[1],
-                type: 3
+                userid:  $('#userid2').val(),
+                type: 3,
+                outtime: $('#refertime').val()
             },
             dataType: "json",
             success: function (result) {
@@ -144,8 +126,7 @@ $(function () {
                 }
             }
         });
-
-        $('#myModal').modal('toggle');
+        $('#myModal2').modal('toggle');
     });
 
 
@@ -153,6 +134,9 @@ $(function () {
         $('#myModal').modal('toggle');
     });
 
+    $("#close2").click(function () {
+        $('#myModal2').modal('toggle');
+    });
 
     $("#submit").click(function () {
         $.ajax({
@@ -163,7 +147,7 @@ $(function () {
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
-                    $('#myModal').modal('toggle');
+                    $('#myModal2').modal('toggle');
                     $("#myTable").bootstrapTable('refresh');
                 } else {
                     alert(result.message);

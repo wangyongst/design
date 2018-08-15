@@ -213,7 +213,6 @@ public class TwoServiceImpl implements TwoService {
 
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result advertUser(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
