@@ -130,7 +130,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result login(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isNotBlank(oneParameter.getUsername()) && !oneParameter.getUsername().contains("@") && StringUtils.isNotBlank(oneParameter.getPassword())) {
+        if (StringUtils.isNotBlank(oneParameter.getUsername()) && StringUtils.isNotBlank(oneParameter.getPassword())) {
             List<User> users = userRepository.findByUsernameAndLocktimeGreaterThan(oneParameter.getUsername(), new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
             if (users.size() > 0) {
                 result.setStatus(2);
@@ -149,27 +149,6 @@ public class OneServiceImpl implements OneService {
                 return result;
             } else if (userList.size() != 1) {
                 result.setMessage("用户不存在或密码错误！");
-                return result;
-            }
-        } else if (StringUtils.isNotBlank(oneParameter.getUsername()) && oneParameter.getUsername().contains("@") && StringUtils.isNotBlank(oneParameter.getPassword())) {
-            List<User> users = userRepository.findByEmailAndLocktimeGreaterThan(oneParameter.getUsername(), new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-            if (users.size() > 0) {
-                result.setStatus(2);
-                result.setMessage("账号被冻结");
-                return result;
-            }
-            List<User> userList = userRepository.findByEmailAndPassword(oneParameter.getUsername(), oneParameter.getPassword());
-            if (userList.size() == 1) {
-                Token token = new Token();
-                token.setUser(userList.get(0));
-                token.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                token.setExpiretime(new Date().getTime() + 60000 * 120);
-                tokenRepository.save(token);
-                result.setStatus(1);
-                result.setData(userList.get(0));
-                return result;
-            } else if (userList.size() == 0) {
-                result.setMessage("邮箱不存在或密码错误！");
                 return result;
             }
         } else {
