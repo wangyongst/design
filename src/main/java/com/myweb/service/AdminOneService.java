@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 
 public interface AdminOneService {
     public Result login(OneParameter oneParameter, HttpSession httpSession);
@@ -53,7 +54,7 @@ public interface AdminOneService {
 
     public Result userTokenList(HttpSession httpSession);
 
-    public Result user(OneParameter oneParameter, HttpSession httpSession);
+    public Result user(OneParameter oneParameter, HttpSession httpSession) throws ParseException;
 
     public Result userLock(OneParameter oneParameter, HttpSession httpSession);
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/admin")
@@ -94,7 +95,8 @@ public class AdminOneController {
     //登录
     @PostMapping("/user/login")
     public Result login(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
-        return ResultUtils.result(adminOneService.login(oneParameter, httpSession));    }
+        return ResultUtils.result(adminOneService.login(oneParameter, httpSession));
+    }
 
     //登出
     @PostMapping("/user/logout")
@@ -125,9 +127,9 @@ public class AdminOneController {
         return ResultUtils.result(adminOneService.countToken(httpSession));
     }
 
-    //删除修改 type2删除
+    //删除修改 type2删除,type3推广
     @PostMapping("/user")
-    public Result postUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) {
+    public Result postUser(@ModelAttribute OneParameter oneParameter, HttpSession httpSession) throws ParseException {
         return ResultUtils.result(adminOneService.user(oneParameter, httpSession));
     }
 

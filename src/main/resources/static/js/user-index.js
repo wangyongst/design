@@ -53,6 +53,35 @@ $(function () {
     });
 
 
+    $("#refer").click(function () {
+        var selected = select();
+        if (selected == "") {
+            alert("请先选择你要查看的记录");
+            return;
+        }
+        var ids = selected.split(",");
+        if (ids.length > 2) {
+            alert("请选择一条记录");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            cache: "false",
+            url: "/admin/user",
+            data: {
+                userid: ids[1],
+                type: 3
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    alert("推广成功")
+                }
+            }
+        });
+    });
+
+
     $("#update").click(function () {
         var selected = select();
         if (selected == "") {
@@ -69,7 +98,8 @@ $(function () {
             cache: "false",
             url: "/admin/user",
             data: {
-                userid:ids[1],
+                userid: ids[1],
+                type: 1
             },
             dataType: "json",
             success: function (result) {
@@ -85,6 +115,39 @@ $(function () {
 
         $('#myModal').modal('toggle');
     });
+
+    $("#refer").click(function () {
+        var selected = select();
+        if (selected == "") {
+            alert("请先选择你要查看的记录");
+            return;
+        }
+        var ids = selected.split(",");
+        if (ids.length > 2) {
+            alert("请选择一条记录");
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            cache: "false",
+            url: "/admin/user",
+            data: {
+                userid: ids[1],
+                type: 3
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    alert("推广成功");
+                } else {
+                    alert(result.message);
+                }
+            }
+        });
+
+        $('#myModal').modal('toggle');
+    });
+
 
     $("#close").click(function () {
         $('#myModal').modal('toggle');

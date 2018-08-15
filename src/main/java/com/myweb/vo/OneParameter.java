@@ -22,6 +22,15 @@ public class OneParameter {
     private Integer type;
     private String keyword;
     private String text;
+    private String outtime;
+
+    public String getOuttime() {
+        return outtime;
+    }
+
+    public void setOuttime(String outtime) {
+        this.outtime = outtime;
+    }
 
     public String getText() {
         return text;

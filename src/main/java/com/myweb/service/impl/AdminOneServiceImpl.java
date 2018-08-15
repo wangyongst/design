@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -337,7 +338,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result user(OneParameter oneParameter, HttpSession httpSession) {
+    public Result user(OneParameter oneParameter, HttpSession httpSession) throws ParseException {
         Result result = new Result();
         if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0) return result;
         result.setStatus(1);
@@ -370,12 +371,16 @@ public class AdminOneServiceImpl implements AdminOneService {
                 userRepository.save(e);
             });
             userRepository.delete(user);
-        } else {
+        } else if (oneParameter.getType() != null && oneParameter.getType() == 1) {
             User user = userRepository.findOne(oneParameter.getUserid());
             if (StringUtils.isNotBlank(oneParameter.getEmail())) {
                 createLog("修改ID为" + user.getId() + "的用户的邮箱", httpSession);
                 user.setEmail(oneParameter.getEmail());
             }
+            result.setData(userRepository.save(user));
+        } else if (oneParameter.getType() != null && oneParameter.getType() == 3) {
+            User user = userRepository.findOne(oneParameter.getUserid());
+            user.setRefertime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd").parse(oneParameter.getOuttime())));
             result.setData(userRepository.save(user));
         }
         return result;
