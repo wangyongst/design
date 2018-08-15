@@ -145,7 +145,7 @@ public class TwoServiceImpl implements TwoService {
         result.setStatus(1);
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             if (twoParameter.getDesign() == null) {
-                result.setData(helpRepository.findByDraftAndAudience(4,1, pageable));
+                result.setData(helpRepository.findByDraftAndAudience(4, 1, pageable));
             } else {
                 result.setData(helpRepository.findByDesignAndAudienceAndDraft(twoParameter.getDesign(), 1, 4, pageable));
             }
@@ -158,7 +158,7 @@ public class TwoServiceImpl implements TwoService {
                 return result;
             }
             if (twoParameter.getDesign() == null) {
-                Page<Help> helps = helpRepository.findByDraft(4, pageable);
+                Page<Help> helps = helpRepository.queryAll(user, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -170,7 +170,7 @@ public class TwoServiceImpl implements TwoService {
                 result.setStatus(1);
                 result.setData(helps);
             } else {
-                Page<Help> helps = helpRepository.findByDesignAndAudienceNotAndDraft(twoParameter.getDesign(), 3, 4, pageable);
+                Page<Help> helps = helpRepository.queryAllByTag(user, twoParameter.getDesign(), pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -191,7 +191,7 @@ public class TwoServiceImpl implements TwoService {
     public Result advert(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        Page<Advert> adverts = advertRepository.findAllByReferNotAndOuttimeGreaterThanOrderByReferDesc(2,new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
+        Page<Advert> adverts = advertRepository.findAllByReferNotAndOuttimeGreaterThanOrderByReferDesc(2, new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
         adverts.forEach(e -> {
             e.setExposure(e.getExposure() + 1);
             advertRepository.save(e);
@@ -247,19 +247,19 @@ public class TwoServiceImpl implements TwoService {
         result.setStatus(1);
         if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
             if (StringUtils.isBlank(twoParameter.getTag())) {
-                result.setData(helpRepository.findByDraft(4, pageable));
+                result.setData(helpRepository.findByDraftAndAudience(4, 1, pageable));
             } else {
-                result.setData(helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getTag(), pageable));
+                result.setData(helpRepository.findByDraftAndAudienceAndTagContains(4, 1, twoParameter.getTag(), pageable));
             }
-        } else {
+        } else {//自己或粉丝
             User user = userRepository.findOne(twoParameter.getUserid());
             if (user == null || isNotLogin(user)) {
                 result.setStatus(9);
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (StringUtils.isBlank(twoParameter.getTag()))  {
-                Page<Help> helps = helpRepository.findByDraft(4, pageable);
+            if (StringUtils.isBlank(twoParameter.getTag())) {
+                Page<Help> helps = helpRepository.queryAll(user, pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {
@@ -277,7 +277,7 @@ public class TwoServiceImpl implements TwoService {
                 searching.setType(1);
                 searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
                 searchingRepository.save(searching);
-                Page<Help> helps = helpRepository.findByDraftAndAudienceNotAndTagContains(4, 3, twoParameter.getTag(), pageable);
+                Page<Help> helps = helpRepository.queryAllByTag(user, "%" + twoParameter.getTag() + "%", pageable);
                 helps.forEach(e -> {
                     List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                     if (studies.size() > 0) {

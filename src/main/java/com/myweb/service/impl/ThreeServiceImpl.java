@@ -117,7 +117,14 @@ public class ThreeServiceImpl implements ThreeService {
             return result;
         }
         result.setStatus(1);
-        result.setData(helpRepository.findOne(threeParameter.getHelpid()));
+        Advert advert = advertRepository.findOne(threeParameter.getAdvertid());
+        if(threeParameter.getUserid() != null && threeParameter.getUserid() !=0){
+            List<Buy> buyList = buyRepository.findAllByUserAndAdvert(userRepository.findOne(threeParameter.getUserid()),advert);
+            if(buyList.size() > 0){
+                advert.setIsBuy(1);
+            }
+        }
+        result.setData(advert);
         return result;
     }
 

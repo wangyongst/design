@@ -40,12 +40,56 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $('#lookImg').attr("src", result.data.image);
-                }else{
+                } else {
                     alert(result.message);
                 }
             }
         });
         $('#myModal').modal('toggle');
+    });
+
+
+    $("#update").click(function () {
+        var selected = select();
+        if (selected == "") {
+            alert("请先选择你要修改的记录");
+            return;
+        }
+        var ids = selected.split(",");
+        if (ids.length > 2) {
+            alert("请选择一条记录");
+            return;
+        }
+        $.ajax({
+            type: "GET",
+            cache: "false",
+            url: "/admin/advert",
+            data: {
+                advertid: ids[1]
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $('#advertid').val(result.data.id);
+                    $('#title').val(result.data.title);
+                    $('#adminuserid').val(result.data.adminuser.id);
+                    $('#type').val(result.data.type);
+                    $('#url').val(result.data.url);
+                    if ($("#type").val() == 1) {
+                        $("#selectNot2").text("上传大图:");
+                        $("#url").hide();
+                        $("#upload2").show();
+                    } else {
+                        $("#selectNot2").text("跳转链接:");
+                        $("#url").show();
+                        $("#upload2").hide();
+                    }
+                } else {
+                    alert(result.message);
+                }
+            }
+        });
+        $('#myModal2').modal('toggle');
     });
 
     $("#create").click(function () {
@@ -66,7 +110,7 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $('#image').val("http://pas99p7vd.bkt.clouddn.com/" + result.data);
-                }else{
+                } else {
                     alert(result.message);
                 }
             }
@@ -87,7 +131,7 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $('#url').val("http://pas99p7vd.bkt.clouddn.com/" + result.data);
-                }else{
+                } else {
                     alert(result.message);
                 }
             }
@@ -95,15 +139,15 @@ $(function () {
     });
 
     $("#type").change(function () {
-       if($("#type").val() == 1){
-           $("#selectNot2").text("上传大图:");
-           $("#url").hide();
-           $("#upload2").show();
-       }else{
-           $("#selectNot2").text("跳转链接:");
-           $("#url").show();
-           $("#upload2").hide();
-       }
+        if ($("#type").val() == 1) {
+            $("#selectNot2").text("上传大图:");
+            $("#url").hide();
+            $("#upload2").show();
+        } else {
+            $("#selectNot2").text("跳转链接:");
+            $("#url").show();
+            $("#upload2").hide();
+        }
     });
 
     $("#refer").click(function () {
@@ -128,7 +172,7 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $("#myTable").bootstrapTable('refresh');
-                }else{
+                } else {
                     alert(result.message);
                 }
             }
@@ -157,7 +201,7 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     $("#myTable").bootstrapTable('refresh');
-                }else{
+                } else {
                     alert(result.message);
                 }
             }
@@ -165,6 +209,10 @@ $(function () {
     });
 
     $("#submit2").click(function () {
+        if ($("#adminuserid") == null) {
+            alert("广告主必选！！")
+            return;
+        }
         $.ajax({
             type: "Post",
             cache: "false",
@@ -175,7 +223,7 @@ $(function () {
                 if (result.status == 1) {
                     $('#myModal2').modal('toggle');
                     $("#myTable").bootstrapTable('refresh');
-                }else{
+                } else {
                     alert(result.message);
                 }
             }
@@ -227,15 +275,15 @@ function clearForm(form) {
 }
 
 function getType(value, row, index) {
-    if(value ==1) return "想买广告";
-    else if(value ==2) return "了解详情";
-    else if(value ==3) return "立即购买";
+    if (value == 1) return "想买广告";
+    else if (value == 2) return "了解详情";
+    else if (value == 3) return "立即购买";
     else return "其它";
 }
 
 function getStatus(value, row, index) {
-    if(value ==1) return "强制推荐";
-    if(value ==2) return "已经下线";
+    if (value == 1) return "强制推荐";
+    if (value == 2) return "已经下线";
     else return "普通广告";
 }
 

@@ -309,7 +309,8 @@ public class ThreeController {
 
     @ApiOperation(value = "广告详情", notes = "广告详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "advertid", value = "广告id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer")
     })
     @ResponseBody
     @GetMapping("/advert/info")
