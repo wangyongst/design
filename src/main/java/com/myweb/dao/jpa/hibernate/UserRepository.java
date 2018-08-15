@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     public Page<User> findByRefer(Integer refer, Pageable pageable);
 
+    public Page<User> findAllByRefertimeGreaterThanOrderByReferDesc(String  outtime, Pageable pageable);
+
     public List<User> findByRefer(Integer refer);
 
     public List<User> findByUsernameAndPassword(String username, String password);

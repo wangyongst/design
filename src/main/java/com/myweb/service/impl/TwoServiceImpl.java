@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 
 @Service("TwoService")
@@ -217,25 +216,26 @@ public class TwoServiceImpl implements TwoService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result advertUser(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
-//        result.setStatus(1);
-//        Page<User> users = userRepository.findAllByReferNotAndOuttimeGreaterThanOrderByReferDesc(2,new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
-//        adverts.forEach(e -> {
-//            e.setExposure(e.getExposure() + 1);
-//            advertRepository.save(e);
-//            e.setAdminuser(null);
-//            if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
-//                User user = userRepository.findOne(twoParameter.getUserid());
-//                if (user != null) {
-//                    List<Buy> buys = buyRepository.findAllByUserAndAdvert(user, e);
-//                    if (buys.size() > 0) {
-//                        e.setIsBuy(1);
-//                    } else {
-//                        e.setIsBuy(0);
-//                    }
-//                }
-//            }
-//        });
-//        result.setData(adverts);
+        result.setStatus(1);
+        Page<User> users = userRepository.findAllByRefertimeGreaterThanOrderByReferDesc(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()), pageable);
+
+        if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
+            User user = userRepository.findOne(twoParameter.getUserid());
+            if (user == null || isNotLogin(user)) {
+                result.setStatus(9);
+                result.setMessage("当前用户不存在或未登录!");
+                return result;
+            }
+            users.forEach(e -> {
+                List<Follow> follows2 = followRepository.findByUserAndTouser(user, e);
+                if (follows2.size() > 0) {
+                    e.setIsFollow(1);
+                } else {
+                    e.setIsFollow(0);
+                }
+            });
+        }
+        result.setData(users);
         return result;
     }
 
