@@ -99,9 +99,9 @@ public class OneController {
     @ApiOperation(value = "账户设置(基本资料)", notes = "账户设置(基本资料)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userid", value = "当前用户id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "username", value = "账号（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "email", value = "邮箱（可选）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "nickname", value = "昵称（可选）", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "mobile", value = "手机号码（可选）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "mobile", value = "手机号码（必需）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "jobs", value = " 职业（可选）", required = true, dataType = "String"),
             @ApiImplicitParam(name = "sex", value = "性别 （可选）", required = true, dataType = "String")
     })

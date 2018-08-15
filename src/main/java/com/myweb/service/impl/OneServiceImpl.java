@@ -312,7 +312,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setBasic(OneParameter oneParameter) {
         Result result = new Result();
-        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getNickname())) {
+        if (oneParameter.getUserid() == null || oneParameter.getUserid() == 0 || StringUtils.isBlank(oneParameter.getMobile())) {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
@@ -321,9 +321,10 @@ public class OneServiceImpl implements OneService {
             result.setStatus(9);
             result.setMessage("当前用户不存在或未登录!");
         } else {
-            user.setUsername(oneParameter.getUsername());
+            user.setUsername(oneParameter.getMobile());
             user.setNickname(oneParameter.getNickname());
             user.setMobile(oneParameter.getMobile());
+            user.setEmail(oneParameter.getEmail());
             user.setJobs(oneParameter.getJobs());
             user.setSex(oneParameter.getSex());
             userRepository.save(user);
