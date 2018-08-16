@@ -293,7 +293,7 @@ public class ThreeController {
     @ApiOperation(value = "广告列表", notes = "广告列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "adminuserid", value = "广告主id（必需）", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "type", value = "类型（必需）1，想买广告2，了解详情3，立即购买", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "type", value = "类型（必需）1，想买广告2，了解详情3，立即购买，4推广自己，5私信广告", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
     })
