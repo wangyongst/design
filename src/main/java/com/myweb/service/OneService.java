@@ -27,6 +27,8 @@ public interface OneService {
 
     public Result setEmail(OneParameter oneParameter);
 
+    public Result reset(OneParameter oneParameter);
+
     public Result followMy(OneParameter oneParameter, Pageable pageable);
 
     public Result refer(OneParameter oneParameter, Pageable pageable);

@@ -53,7 +53,8 @@ public class OneController {
 
     @ApiOperation(value = "发送验证码", notes = "发送验证码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String")
+            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "type", value = "类型 （可选，0,注册，1修改手机号，2，重置密码），默认为0", required = true, dataType = "Integer"),
     })
     @ResponseBody
     @PostMapping("/user/send/captcha")
@@ -82,6 +83,18 @@ public class OneController {
     @PostMapping("/user/destroy")
     public Result destroy(@ModelAttribute OneParameter oneParameter) {
         return ResultUtils.result(oneService.destroy(oneParameter));
+    }
+
+
+    @ApiOperation(value = "重置密码", notes = "重置密码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mobile", value = "手机号（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "password", value = "密码（必需）", required = true, dataType = "String")
+    })
+    @ResponseBody
+    @PostMapping("/user/reset")
+    public Result reset(@ModelAttribute OneParameter oneParameter) {
+        return ResultUtils.result(oneService.reset(oneParameter));
     }
 
 
