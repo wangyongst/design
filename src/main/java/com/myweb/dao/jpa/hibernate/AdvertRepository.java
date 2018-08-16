@@ -15,5 +15,5 @@ public interface AdvertRepository extends JpaRepository<Advert, Integer> {
 
     public void deleteAllByAdminuser(AdminUser adminUser);
 
-    public Page<Advert> findByAdminuserOrderByOuttimeDesc(AdminUser adminUser,Pageable pageable);
+    public Page<Advert> findByAdminuserAndTypeOrderByOuttimeDesc(AdminUser adminUser,Integer type,Pageable pageable);
 }

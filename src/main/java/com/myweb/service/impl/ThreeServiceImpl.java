@@ -118,9 +118,9 @@ public class ThreeServiceImpl implements ThreeService {
         }
         result.setStatus(1);
         Advert advert = advertRepository.findOne(threeParameter.getAdvertid());
-        if(threeParameter.getUserid() != null && threeParameter.getUserid() !=0){
-            List<Buy> buyList = buyRepository.findAllByUserAndAdvert(userRepository.findOne(threeParameter.getUserid()),advert);
-            if(buyList.size() > 0){
+        if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
+            List<Buy> buyList = buyRepository.findAllByUserAndAdvert(userRepository.findOne(threeParameter.getUserid()), advert);
+            if (buyList.size() > 0) {
                 advert.setIsBuy(1);
             }
         }
@@ -383,10 +383,16 @@ public class ThreeServiceImpl implements ThreeService {
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             } else {
-                Page<Advert> adverts = advertRepository.findByAdminuserOrderByOuttimeDesc(u, pageable);
+                if (threeParameter.getType() != null && threeParameter.getType() == 4) {
+                    return null;
+                }
+                if (threeParameter.getType() != null && threeParameter.getType() == 5) {
+                    return null;
+                }
+                Page<Advert> adverts = advertRepository.findByAdminuserAndTypeOrderByOuttimeDesc(u, threeParameter.getType(), pageable);
                 adverts.forEach(e -> {
                     try {
-                        if (e.getRefer() == 2) e.setStatus(1);
+                        if (e.getRefer() != null && e.getRefer() == 2) e.setStatus(1);
                         else if (new SimpleDateFormat("yyyy-MM-dd").parse(e.getOuttime()).getTime() < new Date().getTime())
                             e.setStatus(3);
                         else e.setStatus(2);

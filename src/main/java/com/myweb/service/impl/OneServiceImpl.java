@@ -469,11 +469,12 @@ public class OneServiceImpl implements OneService {
             result.setMessage("必须的参数不能为空!");
             return result;
         }
-        User user = userRepository.findOne(oneParameter.getUserid());
-        if (user == null) {
+        List<User> users = userRepository.findByUsername(oneParameter.getMobile());
+        if (users.size() == 0) {
             result.setStatus(9);
             result.setMessage("当前用户不存在!");
         } else {
+            User user = users.get(0);
             user.setPassword(oneParameter.getPassword());
             userRepository.save(user);
             result.setStatus(1);

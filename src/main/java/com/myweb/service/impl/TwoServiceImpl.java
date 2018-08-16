@@ -142,45 +142,27 @@ public class TwoServiceImpl implements TwoService {
     public Result index(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
-            if (twoParameter.getDesign() == null) {
-                result.setData(helpRepository.findByDraftAndAudience(4, 1, pageable));
-            } else {
-                result.setData(helpRepository.findByDesignAndAudienceAndDraft(twoParameter.getDesign(), 1, 4, pageable));
-            }
+        Page<Help> helps = null;
+        if (twoParameter.getDesign() == null) {
+            helps = helpRepository.findByDraftAndAudience(4, 1, pageable);
         } else {
-            //自己或粉丝
+            helps = helpRepository.findByDesignAndAudienceAndDraft(twoParameter.getDesign(), 1, 4, pageable);
+        }
+        if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
             User user = userRepository.findOne(twoParameter.getUserid());
             if (user == null || isNotLogin(user)) {
                 result.setStatus(9);
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (twoParameter.getDesign() == null) {
-                Page<Help> helps = helpRepository.queryAll(user, pageable);
-                helps.forEach(e -> {
-                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
-                    if (studies.size() > 0) {
-                        e.setIsStudied(1);
-                    } else {
-                        e.setIsStudied(0);
-                    }
-                });
-                result.setStatus(1);
-                result.setData(helps);
-            } else {
-                Page<Help> helps = helpRepository.queryAllByTag(user, twoParameter.getDesign(), pageable);
-                helps.forEach(e -> {
-                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
-                    if (studies.size() > 0) {
-                        e.setIsStudied(1);
-                    } else {
-                        e.setIsStudied(0);
-                    }
-                });
-                result.setStatus(1);
-                result.setData(helps);
-            }
+            helps.forEach(e -> {
+                List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                if (studies.size() > 0) {
+                    e.setIsStudied(1);
+                } else {
+                    e.setIsStudied(0);
+                }
+            });
         }
         return result;
     }
@@ -244,49 +226,27 @@ public class TwoServiceImpl implements TwoService {
     public Result search(TwoParameter twoParameter, Pageable pageable) {
         Result result = new Result();
         result.setStatus(1);
-        if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
-            if (StringUtils.isBlank(twoParameter.getTag())) {
-                result.setData(helpRepository.findByDraftAndAudience(4, 1, pageable));
-            } else {
-                result.setData(helpRepository.findByDraftAndAudienceAndTagContains(4, 1, twoParameter.getTag(), pageable));
-            }
-        } else {//自己或粉丝
+        Page<Help> helps = null;
+        if (StringUtils.isBlank(twoParameter.getTag())) {
+            helps = helpRepository.findByDraftAndAudience(4, 1, pageable);
+        } else {
+            helps = helpRepository.findByDraftAndAudienceAndTagContains(4, 1, twoParameter.getTag(), pageable);
+        }
+        if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
             User user = userRepository.findOne(twoParameter.getUserid());
             if (user == null || isNotLogin(user)) {
                 result.setStatus(9);
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (StringUtils.isBlank(twoParameter.getTag())) {
-                Page<Help> helps = helpRepository.queryAll(user, pageable);
-                helps.forEach(e -> {
-                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
-                    if (studies.size() > 0) {
-                        e.setIsStudied(1);
-                    } else {
-                        e.setIsStudied(0);
-                    }
-                });
-                result.setData(helps);
-            } else {
-                Searching searching = new Searching();
-                searching.setKeyword(twoParameter.getTag());
-                searching.setUser(user);
-                searching.setIsclear(0);
-                searching.setType(1);
-                searching.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
-                searchingRepository.save(searching);
-                Page<Help> helps = helpRepository.queryAllByTag(user, "%" + twoParameter.getTag() + "%", pageable);
-                helps.forEach(e -> {
-                    List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
-                    if (studies.size() > 0) {
-                        e.setIsStudied(1);
-                    } else {
-                        e.setIsStudied(0);
-                    }
-                });
-                result.setData(helps);
-            }
+            helps.forEach(e -> {
+                List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
+                if (studies.size() > 0) {
+                    e.setIsStudied(1);
+                } else {
+                    e.setIsStudied(0);
+                }
+            });
         }
         return result;
     }
