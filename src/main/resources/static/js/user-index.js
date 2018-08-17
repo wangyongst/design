@@ -10,6 +10,7 @@ $(function () {
             }
         }
     });
+
     $.ajax({
         type: "GET",
         cache: "false",
@@ -22,6 +23,19 @@ $(function () {
         }
     });
 
+    $.ajax({
+        type: "GET",
+        cache: "false",
+        url: "/admin/user/role/15",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 1) {
+                $.each(result.data, function (key, val) {
+                    $('#adminuserid').append("<option value='" + val.id + "'>" + val.username + "</option>");
+                });
+            }
+        }
+    });
 
     $("#delete").click(function () {
         var selected = select();
@@ -104,16 +118,17 @@ $(function () {
     });
 
     $("#submit2").click(function () {
-        if($('#refertime').val() == "") {
+        if ($('#refertime').val() == "") {
             alert("推广有效期不能为空")
-            return ;
+            return;
         }
         $.ajax({
             type: "POST",
             cache: "false",
             url: "/admin/user",
             data: {
-                userid:  $('#userid2').val(),
+                userid: $('#userid2').val(),
+                adminuserid:$('#adminuserid').val(),
                 type: 3,
                 outtime: $('#refertime').val()
             },
@@ -121,6 +136,7 @@ $(function () {
             success: function (result) {
                 if (result.status == 1) {
                     alert("推广成功");
+                    $("#myTable").bootstrapTable('refresh');
                 } else {
                     alert(result.message);
                 }

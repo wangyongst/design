@@ -1,6 +1,6 @@
 $(function () {
 
-    $("#selectNot2").text("上传大图:");
+    $("#selectNot2").text("上传大图:最大不能超过40M");
     $("#url").hide();
 
 
@@ -62,6 +62,51 @@ $(function () {
         }
         $.ajax({
             type: "GET",
+            cache: "false",
+            url: "/admin/advert",
+            data: {
+                advertid: ids[1],
+                operation: 3
+            },
+            dataType: "json",
+            success: function (result) {
+                if (result.status == 1) {
+                    $('#advertid').val(result.data.id);
+                    $('#title').val(result.data.title);
+                    $('#adminuserid').val(result.data.adminuser.id);
+                    $('#type').val(result.data.type);
+                    $('#url').val(result.data.url);
+                    if ($("#type").val() == 1) {
+                        $("#selectNot2").text("上传大图:");
+                        $("#url").hide();
+                        $("#upload2").show();
+                    } else {
+                        $("#selectNot2").text("跳转链接:");
+                        $("#url").show();
+                        $("#upload2").hide();
+                    }
+                } else {
+                    alert(result.message);
+                }
+            }
+        });
+        $('#myModal2').modal('toggle');
+    });
+
+
+    $("#delete").click(function () {
+        var selected = select();
+        if (selected == "") {
+            alert("请先选择你要修改的记录");
+            return;
+        }
+        var ids = selected.split(",");
+        if (ids.length > 2) {
+            alert("请选择一条记录");
+            return;
+        }
+        $.ajax({
+            type: "POST",
             cache: "false",
             url: "/admin/advert",
             data: {
@@ -140,10 +185,13 @@ $(function () {
 
     $("#type").change(function () {
         if ($("#type").val() == 1) {
-            $("#selectNot2").text("上传大图:");
+            $("#selectNot2").text("上传大图:最大不能超过40M");
             $("#url").hide();
             $("#upload2").show();
         } else {
+            if ($("#type").val() == 1) {
+                $("#imagesize").text("上传封面:310*350:");
+            }
             $("#selectNot2").text("跳转链接:");
             $("#url").show();
             $("#upload2").hide();
@@ -214,12 +262,12 @@ $(function () {
             return;
         }
         var oper = 1;
-        if($("#advertid").val() != "") oper = 2;
+        if ($("#advertid").val() != "") oper = 2;
         $.ajax({
             type: "Post",
             cache: "false",
             url: "/admin/advert",
-            data: $('#advertForm').serialize() + "&operation="+oper,
+            data: $('#advertForm').serialize() + "&operation=" + oper,
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {

@@ -380,8 +380,13 @@ public class AdminOneServiceImpl implements AdminOneService {
             result.setData(userRepository.save(user));
         } else if (oneParameter.getType() != null && oneParameter.getType() == 3) {
             User user = userRepository.findOne(oneParameter.getUserid());
+            AdminUser adminUser = new AdminUser();
+            adminUser.setUsername(user.getUsername());
+            adminUser.setPassword(user.getPassword());
+            adminUser.setAdminRole(adminRoleRepository.findOne(15));
+            adminUserRepository.save(adminUser);
             user.setRefertime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new SimpleDateFormat("yyyy-MM-dd").parse(oneParameter.getOuttime())));
-            result.setData(userRepository.save(user));
+            userRepository.save(user);
         }
         return result;
     }
@@ -407,7 +412,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         userRepository.save(user);
         List<Report> reports = reportRepository.findAllByTouserIsNotNullOrderByCreatetimeDesc();
         reports.forEach(e -> {
-            createSysNotice(user, null, "您在" + e.getCreatetime() + ",对\"" + e.getTouser().getNickname() + "\"的举报已确认存在违规行为，并已经对举报对象进行了处理 。", 5, 6);
+            createSysNotice(user, null, "您在" + e.getCreatetime() + ",对\"" + e.getTouser().getNickname() + "\"的举报已确认存在违规行为，并已经对举报对象进行了处理 。", 5, 6,null);
         });
         reportRepository.deleteAllByTouser(user);
         return result;
@@ -511,7 +516,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setStatus(1);
         List<User> userList = studyRepository.queryAllByHelp(helpRepository.findOne(oneParameter.getHelpid()));
         userList.forEach(e -> {
-            createSysNotice(e, helpRepository.findOne(oneParameter.getHelpid()), oneParameter.getText(), 5, 7);
+            createSysNotice(e, helpRepository.findOne(oneParameter.getHelpid()), oneParameter.getText(), 5, 7,oneParameter.getAdminiuserid());
         });
         return result;
     }
@@ -676,6 +681,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         } else if (adminOneParameter.getOperation() == 3) {
             advert = advertRepository.findOne(adminOneParameter.getAdvertid());
             if (advert == null) return result;
+            buyRepository.deleteAllByAdvert(advert);
             advertRepository.delete(advert);
             result.setStatus(1);
         }
@@ -723,7 +729,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         adminLogRepository.saveAndFlush(adminLog);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype) {
+    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype,Integer adminuserid) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));
@@ -741,6 +747,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         me.setTouser(user);
         me.setUser(userRepository.findOne(1));
         me.setCreatetime(new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(new Date()));
+        me.setAdminuser(adminuserid);
         messageRepository.save(me);
     }
 }

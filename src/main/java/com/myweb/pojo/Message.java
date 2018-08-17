@@ -36,6 +36,17 @@ public class Message implements Serializable {
     @Basic
     @Column(name = "type", nullable = true)
     private Integer type;
+    @Basic
+    @Column(name = "adminuser", nullable = true)
+    private Integer adminuser;
+
+    public Integer getAdminuser() {
+        return adminuser;
+    }
+
+    public void setAdminuser(Integer adminuser) {
+        this.adminuser = adminuser;
+    }
 
     public Help getHelp() {
         return help;

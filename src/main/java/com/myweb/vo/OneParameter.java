@@ -7,6 +7,7 @@ public class OneParameter {
     private Integer helpid;
     private Integer userid;
     private Integer touserid;
+    private Integer adminiuserid;
     private String username;
     private String password;
     private String avatar;
@@ -23,6 +24,14 @@ public class OneParameter {
     private String keyword;
     private String text;
     private String outtime;
+
+    public Integer getAdminiuserid() {
+        return adminiuserid;
+    }
+
+    public void setAdminiuserid(Integer adminiuserid) {
+        this.adminiuserid = adminiuserid;
+    }
 
     public String getOuttime() {
         return outtime;

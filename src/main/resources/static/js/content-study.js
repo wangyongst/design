@@ -5,6 +5,20 @@ $(function () {
     $.ajax({
         type: "GET",
         cache: "false",
+        url: "/admin/user/role/15",
+        dataType: "json",
+        success: function (result) {
+            if (result.status == 1) {
+                $.each(result.data, function (key, val) {
+                    $('#adminuserid').append("<option value='" + val.id + "'>" + val.username + "</option>");
+                });
+            }
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        cache: "false",
         url: "/admin/count/study",
         dataType: "json",
         success: function (result) {
@@ -84,7 +98,8 @@ $(function () {
             url: "/admin/user/send/message",
             data: {
                 helpid: $('#studyhelpid').val(),
-                text: $('#content').val()
+                text: $('#content').val(),
+                adminuserid:$('#adminuserid').val()
             },
             dataType: "json",
             success: function (result) {

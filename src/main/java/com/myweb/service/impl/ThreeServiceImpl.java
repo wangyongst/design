@@ -327,7 +327,7 @@ public class ThreeServiceImpl implements ThreeService {
         Result result = new Result();
         Page<User> users = helpRepository.findUserByMost(pageable);
         users.forEach(e -> {
-            e.setPublished(helpRepository.countAllByUser(e));
+            e.setPublished(helpRepository.countAllByUserAndAudience(e,1));
             e.setFollowed(followRepository.countAllByUser(e));
             e.setFans(followRepository.countAllByTouser(e));
             if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {

@@ -22,4 +22,7 @@ public interface BuyRepository extends JpaRepository<Buy, Integer> {
 
     @Query("select buy from Buy buy where buy.advert.adminuser = ?1 order by buy.advert.outtime desc ")
     public Page<Buy> findByAdminuser(AdminUser adminuser, Pageable pageable);
+
+
+    public void deleteAllByAdvert(Advert advert);
 }
