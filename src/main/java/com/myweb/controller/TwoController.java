@@ -144,7 +144,8 @@ public class TwoController {
         }
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
-        if (StringUtils.isBlank(twoParameter.getDesign()) || twoParameter.getDesign().equals("全部")) twoParameter.setDesign(null);
+        if (StringUtils.isBlank(twoParameter.getDesign()) || twoParameter.getDesign().equals("全部"))
+            twoParameter.setDesign(null);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), sort);
         return ResultUtils.result(twoService.index(twoParameter, pageable));
     }
@@ -200,7 +201,7 @@ public class TwoController {
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), null);
-        return ResultUtils.result(twoService.advert(twoParameter,pageable));
+        return ResultUtils.result(twoService.advert(twoParameter, pageable));
     }
 
     @ApiOperation(value = "广告人", notes = "广告人")
@@ -215,7 +216,7 @@ public class TwoController {
         if (twoParameter.getPage() == null) twoParameter.setPage(0);
         if (twoParameter.getPagesize() == null) twoParameter.setPagesize(10);
         Pageable pageable = new PageRequest(twoParameter.getPage(), twoParameter.getPagesize(), null);
-        return ResultUtils.result(twoService.advertUser(twoParameter,pageable));
+        return ResultUtils.result(twoService.advertUser(twoParameter, pageable));
     }
 
     @ApiOperation(value = "点击广告", notes = "点击广告")

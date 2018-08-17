@@ -164,6 +164,7 @@ public class TwoServiceImpl implements TwoService {
                 }
             });
         }
+        result.setData(helps);
         return result;
     }
 
@@ -248,6 +249,7 @@ public class TwoServiceImpl implements TwoService {
                 }
             });
         }
+        result.setData(helps);
         return result;
     }
 
@@ -279,12 +281,6 @@ public class TwoServiceImpl implements TwoService {
                 }
                 result.setStatus(1);
             } else {
-                User user1 = userRepository.findOne(twoParameter.getUserid());
-                if (user1 == null) {
-                    result.setStatus(9);
-                    result.setMessage("当前用户不存!");
-                    return result;
-                }
                 Page<Help> helps = null;
                 if (twoParameter.getType() == null || twoParameter.getType() == 0) {
                     if (StringUtils.isBlank(twoParameter.getTag())) {
@@ -299,14 +295,6 @@ public class TwoServiceImpl implements TwoService {
                         helps = studyRepository.queryAllByUserAndTagLike(user, twoParameter.getTag(), pageable);
                     }
                 }
-                helps.forEach(e -> {
-                    List<Study> studies = studyRepository.findAllByUserAndHelp(user1, e);
-                    if (studies.size() > 0) {
-                        e.setIsStudied(1);
-                    } else {
-                        e.setIsStudied(0);
-                    }
-                });
                 result.setStatus(1);
                 result.setData(helps);
             }
