@@ -7,7 +7,7 @@ public class OneParameter {
     private Integer helpid;
     private Integer userid;
     private Integer touserid;
-    private Integer adminiuserid;
+    private Integer adminuserid;
     private String username;
     private String password;
     private String avatar;
@@ -25,12 +25,12 @@ public class OneParameter {
     private String text;
     private String outtime;
 
-    public Integer getAdminiuserid() {
-        return adminiuserid;
+    public Integer getAdminuserid() {
+        return adminuserid;
     }
 
-    public void setAdminiuserid(Integer adminiuserid) {
-        this.adminiuserid = adminiuserid;
+    public void setAdminuserid(Integer adminuserid) {
+        this.adminuserid = adminuserid;
     }
 
     public String getOuttime() {

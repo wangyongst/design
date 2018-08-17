@@ -24,6 +24,10 @@ public interface ThreeService {
 
     public Result newsCountRead(ThreeParameter threeParameter);
 
+    public Result advertReferList(ThreeParameter threeParameter, Pageable pageable);
+
+    public Result advertMessageList(ThreeParameter threeParameter, Pageable pageable);
+
     public Result helpStudied(ThreeParameter threeParameter, Pageable pageable);
 
     public Result followHelp(ThreeParameter threeParameter, Pageable pageable);

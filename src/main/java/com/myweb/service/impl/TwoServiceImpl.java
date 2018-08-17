@@ -155,11 +155,6 @@ public class TwoServiceImpl implements TwoService {
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (twoParameter.getDesign() == null) {
-                helps = helpRepository.queryAll(user, pageable);
-            } else {
-                helps = helpRepository.queryAllByDesign(user, twoParameter.getDesign(), pageable);
-            }
             helps.forEach(e -> {
                 List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                 if (studies.size() > 0) {
@@ -245,11 +240,6 @@ public class TwoServiceImpl implements TwoService {
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
-            if (StringUtils.isBlank(twoParameter.getTag())) {
-                helps = helpRepository.queryAll(user, pageable);
-            } else {
-                helps = helpRepository.queryAllByTag(user, "%" + twoParameter.getTag() + "%", pageable);
-            }
             helps.forEach(e -> {
                 List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                 if (studies.size() > 0) {
@@ -278,9 +268,30 @@ public class TwoServiceImpl implements TwoService {
             if (twoParameter.getUserid() == null || twoParameter.getUserid() == 0) {
                 if (twoParameter.getType() == null || twoParameter.getType() == 0) {
                     if (StringUtils.isBlank(twoParameter.getTag())) {
-                        result.setData(helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 3, pageable));
+                        result.setData(helpRepository.findByUserAndDraftAndAudience(user, 4, 1, pageable));
                     } else {
-                        result.setData(helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 3, 4, twoParameter.getTag(), pageable));
+                        result.setData(helpRepository.findByUserAndAudienceAndDraftAndTagContains(user, 1, 4, twoParameter.getTag(), pageable));
+                    }
+                } else {
+                    if (StringUtils.isBlank(twoParameter.getTag())) {
+                        result.setData(studyRepository.queryAllByUser(user, pageable));
+                    } else {
+                        result.setData(studyRepository.queryAllByUserAndTagLike(user, "%" + twoParameter.getTag() + "%", pageable));
+                    }
+                }
+                result.setStatus(1);
+            } else {
+                User user1 = userRepository.findOne(twoParameter.getUserid());
+                if (user1 == null || isNotLogin(user1)) {
+                    result.setStatus(0);
+                    result.setMessage("当前用户不存在或未登录!");
+                    return result;
+                }
+                if (twoParameter.getType() == null || twoParameter.getType() == 0) {
+                    if (StringUtils.isBlank(twoParameter.getTag())) {
+                        result.setData(helpRepository.queryAllByMine(user, user1, pageable));
+                    } else {
+                        result.setData(helpRepository.queryAllByTagMine(user, user1, "%" + twoParameter.getTag() + "%", pageable));
                     }
                 } else {
                     if (StringUtils.isBlank(twoParameter.getTag())) {
@@ -290,23 +301,6 @@ public class TwoServiceImpl implements TwoService {
                     }
                 }
                 result.setStatus(1);
-            } else {
-                Page<Help> helps = null;
-                if (twoParameter.getType() == null || twoParameter.getType() == 0) {
-                    if (StringUtils.isBlank(twoParameter.getTag())) {
-                        helps = helpRepository.findByUserAndDraftAndAudienceNot(user, 4, 0, pageable);
-                    } else {
-                        helps = helpRepository.findByUserAndAudienceNotAndDraftAndTagContains(user, 0, 4, twoParameter.getTag(), pageable);
-                    }
-                } else {
-                    if (StringUtils.isBlank(twoParameter.getTag())) {
-                        helps = studyRepository.queryAllByUser(user, pageable);
-                    } else {
-                        helps = studyRepository.queryAllByUserAndTagLike(user, twoParameter.getTag(), pageable);
-                    }
-                }
-                result.setStatus(1);
-                result.setData(helps);
             }
         }
         return result;

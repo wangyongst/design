@@ -334,4 +334,36 @@ public class ThreeController {
         return ResultUtils.result(threeService.advertStudiedList(threeParameter, pageable));
     }
 
+    @ApiOperation(value = "广告推广自己详情", notes = "广告推广自己详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminuserid", value = "广告主id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "userid", value = "用户id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/advert/refer/list")
+    public Result advertReferList(@ModelAttribute ThreeParameter threeParameter) {
+        if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), null);
+        return ResultUtils.result(threeService.advertReferList(threeParameter, pageable));
+    }
+
+    @ApiOperation(value = "广告私信详情", notes = "广告私信详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminuserid", value = "广告主id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "messageid", value = "私信id（必需）", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "page", value = "页数（可选）从0开始，如果不传默认为0", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "pagesize", value = "每页条数（可选），如果不传默认10条", required = true, dataType = "Integer")
+    })
+    @ResponseBody
+    @GetMapping("/advert/message/list")
+    public Result advertMessageList(@ModelAttribute ThreeParameter threeParameter) {
+        if (threeParameter.getPage() == null) threeParameter.setPage(0);
+        if (threeParameter.getPagesize() == null) threeParameter.setPagesize(10);
+        Pageable pageable = new PageRequest(threeParameter.getPage(), threeParameter.getPagesize(), null);
+        return ResultUtils.result(threeService.advertMessageList(threeParameter, pageable));
+    }
+
 }

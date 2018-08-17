@@ -327,7 +327,7 @@ public class ThreeServiceImpl implements ThreeService {
         Result result = new Result();
         Page<User> users = helpRepository.findUserByMost(pageable);
         users.forEach(e -> {
-            e.setPublished(helpRepository.countAllByUserAndAudience(e,1));
+            e.setPublished(helpRepository.countAllByUserAndAudience(e, 1));
             e.setFollowed(followRepository.countAllByUser(e));
             e.setFans(followRepository.countAllByTouser(e));
             if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
@@ -376,7 +376,7 @@ public class ThreeServiceImpl implements ThreeService {
     @Override
     public Result advertList(ThreeParameter threeParameter, Pageable pageable) {
         Result result = new Result();
-        if (threeParameter.getAdminuserid() != null && threeParameter.getAdminuserid() != 0) {
+        if (threeParameter.getAdminuserid() != null && threeParameter.getAdminuserid() != 0 || threeParameter.getType() == null || threeParameter.getType() == 0) {
             AdminUser u = adminUserRepository.findOne(threeParameter.getAdminuserid());
             if (u == null) {
                 result.setStatus(9);
@@ -384,10 +384,12 @@ public class ThreeServiceImpl implements ThreeService {
                 return result;
             } else {
                 if (threeParameter.getType() != null && threeParameter.getType() == 4) {
-                    return null;
+                    result.setData(userRepository.findByUsername(u.getUsername()));
+                    return result;
                 }
                 if (threeParameter.getType() != null && threeParameter.getType() == 5) {
-                    return null;
+                    result.setData(messageRepository.findByAdminuser(u.getId()));
+                    return result;
                 }
                 Page<Advert> adverts = advertRepository.findByAdminuserAndTypeOrderByOuttimeDesc(u, threeParameter.getType(), pageable);
                 adverts.forEach(e -> {
@@ -435,7 +437,7 @@ public class ThreeServiceImpl implements ThreeService {
                     e.setIsFollow(0);
                 }
             }
-            List<Help> helps = helpRepository.findTop3ByUserOrderByStudiedDesc(e);
+            List<Help> helps = helpRepository.findTop3ByUserAndAudienceOrderByStudiedDesc(1,e);
             helps.forEach(t -> {
                 if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
                     User u = userRepository.findOne(threeParameter.getUserid());
@@ -532,6 +534,33 @@ public class ThreeServiceImpl implements ThreeService {
             }
         }
         result.setData(studies);
+        return result;
+    }
+
+
+    @Override
+    public Result advertReferList(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getAdminuserid() == null || threeParameter.getAdminuserid() == 0 || threeParameter.getUserid() == null || threeParameter.getUserid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setStatus(1);
+        result.setData(followRepository.findAllByTouser(userRepository.findOne(threeParameter.getUserid())));
+        return result;
+    }
+
+
+    @Override
+    public Result advertMessageList(ThreeParameter threeParameter, Pageable pageable) {
+        Result result = new Result();
+        if (threeParameter.getAdminuserid() == null || threeParameter.getAdminuserid() == 0 || threeParameter.getMessageid() == null || threeParameter.getMessageid() == 0) {
+            result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        result.setStatus(1);
+        Message message = messageRepository.findOne(threeParameter.getMessageid());
+        result.setData(messageRepository.findByAdminuserAndMessage(threeParameter.getAdminuserid(), message.getMessage(),pageable));
         return result;
     }
 

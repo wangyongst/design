@@ -28,15 +28,20 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     public List<Message> findByUserOrTouser(User user, User touser);
 
+    @Query("select message,count (message) from Message message group by message.adminuser having message.adminuser = ?1")
+    public List<Object[]> findByAdminuser(Integer adminuser);
+
+    public Page<Message> findByAdminuserAndMessage(Integer adminuser,String message, Pageable pageable);
+
     public void deleteAllByUserAndTouser(User user, User touser);
 
     public int countAllByUser(User user);
 
     public int countAllByTouser(User touser);
 
-    public int countAllByUserAndCreatetimeGreaterThan(User user,String time);
+    public int countAllByUserAndCreatetimeGreaterThan(User user, String time);
 
-    public int countAllByTouserAndCreatetimeGreaterThan(User touser,String time);
+    public int countAllByTouserAndCreatetimeGreaterThan(User touser, String time);
 
     public int countAllByUserAndTouser(User user, User touser);
 
