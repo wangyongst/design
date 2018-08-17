@@ -3,15 +3,14 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.AdminOneService;
-import com.myweb.vo.AdminOneParameter;
-import com.myweb.vo.FourParameter;
-import com.myweb.vo.OneParameter;
-import com.myweb.vo.TwoParameter;
+import com.myweb.vo.*;
 import com.utils.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -282,10 +281,18 @@ public class AdminOneServiceImpl implements AdminOneService {
     }
 
     @Override
-    public Result userList(HttpSession httpSession) {
+    public Result userList(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(user2Repository.findAllByIdNot(1));
+        Sort sort = new Sort(Sort.Direction.DESC, "createtime");
+        if (adminOneParameter.getOffset() == null) adminOneParameter.setOffset(0);
+        if (adminOneParameter.getLimit() == null) adminOneParameter.setLimit(10);
+        Pageable pageable = new PageRequest(adminOneParameter.getOffset()/10, adminOneParameter.getLimit(), sort);
+        Page<User2> user2 = user2Repository.findAllByIdNot(1, pageable);
+        TableVo tableVo = new TableVo();
+        tableVo.setRows(user2.getContent());
+        tableVo.setTotal(user2.getTotalElements());
+        result.setData(tableVo);
         return result;
     }
 
@@ -412,7 +419,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         userRepository.save(user);
         List<Report> reports = reportRepository.findAllByTouserIsNotNullOrderByCreatetimeDesc();
         reports.forEach(e -> {
-            createSysNotice(user, null, "您在" + e.getCreatetime() + ",对\"" + e.getTouser().getNickname() + "\"的举报已确认存在违规行为，并已经对举报对象进行了处理 。", 5, 6,null);
+            createSysNotice(user, null, "您在" + e.getCreatetime() + ",对\"" + e.getTouser().getNickname() + "\"的举报已确认存在违规行为，并已经对举报对象进行了处理 。", 5, 6, null);
         });
         reportRepository.deleteAllByTouser(user);
         return result;
@@ -439,7 +446,7 @@ public class AdminOneServiceImpl implements AdminOneService {
     public Result messageList(HttpSession httpSession) {
         Result result = new Result();
         result.setStatus(1);
-        result.setData(messageRepository.findAllByOrderByCreatetimeDesc());
+        result.setData(messageRepository.findAllByUserNotOrderByCreatetimeDesc(userRepository.findOne(1)));
         return result;
     }
 
@@ -516,7 +523,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         result.setStatus(1);
         List<User> userList = studyRepository.queryAllByHelp(helpRepository.findOne(oneParameter.getHelpid()));
         userList.forEach(e -> {
-            createSysNotice(e, helpRepository.findOne(oneParameter.getHelpid()), oneParameter.getText(), 5, 7,oneParameter.getAdminuserid());
+            createSysNotice(e, helpRepository.findOne(oneParameter.getHelpid()), oneParameter.getText(), 5, 7, oneParameter.getAdminuserid());
         });
         return result;
     }
@@ -729,7 +736,7 @@ public class AdminOneServiceImpl implements AdminOneService {
         adminLogRepository.saveAndFlush(adminLog);
     }
 
-    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype,Integer adminuserid) {
+    public void createSysNotice(User user, Help help, String message, Integer type, Integer mtype, Integer adminuserid) {
         Notice notice = new Notice();
         notice.setUser(user);
         notice.setFromuser(userRepository.findOne(1));

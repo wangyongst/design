@@ -437,7 +437,7 @@ public class ThreeServiceImpl implements ThreeService {
                     e.setIsFollow(0);
                 }
             }
-            List<Help> helps = helpRepository.findTop3ByUserAndAudienceOrderByStudiedDesc(1,e);
+            List<Help> helps = helpRepository.findTop3ByUserAndAudienceOrderByStudiedDesc(e,1);
             helps.forEach(t -> {
                 if (threeParameter.getUserid() != null && threeParameter.getUserid() != 0) {
                     User u = userRepository.findOne(threeParameter.getUserid());

@@ -106,8 +106,8 @@ public class AdminOneController {
 
     //用户列表,搜索用户
     @GetMapping("/user/list")
-    public Object userList(HttpSession httpSession) {
-        return ResultUtils.data(adminOneService.userList(httpSession));
+    public Object userList(@ModelAttribute AdminOneParameter adminOneParameter, HttpSession httpSession) {
+        return ResultUtils.data(adminOneService.userList(adminOneParameter,httpSession));
     }
 
     //登录时间列表

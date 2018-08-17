@@ -48,7 +48,7 @@ public interface AdminOneService {
 
     public Result logout(HttpSession httpSession);
 
-    public Result userList(HttpSession httpSession);
+    public Result userList(AdminOneParameter adminOneParameter,HttpSession httpSession);
 
     public Result showlog(HttpSession httpSession);
 

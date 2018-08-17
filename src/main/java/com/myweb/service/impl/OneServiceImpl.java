@@ -94,8 +94,12 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result regist(OneParameter oneParameter) {
         Result result = new Result();
-        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getMobile()) || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getNickname())) {
+        if (StringUtils.isBlank(oneParameter.getUsername()) || StringUtils.isBlank(oneParameter.getMobile()) || StringUtils.isBlank(oneParameter.getPassword()) || StringUtils.isBlank(oneParameter.getNickname()) || StringUtils.isBlank(oneParameter.getText())) {
             result.setMessage("必须的参数不能为空!");
+            return result;
+        }
+        if (captchaRepository.findByMobileAndCode(oneParameter.getMobile(), oneParameter.getText()).size() == 0) {
+            result.setMessage("验证码不正确！");
             return result;
         }
         if (userRepository.findByUsername(oneParameter.getUsername()).size() > 0) {
