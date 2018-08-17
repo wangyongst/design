@@ -52,4 +52,13 @@ public interface HelpRepository extends JpaRepository<Help, Integer> {
     public Integer countAllByUser(User user);
 
     public List<Help> findTop3ByUserOrderByStudiedDesc(User user);
+
+    @Query("select help  from Help help where (help.audience = 1  or help.user = ?1  or (help.user in (select follow.touser from Follow follow where follow.user = ?1) and help.audience =2)) and help.draft =4")
+    public Page<Help> queryAll(User user, Pageable pageable);
+
+    @Query("select help  from Help help where (help.audience = 1 or help.user = ?1  or (help.user in (select follow.touser from Follow follow where follow.user = ?1) and help.audience =2)) and help.draft =4 and help.tag like ?2")
+    public Page<Help> queryAllByTag(User user, String tag, Pageable pageable);
+
+    @Query("select help  from Help help where (help.audience = 1 or help.user = ?1  or (help.user in (select follow.touser from Follow follow where follow.user = ?1) and help.audience =2)) and help.draft =4 and help.design = ?2")
+    public Page<Help> queryAllByDesign(User user, String design, Pageable pageable);
 }

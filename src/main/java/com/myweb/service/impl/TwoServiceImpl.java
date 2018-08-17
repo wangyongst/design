@@ -155,6 +155,11 @@ public class TwoServiceImpl implements TwoService {
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
             }
+            if (twoParameter.getDesign() == null) {
+                helps = helpRepository.queryAll(user, pageable);
+            } else {
+                helps = helpRepository.queryAllByDesign(user, twoParameter.getDesign(), pageable);
+            }
             helps.forEach(e -> {
                 List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
                 if (studies.size() > 0) {
@@ -231,7 +236,7 @@ public class TwoServiceImpl implements TwoService {
         if (StringUtils.isBlank(twoParameter.getTag())) {
             helps = helpRepository.findByDraftAndAudience(4, 1, pageable);
         } else {
-            helps = helpRepository.findByDraftAndAudienceAndTagContains(4, 1, twoParameter.getTag(), pageable);
+            helps = helpRepository.findByDraftAndAudienceAndTagContains(4, 1, "%" + twoParameter.getTag() + "%", pageable);
         }
         if (twoParameter.getUserid() != null && twoParameter.getUserid() != 0) {
             User user = userRepository.findOne(twoParameter.getUserid());
@@ -239,6 +244,11 @@ public class TwoServiceImpl implements TwoService {
                 result.setStatus(9);
                 result.setMessage("当前用户不存在或未登录!");
                 return result;
+            }
+            if (StringUtils.isBlank(twoParameter.getTag())) {
+                helps = helpRepository.queryAll(user, pageable);
+            } else {
+                helps = helpRepository.queryAllByTag(user, "%" + twoParameter.getTag() + "%", pageable);
             }
             helps.forEach(e -> {
                 List<Study> studies = studyRepository.findAllByUserAndHelp(user, helpRepository.findOne(e.getId()));
@@ -315,8 +325,10 @@ public class TwoServiceImpl implements TwoService {
             result.setMessage("当前用户不存在0!");
         } else {
             result.setStatus(1);
-            if (twoParameter.getType() == null || twoParameter.getType() == 0) result.setData(searchingRepository.findByUserAndIsclearNot(user, 1, pageable));
-            else result.setData(searchingRepository.findByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1, pageable));
+            if (twoParameter.getType() == null || twoParameter.getType() == 0)
+                result.setData(searchingRepository.findByUserAndIsclearNot(user, 1, pageable));
+            else
+                result.setData(searchingRepository.findByUserAndTypeAndIsclearNot(user, twoParameter.getType(), 1, pageable));
         }
         return result;
     }
