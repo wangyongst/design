@@ -649,10 +649,6 @@ public class AdminOneServiceImpl implements AdminOneService {
     @Override
     public Result postAdvert(AdminOneParameter adminOneParameter, HttpSession httpSession) {
         Result result = new Result();
-        if (adminOneParameter.getOperation() == null || adminOneParameter.getOperation() == 0 || StringUtils.isBlank(adminOneParameter.getTitle()) || StringUtils.isBlank(adminOneParameter.getImage()) || StringUtils.isBlank(adminOneParameter.getOuttime())) {
-            result.setMessage("必需的项目未填写完整");
-            return result;
-        }
         Advert advert = new Advert();
         if (adminOneParameter.getOperation() == 1) {
             advert.setAdminuser(adminUserRepository.findOne(adminOneParameter.getAdminuserid()));

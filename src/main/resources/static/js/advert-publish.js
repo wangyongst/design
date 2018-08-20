@@ -66,7 +66,7 @@ $(function () {
             url: "/admin/advert",
             data: {
                 advertid: ids[1],
-                operation: 3
+                operation: 2
             },
             dataType: "json",
             success: function (result) {
@@ -77,10 +77,15 @@ $(function () {
                     $('#type').val(result.data.type);
                     $('#url').val(result.data.url);
                     if ($("#type").val() == 1) {
-                        $("#selectNot2").text("上传大图:");
+                        $("#imagesize").text("上传封面:310*310:");
+                        $("#selectNot2").text("上传大图:最大不能超过40M");
                         $("#url").hide();
                         $("#upload2").show();
                     } else {
+                        $("#imagesize").text("上传封面:310*310:");
+                        if ($("#type").val() == 2) {
+                            $("#imagesize").text("上传封面:310*350:");
+                        }
                         $("#selectNot2").text("跳转链接:");
                         $("#url").show();
                         $("#upload2").hide();
@@ -110,31 +115,18 @@ $(function () {
             cache: "false",
             url: "/admin/advert",
             data: {
-                advertid: ids[1]
+                advertid: ids[1],
+                operation: 3
             },
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
-                    $('#advertid').val(result.data.id);
-                    $('#title').val(result.data.title);
-                    $('#adminuserid').val(result.data.adminuser.id);
-                    $('#type').val(result.data.type);
-                    $('#url').val(result.data.url);
-                    if ($("#type").val() == 1) {
-                        $("#selectNot2").text("上传大图:");
-                        $("#url").hide();
-                        $("#upload2").show();
-                    } else {
-                        $("#selectNot2").text("跳转链接:");
-                        $("#url").show();
-                        $("#upload2").hide();
-                    }
+                    $("#myTable").bootstrapTable('refresh');
                 } else {
                     alert(result.message);
                 }
             }
         });
-        $('#myModal2').modal('toggle');
     });
 
     $("#create").click(function () {
@@ -185,11 +177,13 @@ $(function () {
 
     $("#type").change(function () {
         if ($("#type").val() == 1) {
+            $("#imagesize").text("上传封面:310*310:");
             $("#selectNot2").text("上传大图:最大不能超过40M");
             $("#url").hide();
             $("#upload2").show();
         } else {
-            if ($("#type").val() == 1) {
+            $("#imagesize").text("上传封面:310*310:");
+            if ($("#type").val() == 2) {
                 $("#imagesize").text("上传封面:310*350:");
             }
             $("#selectNot2").text("跳转链接:");
@@ -262,12 +256,12 @@ $(function () {
             return;
         }
         var oper = 1;
-        if ($("#advertid").val() != "") oper = 2;
+        if($("#advertid").val() != "") oper = 2;
         $.ajax({
             type: "Post",
             cache: "false",
             url: "/admin/advert",
-            data: $('#advertForm').serialize() + "&operation=" + oper,
+            data: $('#advertForm').serialize() + "&operation="+oper,
             dataType: "json",
             success: function (result) {
                 if (result.status == 1) {
